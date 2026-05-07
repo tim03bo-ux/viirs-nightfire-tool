@@ -1,0 +1,8 @@
+numpy>=1.24
+scipy>=1.10
+netCDF4>=1.6
+h5py>=3.8
+matplotlib>=3.7
+pandas>=2.0
+cartopy>=0.21
+simplekml>=1.3

@@ -1,0 +1,46 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.spec.bak
+
+# Generated outputs and data
+output/
+data/raw/
+data/processed/
+*.nc
+*.h5
+*.hdf
+
+# Archives
+*.tar.gz
+*.zip
+
+# Stray brace-expansion folder
+{src,data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Claude Code local config / planning notes
+.claude/
+CLAUDE.md
