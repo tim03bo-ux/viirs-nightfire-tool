@@ -138,7 +138,7 @@ viirs-nightfire-tool/
 **Permian Basin, West Texas**
 - Bounding box: 30.0°N to 33.5°N, 100.5°W to 104.5°W
 - Includes Delaware Basin (west of -103°) and Midland Basin (east of -103°)
-- McCamey/BLU Kelton site: approximately 31.14°N, 102.22°W
+
 
 ## Setup
 
