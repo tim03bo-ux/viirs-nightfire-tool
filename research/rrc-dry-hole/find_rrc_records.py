@@ -279,6 +279,110 @@ def step_wildcat(outdir: Path) -> None:
             print(f"  {name}: fetch failed: {exc}")
 
 
+GWDB_ZIP = "https://www.twdb.texas.gov/groundwater/data/GWDBDownload.zip"
+RRC_MAPSERVER = (
+    "https://gis.rrc.texas.gov/server/rest/services/rrc_public"
+    "/RRC_Public_Viewer_Srvs/MapServer"
+)
+SURVEY_LAYER, WELL_LAYER = 24, 1
+
+
+def step_gwdb(outdir: Path) -> None:
+    """Pull the well's record straight from TWDB's full database download.
+
+    This is what actually produced the answer: Report 78's Table 5 was never
+    scanned, but the live GWDB carries the same fields -- including the driller
+    spelling that unblocked the whole search.
+    """
+    print("\n" + "=" * 70)
+    print("STEP: TWDB Groundwater Database -- record for site 4556803")
+    print("=" * 70)
+    import csv
+    import zipfile
+
+    csv.field_size_limit(10 ** 7)
+    print(f"\nFetching {GWDB_ZIP} (~78 MB)")
+    try:
+        blob = fetch(GWDB_ZIP, outdir / "GWDBDownload.zip")
+    except FetchError as exc:
+        print(f"  FAILED: {exc}")
+        return
+
+    site = STATE_WELL_NO.replace("-", "")
+    with zipfile.ZipFile(io.BytesIO(blob)) as z:
+        for member in ("WellMain.txt", "WellCasing.txt"):
+            name = next(
+                (n for n in z.namelist() if n.endswith(member) and "/" in n), None
+            )
+            if name is None:
+                print(f"  {member} not in archive")
+                continue
+            print(f"\n--- {member} ---")
+            with z.open(name) as fh:
+                text = io.TextIOWrapper(fh, encoding="utf-8", errors="replace")
+                for row in csv.DictReader(text, delimiter="|"):
+                    if (row.get("StateWellNumber") or "").strip() != site:
+                        continue
+                    for k, v in row.items():
+                        if v and v.strip():
+                            print(f"  {k:<30} {v.strip()[:300]}")
+                    print()
+
+
+def step_gis(outdir: Path) -> None:
+    """Locate the well's survey and every RRC well inside it.
+
+    Confirms the card's "Sec. 3, G.C.&S.F." and finds the dry hole that has no
+    API number -- the absent API is what places it in the Wildcat & Suspense
+    no-API branch.
+    """
+    print("\n" + "=" * 70)
+    print("STEP: RRC GIS -- survey and wells at the well's coordinates")
+    print("=" * 70)
+    import json
+
+    lat, lon = 31.1511120, -102.0469450
+
+    def q(layer: int, params: dict) -> dict:
+        base = {"f": "pjson", "outFields": "*", "returnGeometry": "false"}
+        url = f"{RRC_MAPSERVER}/{layer}/query?" + urllib.parse.urlencode(
+            {**base, **params}
+        )
+        return json.loads(fetch(url).decode("utf-8", errors="replace"))
+
+    point = {
+        "geometry": f"{lon},{lat}",
+        "geometryType": "esriGeometryPoint",
+        "inSR": "4326",
+        "spatialRel": "esriSpatialRelIntersects",
+    }
+    try:
+        surveys = q(SURVEY_LAYER, point)
+        wells = q(WELL_LAYER, {**point, "distance": "4800",
+                               "units": "esriSRUnit_Meter"})
+    except FetchError as exc:
+        print(f"  FAILED: {exc}")
+        return
+
+    print("\nSurvey containing the TWDB coordinate:")
+    for f in surveys.get("features", []):
+        a = f["attributes"]
+        print(f"  {a.get('LEVEL1_SURVEY_NAME')} blk {a.get('LEVEL2_BLOCK_NUMBER')}"
+              f" sec {a.get('LEVEL3_SURVEY_NUMBER')}  {a.get('ABSTRACT_LABEL')}")
+
+    feats = wells.get("features", [])
+    print(f"\n{len(feats)} well(s) within 4.8 km. Those WITHOUT an API number are "
+          "the pre-API\ndry holes -- these are the Wildcat & Suspense candidates:")
+    for f in feats:
+        a = f["attributes"]
+        api = (a.get("API") or "").strip()
+        if len(api) > 3:
+            continue  # has a real API sequence; not a pre-API record
+        print(f"  UNIQID {a.get('UNIQID')}  well#{a.get('GIS_WELL_NUMBER')}  "
+              f"{a.get('GIS_SYMBOL_DESCRIPTION')}  "
+              f"{a.get('GIS_LAT83')},{a.get('GIS_LONG83')}")
+
+
 def step_variants() -> None:
     print("\n" + "=" * 70)
     print("STEP: search key matrix")
@@ -310,17 +414,25 @@ roughly 2,500-9,000 ft). A shallow-TD screen discards the right well.
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--step", choices=["all", "twdb", "wildcat", "variants"], default="all")
+    ap.add_argument(
+        "--step",
+        choices=["all", "gwdb", "gis", "wildcat", "twdb", "variants"],
+        default="all",
+    )
     ap.add_argument("--outdir", type=Path, default=Path("./rrc-downloads"))
     args = ap.parse_args()
 
     args.outdir.mkdir(parents=True, exist_ok=True)
     if args.step in ("all", "variants"):
         step_variants()
-    if args.step in ("all", "twdb"):
-        step_twdb(args.outdir)
+    if args.step in ("all", "gwdb"):
+        step_gwdb(args.outdir)
+    if args.step in ("all", "gis"):
+        step_gis(args.outdir)
     if args.step in ("all", "wildcat"):
         step_wildcat(args.outdir)
+    if args.step == "twdb":  # superseded by gwdb; Table 5 was never scanned
+        step_twdb(args.outdir)
 
 
 if __name__ == "__main__":

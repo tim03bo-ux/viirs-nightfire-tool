@@ -8,6 +8,31 @@ scanned as `4556803.pdf` in the TWDB groundwater database.
 
 ---
 
+## 0. Result — the well is located
+
+The well has been identified on the ground and its RRC filing position pinned down.
+
+| | |
+|---|---|
+| Operator/driller spelling | **KIMBRELL Oil Company** (TWDB GWDB) — also filed as **KIMBLE Oil Company**. **Not "Kimbell"/"Kimbel"** — this is why every previous search failed |
+| Owner | **Bert Kincaid** — confirmed |
+| Legal location | **GC&SF RR Co Survey, Section 3, Abstract A‑159, Upton County** (RRC abstract `461159`) — the card's reading confirmed |
+| Coordinates | 31.1511120, −102.0469450 (TWDB, ±5 sec) |
+| The well at RRC | **UNIQID 876324** — Dry Hole, well #1, **no API number assigned** (API field holds only county code `461`), located from "Commission's hardcopy map" |
+| Position check | 89.9% east / 6.3% north within Section 3 = **SE¼ SE¼**, exactly as the card states |
+| RRC filing target | **Wildcat & Suspense, District 7C, span "1968 & prior", roll `WS7C-2`**, in the *no‑API‑number* branch → Operator Name → Lease Name |
+
+Only **two** dry holes exist inside Section 3. The other (UNIQID 876318 =
+API 42‑461‑32677) sits in the *southwest* quadrant and is a different well.
+
+**The remaining step is viewing roll `WS7C-2`** on Neubus, profile 84:
+`https://rrcsearch3.neubus.com/esd3-rrc/index.php?_module_=esd&_action_=keysearch&profile=84`
+Document Type = *Wildcat and Suspense*, roll number entered exactly as `WS7C-2`.
+That host is a third party (`rrcsearch3.neubus.com`) and is **not** covered by an
+allowlist of `rrc.texas.gov` — it must be added separately.
+
+---
+
 ## 1. The card, transcribed
 
 | Field | Value as written | Reading / note |
@@ -119,7 +144,7 @@ operator outright**.
 | Location | Sec. **3**, G.C. & S.F. Ry. Co. Survey — **get the block** from the Upton County abstract index / Upton CAD; the card omits it |
 | Permit date window | 1956‑01‑01 → 1959‑12‑31 |
 | Suspense film spans | **all spans 1957 → 1972**, not just 1957 |
-| Operator variants | Kimbell, Kimbel, Kimble, Kimball, Kimbrell, Kimbrough; "Kimbell Oil Co.", "Kimbell Oil Company of Texas" |
+| **Operator (confirmed)** | **KIMBRELL Oil Company** (TWDB spelling) and **KIMBLE Oil Company** (same outfit, Ward County 1958/1960). Try both before "Kimbell"/"Kimbel" |
 | Elevation cross-check | ground elevation **2,410 ft** |
 
 **Do not filter on 630 ft.** That is the plug-back depth for the water completion.
@@ -176,6 +201,70 @@ contents places the well records in an appendix that this file stops just short 
 separately from the body; the complete document is roughly 5.6 MB against this
 file's 2.4 MB.
 
+**Table 5 was never scanned.** The Report 78 landing page publishes only the body
+PDF plus Figures 5–21. There is no appendix file. The well records in Table 5 exist
+only in the printed report — which no longer matters, because the live GWDB carries
+the same data (below).
+
+### TWDB Groundwater Database — the record, retrieved
+
+From the full GWDB download (`GWDBDownload.zip` → `WellMain.txt`, 78 MB), site
+**4556803**:
+
+| Field | Value |
+|---|---|
+| Owner | **Bert Kincaid** |
+| Driller | **Kimbrell Oil Company** |
+| County / Aquifer | Upton / Dockum (`231DCKM`) |
+| Drilling year | 1957 |
+| Well depth | 630 ft |
+| Land surface elevation | 2,410 ft |
+| Latitude / Longitude | 31.1511120, −102.0469450 (±5 sec) |
+| Well use | Unused |
+| **Remarks** | **"Oil test; converted to water well. Unused."** |
+
+`WellCasing.txt` corroborates the card exactly: blank casing 0–6 ft, then
+**open hole 6–630 ft**.
+
+**The spelling is the whole answer to the failed searches.** The card's hand reads
+"KIMBELL"; TWDB transcribed it **"Kimbrell"**. Searching the GWDB for every
+`Kimb*` driller statewide returns 20 wells, including two in **Ward County**
+(sites 4533705 and 4533707, drilled 1958 and 1960) filed under
+**"Kimble Oil Company"** — the same small West Texas outfit under a third spelling.
+
+### RRC GIS — the well found on the ground
+
+RRC's ArcGIS service (`gis.rrc.texas.gov/server/rest/services/rrc_public/RRC_Public_Viewer_Srvs/MapServer`,
+layer 24 = Surveys, layer 1 = Well Locations) resolves the location:
+
+- The survey polygon **GC&SF RR CO, Section 3, A‑159** (abstract `461159`) has its
+  centroid **852 m** from the TWDB coordinate, which falls on its eastern edge —
+  well within TWDB's stated ±5‑second precision. **The card's "Sec. 3, G.C.&S.F."
+  is correct.**
+- A **"KINCAID, T A" survey (A‑1584)** lies ~6.7 km northeast, independently
+  corroborating the family's landholding in the area.
+- Exactly **two** wells fall inside Section 3, both dry holes:
+
+| UNIQID | API | Position in Sec. 3 | Verdict |
+|---|---|---|---|
+| **876324** | **none** (county code `461` only) | 89.9% E, 6.3% N = **SE¼ SE¼** | **our well** |
+| 876318 | 42‑461‑32677 | 36.7% E, 36.3% N = SW quadrant | different well |
+
+Both are flagged `GIS_LOCATION_SOURCE = "Commission's hardcopy map"` — mapped by
+hand, never digitized into a completion record.
+
+### Why "no API number" pins the filing location
+
+The Wildcat & Suspense film hierarchy is *District → Span of years →* **Records
+with no API number → Operator Name → Lease Name** *→ Records with API number →
+County → API number*. Our well has **no API number**, so it sits in the first
+branch — filed under **operator name, then lease name**, not under county/API.
+
+Per the users guide the no‑API portion of each roll is "generally very small…
+only a few dozen documents", which makes `WS7C-2` a tractable read rather than a
+needle in a haystack. Search it for operator **Kimbrell / Kimble / Kimbell Oil Co.**
+and lease **Kincaid**.
+
 ### Useful confirmation from the body
 
 Report 78 explicitly documents oil-test-to-water-well conversions in Upton County.
@@ -202,15 +291,19 @@ oil-test provenance — and plausibly the operator's name — for `45-56-803`.
 
 ## 8. Caveat on how this was researched
 
-This session's network policy blocked every `rrc.texas.gov` and `twdb.texas.gov`
-host (only package/dev hosts are allowed), so **I could not drive the RRC query
-applications or open Report 78 directly.** Everything above about RRC collection
-structure, coverage dates, and filing keys comes from web-search retrieval of the
-RRC's own user guides and records pages, cited below. The identification of
-Wildcat & Suspense as the target collection is an inference from documented RRC
-filing rules plus the card's "plugged back oil test" — it is well-founded but
-unverified against the actual index. `find_rrc_records.py` is written to be run
-where the network is open; it has **not** been executed against live endpoints.
+`rrc.texas.gov` and `twdb.texas.gov` were allowlisted partway through this work.
+Everything in sections 0 and 6 was then retrieved and verified directly: the GWDB
+record from TWDB's own full database download, the survey geometry and well
+locations from RRC's live ArcGIS service, and the roll numbers from RRC's published
+Wildcat & Suspense index spreadsheet. The Wildcat & Suspense hypothesis in section 2
+was formed *before* that access and has since been confirmed against the actual
+index and users guide.
+
+**One thing remains unverified: nobody has yet seen the document itself.** The
+images live on `rrcsearch3.neubus.com`, a third‑party host still blocked here, so
+roll `WS7C-2` has not been opened. The identification of UNIQID 876324 as the well
+rests on the survey/quarter‑quarter match plus the absent API number — strong,
+convergent, but not the same as reading the W‑1.
 
 ### Sources
 
