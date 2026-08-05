@@ -323,6 +323,52 @@ imaged records.** It is in the **pre‑1965 physical operator file at Central
 Records** — which is what §3‑C and `central_records_request.md` request, now
 armed with the correct operator spelling and the exact abstract.
 
+### 6.5 Every imaged-records collection swept — "are dry holes separate?"
+
+Good question — and yes, **Dry Hole Files is its own collection** (Neubus profile 9),
+distinct from Wildcat & Suspense. "Wildcat & Suspense" is a *filing‑status* category
+(incomplete records held in suspense), not a well type, so a dry hole can appear in
+either. To be exhaustive, **every** imaged‑records collection that could hold a
+pre‑1964 dry hole was enumerated (from the RRC Imaged Records Menu) and searched for
+this well — by operator, lease, county, survey/abstract, and API:
+
+| Collection | Profile / index | Coverage | Result for our well |
+|---|---|---|---|
+| Oil & Gas Well Records (Potential) | 17 | 1964→ | 0 Kimbrell/Kimble; Upton "Kincaid" = deep modern wells |
+| **Dry Hole Files** | **9** | **2000→** | all Upton dry holes modern; only Upton "Kimbell" record = ARCO 1987 |
+| District Office Well Records | 27 | varies | 0 Kimbrell; 1 Upton "Kincaid" = Bell Petroleum, deep Bend |
+| Oil & Gas Well Logs | 15 | varies | 0 Kimbrell; Upton "Kincaid" = deep well at *TC RR* Sec 3 (A‑386), not GC&SF |
+| Wildcat & Suspense (WS7C‑2) | 84 | 1965–68 | roll read in full; only 1966–68 records |
+| W‑1X / W‑3X / W‑3C (permit/plugging exceptions) | 84 | 1988–2022 | modern; ruled out |
+| 1963 & Prior Closed Potential | 84 | ≤1963 | organized by *producing field*; a dry hole has no potential test |
+| Historical Well Records film | 84 | 1919–1951 | 1957 postdates the film |
+
+**Conclusion (now firm from eight collections, not one):** the 1957 oil test
+predates every digitized online collection. Dry Hole Files *is* the right *kind* of
+record — but it only reaches back to 2000. The record survives solely in the
+**pre‑1965 physical operator file at Central Records**.
+
+### 6.6 The "Kimbell" lease — and a plat that nails the survey
+
+Looking up the *other* dry hole inside Section 3 (the SW‑quadrant well, API
+42‑461‑**32677**) cracked open the naming: it is **ARCO Oil & Gas Co., lease
+"KIMBELL", Upton, permit 335816 (1987)** — in the Dry Hole Files. So in Section 3
+the *oil/mineral lease* is the **Kimbell lease**; Bert Kincaid was the *surface*
+owner. That's why the water‑well card names "Kimbell Oil Co." and TWDB recorded the
+driller as "Kimbrell" — the family were the mineral operators.
+
+ARCO's 1987 W‑1 location plat for that well (saved as
+`evidence/arco_kimbell_sec3_plat_1987.png`) is titled, in the RRC's own record:
+
+> **Location Plat — ARCO Oil and Gas Company — Kimbell Lease — Section 3, Abstract
+> 159 — G C & S F RR CO — Upton County, Texas**
+
+with `A‑159` on the west line, `Kimbell` on the south line, and the section boxed by
+**M.K.&T. RR Co. Block 1**, **G.C.&S.F. RR Co.**, and **University Land Block 15** —
+independent confirmation of the exact survey and abstract read off the 1966 water
+card. (This ARCO well is a *different, 1987* hole on the same lease; our 1957 test is
+the SE¼ SE¼ well with no API.)
+
 ### Useful confirmation from the body
 
 Report 78 explicitly documents oil-test-to-water-well conversions in Upton County.

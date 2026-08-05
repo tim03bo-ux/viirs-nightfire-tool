@@ -1,0 +1,56 @@
+{
+  "question": "Is the 1957 Kincaid/Kimbrell oil test in any online RRC imaged-records collection?",
+  "well": "GC&SF RR CO Sec 3 A-159, Upton Co; drilled 1957; plugged-back oil test -> water well; no API",
+  "collections_checked": [
+    {
+      "collection": "Oil & Gas Well Records (Potential files)",
+      "neubus_profile": 17,
+      "coverage": "1964-present",
+      "result": "0 Kimbrell/Kimble operators; Upton 'Kincaid' leases are deep modern wells only"
+    },
+    {
+      "collection": "Dry Hole Files",
+      "neubus_profile": 9,
+      "coverage": "2000-present (older Dist 9 backfill only)",
+      "result": "all Upton dry holes are 1980s-2000s; only Upton 'Kimbell' lease record = ARCO Kimbell #1 (API 46132677, 1987)"
+    },
+    {
+      "collection": "District Office Well Records",
+      "neubus_profile": 27,
+      "coverage": "varies",
+      "result": "0 Kimbrell; 1 Upton 'Kincaid' = Bell Petroleum, deep Bend (10400 ft)"
+    },
+    {
+      "collection": "Oil & Gas Well Logs",
+      "neubus_profile": 15,
+      "coverage": "varies",
+      "result": "0 Kimbrell; Upton 'Kincaid' = ARCO/Forest deep well at TC RR Sec 3 A-386 (different survey); nothing at GC&SF Sec 3/A-159"
+    },
+    {
+      "collection": "Wildcat & Suspense (roll WS7C-2)",
+      "neubus_profile": 84,
+      "coverage": "1965-1968 (7C no-API span)",
+      "result": "roll read in full; Upton section is 1966-1968 records; the 1957 well does not appear (handwritten forms don't OCR)"
+    },
+    {
+      "collection": "W-1X / W-3X / W-3C (permit & plugging exceptions)",
+      "neubus_profile": 84,
+      "coverage": "1988-2022",
+      "result": "modern only; ruled out for 1957"
+    },
+    {
+      "collection": "1963 & Prior Closed Potential",
+      "neubus_profile": 84,
+      "coverage": "<=1963",
+      "result": "organized by producing field; a dry hole has no potential test; ruled out"
+    },
+    {
+      "collection": "Historical Well Records film",
+      "neubus_profile": 84,
+      "coverage": "1919-1951",
+      "result": "1957 postdates this film; excluded by era"
+    }
+  ],
+  "conclusion": "The 1957 oil test predates every digitized online collection. Dry Hole Files IS a separate collection but is 2000+ only. The record survives only in the pre-1965 physical operator file at RRC Central Records.",
+  "key_corroboration": "ARCO 1987 W-1 plat (API 46132677, evidence/arco_kimbell_sec3_plat_1987.png) is labelled 'Kimbell Lease, Section 3, Abstract 159, G C & S F RR CO, Upton County' -- confirming the survey and that the section's oil lease is the Kimbell lease (Kincaid = surface owner)."
+}

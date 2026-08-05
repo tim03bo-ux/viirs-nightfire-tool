@@ -10,7 +10,11 @@ individual microfilm frames can be pulled headlessly.
 
 Profiles (the `profile_id` below):
     17  Imaged Oil and Gas Well Records (indexed: operator/lease/county/API/field)
-    84  Wildcat & Suspense (indexed only by reel_number + document_type)
+     9  Dry Hole Files (indexed: operator/lease/county/API/permit#; 2000-present)
+    27  District Office Well Records (indexed: operator/lease/county/field)
+    15  Oil & Gas Well Logs (indexed: + survey name/section/abstract)
+    84  Historical microfilm (Wildcat & Suspense, Potential, P-13, W-1X/W-3X/W-3C,
+        Well Records, ...): searched by reel_number + a document_type dropdown
 
 Flow for a Wildcat & Suspense roll:
     search profile 84 by reel_number -> doc_id
