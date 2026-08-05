@@ -21,10 +21,18 @@ and am trying to match it to the RRC permit and plugging record.
 | County / District | Upton / **7C** (county code 461) |
 | Location | SE/4 of SE/4, **Section 3, G.C. & S.F. Ry. Co. Survey** (block not recorded on my source document) |
 | Landowner | **Bert Kincaid** — so the lease name is most likely "Kincaid" or a variant |
-| Driller named on the water-well record | **Kimbell Oil Co.**, with "Buck Jones, McCamey" also noted |
+| Operator / driller | **Kimbrell Oil Company** — this is the spelling in the state groundwater database (my source card reads "Kimbell", but TWDB transcribed the driller as **Kimbrell**, and the same outfit filed two Ward County water wells in 1958–1960 as **Kimble Oil Company**). Please check **Kimbrell / Kimble / Kimbell / Kimbel**. "Buck Jones, McCamey" is also noted on the card |
+| Exact survey | **Section 3, G.C. & S.F. Ry. Co. Survey, Abstract A‑159, Upton County** (confirmed against the RRC public GIS; the well plots in the SE/4 of the SE/4). It adjoins Humble's King Mountain / Amacker‑Tippett leases (e.g. Rosa H. Barnet, Sec. 86 Block Y) |
 | Ground elevation | 2,410 ft |
 | Disposition | dry hole; plugged back to **630 ft** and completed open-hole in the Santa Rosa Sandstone as a water well |
 | Cross-reference | TWDB/USGS state well no. **45‑56‑803**, scanned as 4556803.pdf |
+
+**Why I'm writing rather than using the online systems:** I've already checked them.
+The oil test has **no API number** in the RRC GIS, it does **not** appear in the
+online Oil & Gas Well Records index (which begins 1964), and I read the full
+**Wildcat & Suspense roll WS7C‑2** — its Upton County section holds only 1965–1968
+records, not a 1957 filing. That points to the **pre‑1965 physical file** held under
+the operator's 5‑digit number, which is why I need Central Records.
 
 Note the 630 ft is the *plug-back* depth for the water completion only — the
 original test's total depth would have been considerably deeper.

@@ -20,16 +20,42 @@ The well has been identified on the ground and its RRC filing position pinned do
 | Coordinates | 31.1511120, −102.0469450 (TWDB, ±5 sec) |
 | The well at RRC | **UNIQID 876324** — Dry Hole, well #1, **no API number assigned** (API field holds only county code `461`), located from "Commission's hardcopy map" |
 | Position check | 89.9% east / 6.3% north within Section 3 = **SE¼ SE¼**, exactly as the card states |
-| RRC filing target | **Wildcat & Suspense, District 7C, span "1968 & prior", roll `WS7C-2`**, in the *no‑API‑number* branch → Operator Name → Lease Name |
+| RRC record location | **Pre‑1965 physical operator file at Central Records** (filed under the operator's 5‑digit number → lease name). *Not* online: it has no API, isn't in the 1964‑forward index, and the online Wildcat & Suspense roll for this county/span (`WS7C-2`) holds only 1965–1968 records — verified by retrieving and reading the roll (§6.4) |
 
 Only **two** dry holes exist inside Section 3. The other (UNIQID 876318 =
 API 42‑461‑32677) sits in the *southwest* quadrant and is a different well.
 
-**The remaining step is viewing roll `WS7C-2`** on Neubus, profile 84:
-`https://rrcsearch3.neubus.com/esd3-rrc/index.php?_module_=esd&_action_=keysearch&profile=84`
-Document Type = *Wildcat and Suspense*, roll number entered exactly as `WS7C-2`.
-That host is a third party (`rrcsearch3.neubus.com`) and is **not** covered by an
-allowlist of `rrc.texas.gov` — it must be added separately.
+### What the imaged records actually turned up
+
+Roll `WS7C-2` **was retrieved and read** (see §6.4). Its Upton County section is a
+~230‑page run of scanned RRC Oil & Gas Division forms — the "unorganized imaged
+records grouped by county and groups of years" exactly as anticipated. Two OCR
+passes plus operator‑sequence and shallow‑well signature analysis were run against
+it. **The 1957 Kincaid/Kimbrell oil test did not surface there**, and the reason is
+now clear:
+
+- Every legible Upton record on `WS7C-2` is dated **1966–1968**. The online
+  Wildcat & Suspense span labelled "1968 & prior" is in practice the **1965–1968**
+  sweep — it does not reach back to a 1957 filing.
+- The RRC's modern Oil & Gas Well Records index (Neubus profile 17, which *is*
+  indexed by operator/lease/county) returns **zero** wells for operators
+  `KIMBRELL*` or `KIMBLE*` — that index only covers 1964‑forward completed wells.
+
+So the 1957 original is **not in the online imaged records at all.** It sits in the
+**pre‑1965 physical file at RRC Central Records**, organized by the operator's
+5‑digit number then by lease name — precisely the collection §3‑C and the
+`central_records_request.md` letter target. The excavation didn't just fail to find
+it online; it *established* that online is the wrong place to look and produced the
+two things that make the physical request answerable: the **correct operator
+spelling** and the **exact survey/abstract**.
+
+### Access method proved out
+
+The Neubus imaged‑records archive (`rrcsearch3.neubus.com`) was reached and driven
+end‑to‑end via its JSON API (see `neubus_client.py`): search a profile → open a
+record → list its files → download the page images. Roll `WS7C-2` (1,886 pages,
+245 MB) and its individual microfilm frames were pulled successfully. The method is
+reusable for any roll named in the Wildcat & Suspense index.
 
 ---
 
@@ -265,6 +291,38 @@ only a few dozen documents", which makes `WS7C-2` a tractable read rather than a
 needle in a haystack. Search it for operator **Kimbrell / Kimble / Kimbell Oil Co.**
 and lease **Kincaid**.
 
+### 6.4 Roll WS7C-2 retrieved and searched — the online dead end, proven
+
+Using `neubus_client.py`, roll **WS7C-2** was pulled in full: a **1,886‑page**,
+245 MB scanned PDF (the "Document" tab) plus 171 individual microfilm frames (the
+"Attachment" tab). The PDF has **no text layer and no bookmarks** — pure images.
+
+The Upton County section runs roughly **pages 172–400** of the roll. It was OCR'd
+twice (140 dpi sparse, then 210 dpi psm‑4) and searched for `KINCAID`, `KIMBRELL`,
+`KIMBELL`, `KIMBLE`, `KINARD`, the survey (`GC&SF` / `Sec. 3`), the elevation
+(`2410`), the aquifer (`Santa Rosa`), shallow total depths, and dry‑hole language.
+
+Findings:
+
+- Every **legible** Upton record is a **1966–1968** RRC Oil & Gas Division form
+  (applications to drill/deepen/plug‑back, plugging records, plats) from major
+  operators — Humble, Gulf, Pure Oil, Cities Service, Texas Pacific, Mobil,
+  Sinclair, Standard, Hunt. All the plug‑backs are **deep** Permian/Devonian tests
+  (e.g. plug‑back depth 10,150 ft; TD 11,097 ft).
+- The `GC&SF` hits (pages 282–289) are **Humble's Rosa H. Barnet well, Sec. 86
+  Block Y** — King Mountain (Ellenburger) — a *different* well from our Sec. 3.
+- **No page surfaced the Kincaid/Kimbrell oil test**, by name, survey, or shallow
+  depth. ~109 pages OCR'd nearly empty (handwritten forms and plats); the name
+  never appears in machine‑readable text.
+
+Interpretation: the online "1968 & prior" span is effectively the **1965–1968**
+suspense sweep and does not reach a **1957** filing. Combined with profile 17
+(the indexed 1964‑forward records) returning **zero** `KIMBRELL*`/`KIMBLE*`
+operators, the conclusion is firm: **the 1957 oil‑test record is not in the online
+imaged records.** It is in the **pre‑1965 physical operator file at Central
+Records** — which is what §3‑C and `central_records_request.md` request, now
+armed with the correct operator spelling and the exact abstract.
+
 ### Useful confirmation from the body
 
 Report 78 explicitly documents oil-test-to-water-well conversions in Upton County.
@@ -282,10 +340,16 @@ oil-test provenance — and plausibly the operator's name — for `45-56-803`.
 
 ## 7. Files here
 
+- `neubus_client.py` — client for the RRC imaged-records archive on Neubus
+  (`rrcsearch3.neubus.com`). Mints the same anonymous public token the RRC search
+  page uses, then searches profiles, opens records, and downloads roll PDFs and
+  microfilm frames. This is what retrieved and read roll WS7C-2.
+  Try: `python3 neubus_client.py roll --reel WS7C-2`
 - `find_rrc_records.py` — fetches TWDB Report 78 and extracts the 45‑56‑803 record;
-  fetches and filters the RRC Wildcat & Suspense roll index to District 7C; prints
-  the full name-variant matrix. Run from a machine with open internet.
-- `central_records_request.md` — ready-to-send request to RRC Central Records.
+  pulls the well's GWDB row and RRC survey/well geometry; fetches and filters the
+  Wildcat & Suspense roll index to District 7C; prints the name-variant matrix.
+- `central_records_request.md` — ready-to-send request to RRC Central Records,
+  updated with the corrected operator spelling and the exact abstract.
 
 ---
 

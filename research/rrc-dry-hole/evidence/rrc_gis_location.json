@@ -1,0 +1,39 @@
+{
+  "well_coordinate": [
+    31.151112,
+    -102.046945
+  ],
+  "containing_survey": {
+    "name": "GC&SF RR CO",
+    "section": "3",
+    "abstract": "A-159",
+    "abstract_number": "461159",
+    "centroid": [
+      31.151712,
+      -102.055871
+    ],
+    "distance_from_well_m": 852
+  },
+  "nearby_kincaid_survey": {
+    "name": "KINCAID, T A",
+    "abstract": "A-1584",
+    "distance_m": 6714
+  },
+  "wells_in_section_3": [
+    {
+      "UNIQID": 876324,
+      "API": "none (461)",
+      "quadrant": "SE/4 SE/4 (89.9% E, 6.3% N)",
+      "type": "Dry Hole",
+      "verdict": "THIS WELL"
+    },
+    {
+      "UNIQID": 876318,
+      "API": "42-461-32677",
+      "quadrant": "SW",
+      "type": "Dry Hole",
+      "verdict": "different well"
+    }
+  ],
+  "source": "RRC public ArcGIS MapServer rrc_public/RRC_Public_Viewer_Srvs, layers 24 (Surveys) and 1 (Well Locations)"
+}
