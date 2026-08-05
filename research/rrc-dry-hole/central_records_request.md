@@ -19,20 +19,23 @@ and am trying to match it to the RRC permit and plugging record.
 |---|---|
 | Date drilled | **May 14, 1957** |
 | County / District | Upton / **7C** (county code 461) |
-| Location | SE/4 of SE/4, **Section 3, G.C. & S.F. Ry. Co. Survey** (block not recorded on my source document) |
-| Landowner | **Bert Kincaid** — so the lease name is most likely "Kincaid" or a variant |
-| Operator / driller | **Kimbrell Oil Company** — this is the spelling in the state groundwater database (my source card reads "Kimbell", but TWDB transcribed the driller as **Kimbrell**, and the same outfit filed two Ward County water wells in 1958–1960 as **Kimble Oil Company**). Please check **Kimbrell / Kimble / Kimbell / Kimbel**. "Buck Jones, McCamey" is also noted on the card |
-| Exact survey | **Section 3, G.C. & S.F. Ry. Co. Survey, Abstract A‑159, Upton County** (confirmed against the RRC public GIS; the well plots in the SE/4 of the SE/4). It adjoins Humble's King Mountain / Amacker‑Tippett leases (e.g. Rosa H. Barnet, Sec. 86 Block Y) |
-| Ground elevation | 2,410 ft |
+| Location | SE/4 of SE/4, **Section 3, G.C. & S.F. Ry. Co. Survey, Abstract A‑159** — **8.2 miles SW of Rankin** |
+| Lease | Almost certainly the **"Kimbell" lease**. A later well on this same section — ARCO Oil & Gas, *Kimbell* #1, API 42‑461‑32677, plugged 1987 — is filed under lease name **Kimbell**, so the section's oil/mineral lease carries that name. **Bert Kincaid** was the *surface* owner (the water well), which is why the card names him as owner |
+| Operator / driller | **Kimbrell Oil Company** — the spelling in the state groundwater database (my source card reads "Kimbell", but TWDB transcribed the driller as **Kimbrell**, and the same outfit filed two Ward County water wells in 1958–1960 as **Kimble Oil Company**). Please check **Kimbell / Kimbrell / Kimble / Kimbel / Kimball**. "Buck Jones, McCamey" is also noted on the card |
+| Exact survey | **Section 3, G.C. & S.F. Ry. Co. Survey, Abstract A‑159, Upton County** — confirmed three independent ways: the 1966 water‑well card, the RRC public GIS (the well plots in the SE/4 of the SE/4), and the RRC's own 1987 W‑1 plat for ARCO's *Kimbell* #1 on this section (titled "Kimbell Lease, Section 3, Abstract 159, G C & S F RR Co, Upton County"). **A‑159 is the unambiguous key — no block number is needed** (the section is bounded by M.K.&T. RR Co. Block 1, G.C.&S.F. RR Co., and University Land Block 15) |
+| Ground elevation | 2,410 ft (the adjacent ARCO Kimbell #1 plats at 2,459 ft) |
 | Disposition | dry hole; plugged back to **630 ft** and completed open-hole in the Santa Rosa Sandstone as a water well |
 | Cross-reference | TWDB/USGS state well no. **45‑56‑803**, scanned as 4556803.pdf |
 
-**Why I'm writing rather than using the online systems:** I've already checked them.
-The oil test has **no API number** in the RRC GIS, it does **not** appear in the
-online Oil & Gas Well Records index (which begins 1964), and I read the full
-**Wildcat & Suspense roll WS7C‑2** — its Upton County section holds only 1965–1968
-records, not a 1957 filing. That points to the **pre‑1965 physical file** held under
-the operator's 5‑digit number, which is why I need Central Records.
+**Why I'm writing rather than using the online systems:** I've already searched every
+online imaged‑records collection and the well is in none of them. Specifically: it has
+**no API number** in the RRC GIS; it is **not** in the online Oil & Gas Well Records
+index or the **Dry Hole Files** (both begin 1964/2000); it is **not** in the District
+Office Well Records, Well Logs, W‑1X/W‑3X/W‑3C, or 1963‑&‑Prior Closed Potential
+collections; and I read the full **Wildcat & Suspense roll WS7C‑2**, whose Upton County
+section holds only 1965–1968 records, not a 1957 filing. Everything points to the
+**pre‑1965 physical file** held under the operator's 5‑digit number, which is why I
+need Central Records.
 
 Note the 630 ft is the *plug-back* depth for the water completion only — the
 original test's total depth would have been considerably deeper.
@@ -51,9 +54,10 @@ original test's total depth would have been considerably deeper.
    assigned to any of: **Kimbell Oil Co. / Kimbell / Kimbel / Kimble / Kimball /
    Kimbrell**? Once I have the number I can work the film under lease name
    "Kincaid" myself.
-4. If the operator of record turns out to be someone other than Kimbell (Kimbell
-   may have been only the drilling contractor), the **landowner name Kincaid and
-   the Sec. 3 G.C.&S.F. location** are the surer keys.
+4. If the operator of record turns out to be someone other than Kimbell (it may
+   have been only the drilling contractor), the surer keys are the **"Kimbell"
+   lease name**, the **Kincaid** surface owner, and the **Sec. 3, A‑159,
+   G.C.&S.F.** location — the same section the ARCO Kimbell #1 file sits on.
 
 I am happy to pay reproduction fees and to come in or have copies made — please
 let me know the cost and the best way to proceed.
@@ -66,11 +70,14 @@ Thank you,
 
 ## Notes before sending
 
-- **Fill in the survey block if you can.** Section 3 of the G.C. & S.F. Ry. Co.
-  Survey in Upton County needs a block number to be unambiguous; pull it from the
-  Upton County abstract index or Upton CAD first. It materially improves the odds
-  Central Records can find the file.
-- Attach a copy of the well schedule (`4556803.pdf`) — the handwritten
-  "PLUGGED BACK OIL TEST" line is the thing that makes the request concrete.
-- Lead with **location + date + landowner**, not the company name. A name search
-  against pre‑1965 film is not a search they can run; a location and date is.
+- **Attachments to include:**
+  - The USGS/TWDB well schedule (`4556803.pdf`) — the handwritten "PLUGGED BACK OIL
+    TEST" line is what makes the request concrete.
+  - The ARCO *Kimbell* #1 location plat (`evidence/arco_kimbell_sec3_plat_1987.png`) —
+    it fixes the exact section and shows the section corners, so Central Records can
+    place the tract instantly.
+- **The survey block is resolved — you don't need one.** Abstract **A‑159** uniquely
+  identifies G.C.&S.F. Ry. Co. Section 3 in Upton County; the ARCO plat confirms it.
+- Lead with **location + date + lease/landowner**, not the drilling contractor. A
+  company‑name search against pre‑1965 film is not something they can run; a location,
+  a date, and the "Kimbell" lease / Kincaid owner are.
