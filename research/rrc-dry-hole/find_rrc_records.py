@@ -71,14 +71,36 @@ OPERATOR_VARIANTS = [
 ]
 
 
+class FetchError(RuntimeError):
+    """A URL could not be retrieved, with a human-actionable explanation."""
+
+
 def fetch(url: str, dest: Path | None = None) -> bytes:
-    """GET a URL, optionally caching to disk. Returns the raw body."""
+    """GET a URL, optionally caching to disk. Returns the raw body.
+
+    Raises FetchError with an actionable message rather than a traceback --
+    these endpoints are commonly unreachable from restricted networks, and a
+    proxy denial should read as "your network blocked this", not as a bug.
+    """
     if dest is not None and dest.exists() and dest.stat().st_size > 0:
         print(f"  cached: {dest}")
         return dest.read_bytes()
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        body = resp.read()
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            body = resp.read()
+    except urllib.error.HTTPError as exc:
+        raise FetchError(f"{url}\n    HTTP {exc.code} {exc.reason}") from exc
+    except urllib.error.URLError as exc:
+        hint = ""
+        reason = str(exc.reason)
+        if "403" in reason or "Tunnel connection failed" in reason:
+            hint = (
+                "\n    A proxy refused the CONNECT. This host is very likely blocked"
+                "\n    by your network's egress policy -- run this from an unrestricted"
+                "\n    machine, or allowlist rrc.texas.gov and twdb.texas.gov."
+            )
+        raise FetchError(f"{url}\n    {reason}{hint}") from exc
     if dest is not None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(body)
@@ -144,7 +166,13 @@ def step_twdb(outdir: Path) -> None:
     print("STEP: TWDB Report 78 -- White (1968), Ground-Water Resources of Upton County")
     print("=" * 70)
     print(f"\nFetching {R78_PDF}")
-    data = fetch(R78_PDF, outdir / "TWDB-R78.pdf")
+    try:
+        data = fetch(R78_PDF, outdir / "TWDB-R78.pdf")
+    except FetchError as exc:
+        print(f"  FAILED: {exc}")
+        print("\n  Skipping this step. You can also download R78.pdf by hand and drop")
+        print(f"  it at {outdir / 'TWDB-R78.pdf'}, then re-run -- it will be picked up.")
+        return
     text = pdf_to_text(data)
     print(f"  extracted {len(text):,} characters")
 
@@ -206,9 +234,13 @@ def step_wildcat(outdir: Path) -> None:
     print("STEP: RRC Wildcat & Suspense roll index, District 7C")
     print("=" * 70)
     print(f"\nFetching index page {WILDCAT_INDEX_PAGE}")
-    page = fetch(WILDCAT_INDEX_PAGE, outdir / "wildcat-index-page.html").decode(
-        "utf-8", errors="replace"
-    )
+    try:
+        raw = fetch(WILDCAT_INDEX_PAGE, outdir / "wildcat-index-page.html")
+    except FetchError as exc:
+        print(f"  FAILED: {exc}")
+        print("\n  Skipping this step.")
+        return
+    page = raw.decode("utf-8", errors="replace")
     links = find_index_links(page, WILDCAT_INDEX_PAGE)
     if not links:
         print("  No downloadable index files linked. The index may be rendered")
