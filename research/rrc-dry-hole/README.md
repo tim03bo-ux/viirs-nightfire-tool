@@ -130,9 +130,11 @@ roughly 2,500–9,000 ft. A search screened to shallow TDs will discard the righ
 
 ## 5. Ordered protocol
 
-1. **TWDB Report 78 first.** Pull the records-of-wells table, find `45-56-803`,
-   read the remarks/driller's-log entry. Cheapest shot at a named operator.
+1. **TWDB Report 78, Table 5.** Find `45-56-803` in the records-of-wells table and
+   read its remarks column. Cheapest shot at a named operator.
    `find_rrc_records.py --step twdb` automates the fetch and extraction.
+   **Status: the report body has been checked and does not contain it — see the
+   progress log below. Table 5 is a separate file and is still needed.**
 2. **Fix the survey block.** Upton County abstract index or Upton CAD for Sec. 3,
    G.C.&S.F. Ry. Co. Survey. Without the block you cannot place the well on an RRC
    plat, and the block is what makes step 4 tractable.
@@ -150,7 +152,46 @@ roughly 2,500–9,000 ft. A search screened to shallow TDs will discard the righ
 
 ---
 
-## 6. Files here
+## 6. Progress log
+
+### TWDB Report 78 — body checked, well not in it
+
+A copy of `R78.pdf` was obtained and searched (44 PDF pages, 2.4 MB, ending at
+References Cited = report p. 54). **This file is the report body only.** Searched
+for and found **zero** hits on:
+
+`45-56-803` · `45-56` (the quadrangle, anywhere) · Kincaid / Kincade / Kinard /
+Kingrid · Kimbell / Kimbel / Kimble / Kimball · Buck Jones · "plugged back"
+
+That is not a dead end — it is the expected result. Report 78's own table of
+contents places the well records in an appendix that this file stops just short of:
+
+| Table | Title | Report page |
+|---|---|---|
+| **5** | **Records of Wells and Test Holes** | **55** |
+| 6 | Chemical Analyses of Water from Wells | 123 |
+| 7 | Chemical Analyses of Oil-Field Brine and Industrial Waste Water | 131 |
+
+**Still needed: Report 78 pages 55–122 (Table 5).** TWDB hosts the appendix tables
+separately from the body; the complete document is roughly 5.6 MB against this
+file's 2.4 MB.
+
+### Useful confirmation from the body
+
+Report 78 explicitly documents oil-test-to-water-well conversions in Upton County.
+From the "Other Aquifers" section:
+
+> The well, YL-45-23-902, **drilled as an oil test and later converted to a water
+> well**, yielded brine that had a low pH (5.3) and a high hydrogen sulfide (335 ppm)
+> content.
+
+So White was tracking exactly this class of well and describing the conversion in
+prose. Table 5's remarks column is therefore the right place to expect our well's
+oil-test provenance — and plausibly the operator's name — for `45-56-803`.
+
+---
+
+## 7. Files here
 
 - `find_rrc_records.py` — fetches TWDB Report 78 and extracts the 45‑56‑803 record;
   fetches and filters the RRC Wildcat & Suspense roll index to District 7C; prints
@@ -159,7 +200,7 @@ roughly 2,500–9,000 ft. A search screened to shallow TDs will discard the righ
 
 ---
 
-## 7. Caveat on how this was researched
+## 8. Caveat on how this was researched
 
 This session's network policy blocked every `rrc.texas.gov` and `twdb.texas.gov`
 host (only package/dev hosts are allowed), so **I could not drive the RRC query
