@@ -1,0 +1,30 @@
+{
+  "StateWellNumber": "4556803",
+  "County": "Upton",
+  "Aquifer": "Dockum",
+  "AquiferCode": "231DCKM",
+  "Owner": "Bert Kincaid",
+  "Driller": "Kimbrell Oil Company",
+  "WellDepth": "630",
+  "DrillingYear": "1957",
+  "LandSurfaceElevation": "2410",
+  "LatitudeDD": "31.1511120",
+  "LongitudeDD": "-102.0469450",
+  "WellType": "Withdrawal of Water",
+  "WellUse": "Unused",
+  "Remarks": "Oil test; converted to water well. Unused.",
+  "Casing": [
+    {
+      "CasingType": "Blank",
+      "TopDepth": "0",
+      "BottomDepth": "6",
+      "Diameter": "23"
+    },
+    {
+      "CasingType": "Open Hole",
+      "TopDepth": "6",
+      "BottomDepth": "630"
+    }
+  ],
+  "source": "TWDB Groundwater Database full download, WellMain.txt / WellCasing.txt"
+}
