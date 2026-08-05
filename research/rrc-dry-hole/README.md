@@ -394,8 +394,14 @@ oil-test provenance — and plausibly the operator's name — for `45-56-803`.
 - `find_rrc_records.py` — fetches TWDB Report 78 and extracts the 45‑56‑803 record;
   pulls the well's GWDB row and RRC survey/well geometry; fetches and filters the
   Wildcat & Suspense roll index to District 7C; prints the name-variant matrix.
-- `central_records_request.md` — ready-to-send request to RRC Central Records,
-  updated with the corrected operator spelling and the exact abstract.
+- `central_records_request.md` — ready-to-send **mail/email** request to RRC Central
+  Records, updated with the corrected operator spelling and the exact abstract.
+- `field_guide.md` — **in-person** research packet for someone visiting RRC Central
+  Records: identifier card, how the pre-1965 operator-number filing works, a
+  counter-side retrieval script, a fallback tree (location, ARCO cross-reference,
+  District 7C office, Upton County land records), and logistics.
+- `evidence/` — supporting artifacts: the GWDB record, the RRC GIS resolution, the
+  ARCO Kimbell #1 plat and full dry-hole file, and the collection-sweep summary.
 
 ---
 
