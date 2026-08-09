@@ -188,24 +188,48 @@ def cmd_scrape(args):
     finally:
         conn.close()
 
-    print(f"{len(targets)} regulated entities to scrape")
-    access = tceq_records.get_access_id()
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
+
+    # Resume: a full sweep is thousands of HTTP round trips against one state
+    # query app, so it has to survive being interrupted. Anything already
+    # recorded is skipped, and each entity is flushed as it completes.
     results = []
-    for rn, operator in targets:
+    done = set()
+    if os.path.exists(args.out) and not args.restart:
+        try:
+            with open(args.out) as handle:
+                results = json.load(handle)
+            done = {r.get("regulated_entity") for r in results}
+        except (ValueError, OSError):
+            results, done = [], set()
+
+    todo = [(rn, op) for rn, op in targets if rn not in done]
+    print(f"{len(targets)} entities selected, {len(done)} already done, "
+          f"{len(todo)} to scrape")
+
+    access = tceq_records.get_access_id()
+    for index, (rn, operator) in enumerate(todo, 1):
         try:
             found = tceq_records.scrape_entity(
                 rn, args.dir, max_docs=args.max_docs, access=access,
-                delay=args.delay,
+                delay=args.delay, verbose=False,
             )
         except Exception as exc:
-            print(f"  {rn}: ERROR {type(exc).__name__}: {exc}")
-            continue
-        if found["max_mw"] or found["manufacturers"]:
-            print(f"  {rn} {str(found['entity_name'] or operator)[:32]:32} "
-                  f"max_mw={found['max_mw']} mfr={found['manufacturers'][:3]}")
+            print(f"  {rn}: ERROR {type(exc).__name__}: {exc}", flush=True)
+            found = {"regulated_entity": rn, "error": str(exc)[:150],
+                     "max_mw": None, "manufacturers": [], "models": [],
+                     "documents_total": 0, "documents_read": 0, "findings": []}
+        if found.get("max_mw") or found.get("manufacturers"):
+            print(f"  [{index}/{len(todo)}] {rn} "
+                  f"{str(found.get('entity_name') or operator)[:30]:30} "
+                  f"max_mw={found['max_mw']} mfr={found['manufacturers'][:3]}",
+                  flush=True)
         results.append(found)
+        if index % 5 == 0 or index == len(todo):
+            with open(args.out, "w") as handle:
+                json.dump(results, handle, indent=1)
+            print(f"    ... {index}/{len(todo)} scraped", flush=True)
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
     with open(args.out, "w") as handle:
         json.dump(results, handle, indent=1)
     hits = sum(1 for r in results if r["max_mw"] or r["manufacturers"])
@@ -499,6 +523,8 @@ def build_parser():
     sub.add_argument("--delay", type=float, default=1.0)
     sub.add_argument("--dir", default=os.path.join("data", "raw", "tceq_docs"))
     sub.add_argument("--out", default=os.path.join("output", "permit_units.json"))
+    sub.add_argument("--restart", action="store_true",
+                     help="ignore prior results and scrape everything again")
     sub.set_defaults(func=cmd_scrape)
 
     sub = subparsers.add_parser(

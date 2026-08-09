@@ -228,7 +228,7 @@ def extract_text(path, max_pages=40):
     return "\n".join(chunks)
 
 
-def extract_units(text):
+def extract_units(text, entity_name=None):
     """Pull candidate unit ratings and manufacturers out of permit text.
 
     Returns {'mw_values': [...], 'max_mw':, 'total_mw':, 'manufacturers': [...],
@@ -259,6 +259,12 @@ def extract_units(text):
         maker for maker in MANUFACTURERS
         if re.search(rf"\b{re.escape(maker)}\b", lowered)
     })
+    # A manufacturer that is merely the site's own name is not evidence about
+    # its equipment: "SOLAR TURBINES DLS OVERHAUL CENTER" is a repair shop, and
+    # every page of its file says "Solar Turbines".
+    if entity_name:
+        own = entity_name.lower()
+        makers = [m for m in makers if m not in own]
     # A bare "cat" is too common in prose to count on its own.
     if "cat" in makers and "caterpillar" not in makers:
         makers.remove("cat")
@@ -292,7 +298,9 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
         path = download(document, dest_dir)
         if not path:
             continue
-        extracted = extract_units(extract_text(path))
+        extracted = extract_units(
+            extract_text(path), entity_name=document.get("entity_name")
+        )
         extracted["title"] = document.get("title")
         extracted["doc_id"] = document.get("doc_id")
         findings.append(extracted)
