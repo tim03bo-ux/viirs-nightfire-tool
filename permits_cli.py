@@ -177,6 +177,10 @@ def cmd_scrape(args):
                    "       OR primary_business LIKE '%ELECTRIC%' "
                    "       OR permit_program IN ('psd','nsr')) ")
             params = []
+            if args.program:
+                wanted = [p.strip() for p in args.program.split(",") if p.strip()]
+                sql += f" AND permit_program IN ({','.join('?' * len(wanted))})"
+                params.extend(wanted)
             if args.lifecycle:
                 sql += " AND lifecycle = ?"
                 params.append(args.lifecycle)
@@ -522,6 +526,10 @@ def build_parser():
         "scrape", help="pull permit documents; extract unit MW and manufacturer"
     )
     sub.add_argument("--rn", help="scrape one regulated entity")
+    sub.add_argument("--program",
+                     help="comma-separated authorization programs, e.g. "
+                          "psd,nonattainment_nsr — the major-source filings are "
+                          "the ones carrying unit tables")
     sub.add_argument("--lifecycle", help="restrict to e.g. pending")
     sub.add_argument("--limit", type=int, default=25)
     sub.add_argument("--max-docs", type=int, default=6,
