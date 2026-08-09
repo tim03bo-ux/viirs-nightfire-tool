@@ -159,6 +159,61 @@ def cmd_sites(args):
     return 0
 
 
+def cmd_scrape(args):
+    """Pull permit documents and extract unit MW / engine manufacturer."""
+    from src.permits.sources import tceq_records
+
+    conn = dbmod.open_db(args.db)
+    try:
+        if args.rn:
+            targets = [(args.rn, None)]
+        else:
+            # Generation first, and within that the case-by-case programs, since
+            # PSD and NSR files are the ones that carry unit tables.
+            sql = ("SELECT DISTINCT regulated_entity, operator FROM entities "
+                   "WHERE source='tceq_air' AND regulated_entity IS NOT NULL "
+                   "  AND (project_kind='generation' "
+                   "       OR primary_business LIKE '%POWER%' "
+                   "       OR primary_business LIKE '%ELECTRIC%' "
+                   "       OR permit_program IN ('psd','nsr')) ")
+            params = []
+            if args.lifecycle:
+                sql += " AND lifecycle = ?"
+                params.append(args.lifecycle)
+            sql += (" ORDER BY CASE permit_program WHEN 'psd' THEN 0 "
+                    "WHEN 'nonattainment_nsr' THEN 1 WHEN 'nsr' THEN 2 ELSE 3 END "
+                    "LIMIT ?")
+            params.append(args.limit)
+            targets = [(r[0], r[1]) for r in conn.execute(sql, params)]
+    finally:
+        conn.close()
+
+    print(f"{len(targets)} regulated entities to scrape")
+    access = tceq_records.get_access_id()
+    results = []
+    for rn, operator in targets:
+        try:
+            found = tceq_records.scrape_entity(
+                rn, args.dir, max_docs=args.max_docs, access=access,
+                delay=args.delay,
+            )
+        except Exception as exc:
+            print(f"  {rn}: ERROR {type(exc).__name__}: {exc}")
+            continue
+        if found["max_mw"] or found["manufacturers"]:
+            print(f"  {rn} {str(found['entity_name'] or operator)[:32]:32} "
+                  f"max_mw={found['max_mw']} mfr={found['manufacturers'][:3]}")
+        results.append(found)
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
+    with open(args.out, "w") as handle:
+        json.dump(results, handle, indent=1)
+    hits = sum(1 for r in results if r["max_mw"] or r["manufacturers"])
+    print(f"\n{hits}/{len(results)} entities yielded MW or manufacturer data "
+          f"-> {args.out}")
+    return 0
+
+
 def cmd_enrich(args):
     pipeline.enrich_registry(args.db, limit=args.limit, delay=args.delay,
                              lifecycle=args.lifecycle, county=args.county)
@@ -432,6 +487,19 @@ def build_parser():
                      help="only sites with an application still in process")
     sub.add_argument("--limit", type=int, default=40)
     sub.set_defaults(func=cmd_sites)
+
+    sub = subparsers.add_parser(
+        "scrape", help="pull permit documents; extract unit MW and manufacturer"
+    )
+    sub.add_argument("--rn", help="scrape one regulated entity")
+    sub.add_argument("--lifecycle", help="restrict to e.g. pending")
+    sub.add_argument("--limit", type=int, default=25)
+    sub.add_argument("--max-docs", type=int, default=6,
+                     help="documents to open per entity")
+    sub.add_argument("--delay", type=float, default=1.0)
+    sub.add_argument("--dir", default=os.path.join("data", "raw", "tceq_docs"))
+    sub.add_argument("--out", default=os.path.join("output", "permit_units.json"))
+    sub.set_defaults(func=cmd_scrape)
 
     sub = subparsers.add_parser(
         "enrich", help="add real site names + business class from Central Registry"

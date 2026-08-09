@@ -47,3 +47,6 @@ CLAUDE.md
 
 # Central Registry lookup cache (regenerable, grows over time)
 data/cache/
+
+# Downloaded TCEQ permit documents (large, regenerable)
+data/raw/tceq_docs/
