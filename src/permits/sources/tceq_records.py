@@ -42,12 +42,18 @@ USER_AGENT = "viirs-nightfire-tool/permits (+https://github.com/tim03bo-ux/viirs
 
 # Record series worth searching for generation work. Values from the live
 # xRecordSeries select.
+# Verified against the live xRecordSeries select. There is no separate series
+# for standard permits or permits by rule — 30 TAC 116 rides under New Source
+# Review, so 1081 covers case-by-case permits, Subchapter F standard permits and
+# registrations alike. An earlier guess of "1101" for standard permits matched
+# nothing and would have returned silently empty results.
 RECORD_SERIES = {
-    "nsr_permit": "1081",
+    "nsr_permit": "1081",              # incl. standard permits and registrations
     "nsr_county_general": "1091",
     "federal_operating_permit": "1051",
-    "standard_permit": "1101",
-    "emissions_inventory": "1041",
+    "emissions_reduction_credit": "1041",
+    "discrete_emission_credit": "1021",
+    "emissions_banking": "1031",
 }
 
 # Document titles that plausibly carry unit tables. Applied to dDocTitle before

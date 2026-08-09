@@ -171,12 +171,25 @@ def cmd_scrape(args):
             # Generation first, and within that the case-by-case programs, since
             # PSD and NSR files are the ones that carry unit tables.
             sql = ("SELECT DISTINCT regulated_entity, operator FROM entities "
-                   "WHERE source='tceq_air' AND regulated_entity IS NOT NULL "
-                   "  AND (project_kind='generation' "
-                   "       OR primary_business LIKE '%POWER%' "
-                   "       OR primary_business LIKE '%ELECTRIC%' "
-                   "       OR permit_program IN ('psd','nsr')) ")
+                   "WHERE source='tceq_air' AND regulated_entity IS NOT NULL ")
+            if not (args.from_file or args.program):
+                # Only apply the generation heuristic when nothing more precise
+                # was asked for; --from-file and --program are already targeted.
+                sql += ("  AND (project_kind='generation' "
+                        "       OR primary_business LIKE '%POWER%' "
+                        "       OR primary_business LIKE '%ELECTRIC%' "
+                        "       OR permit_program IN ('psd','nsr')) ")
             params = []
+            if args.from_file:
+                # Target everything ingested from one export — the cleanest way
+                # to sweep TCEQ's own unit-rule pulls. The Electric Generating
+                # Facilities rule is 984 regulated entities, all standard
+                # permits, which is where reciprocating engines live; the
+                # generation keyword filter above would miss most of them
+                # because primary_business is only populated for enriched RNs.
+                sql += (" AND source_file_id IN (SELECT file_id FROM source_files"
+                        "  WHERE uri LIKE ?)")
+                params.append(f"%{args.from_file}%")
             if args.program:
                 wanted = [p.strip() for p in args.program.split(",") if p.strip()]
                 sql += f" AND permit_program IN ({','.join('?' * len(wanted))})"
@@ -526,6 +539,9 @@ def build_parser():
         "scrape", help="pull permit documents; extract unit MW and manufacturer"
     )
     sub.add_argument("--rn", help="scrape one regulated entity")
+    sub.add_argument("--from-file", dest="from_file",
+                     help="scrape entities from one ingested export, matched on "
+                          "its filename, e.g. electric_generating")
     sub.add_argument("--program",
                      help="comma-separated authorization programs, e.g. "
                           "psd,nonattainment_nsr — the major-source filings are "
@@ -559,6 +575,9 @@ def build_parser():
     sub = subparsers.add_parser(
         "timing", help="how long decided permits took, filing to decision"
     )
+    sub.add_argument("--from-file", dest="from_file",
+                     help="scrape entities from one ingested export, matched on "
+                          "its filename, e.g. electric_generating")
     sub.add_argument("--program", help="restrict to one authorization program")
     sub.add_argument("--limit", type=int, default=12)
     sub.set_defaults(func=cmd_timing)
@@ -566,6 +585,9 @@ def build_parser():
     sub = subparsers.add_parser(
         "applications", help="list authorizations still sitting in process"
     )
+    sub.add_argument("--from-file", dest="from_file",
+                     help="scrape entities from one ingested export, matched on "
+                          "its filename, e.g. electric_generating")
     sub.add_argument("--program", choices=statusmod.AIR_PROGRAMS + [
         statusmod.PROGRAM_STORMWATER, statusmod.PROGRAM_INTERCONNECTION,
     ], help="filter by authorization program")
