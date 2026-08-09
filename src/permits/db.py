@@ -69,7 +69,9 @@ CREATE TABLE IF NOT EXISTS entities (
     address         TEXT,
     latitude        REAL,
     longitude       REAL,
-    geo_precision   TEXT,          -- site | county | none
+    geo_precision   TEXT,          -- site | zip | county | none
+    zip_code        TEXT,
+    primary_business TEXT,   -- TCEQ Central Registry classification
     project_kind    TEXT,
     kind_confidence REAL,
     kind_evidence   TEXT,
@@ -183,7 +185,7 @@ CREATE INDEX IF NOT EXISTS ix_site_members_entity ON site_members(entity_id);
 ENTITY_COLUMNS = [
     "entity_id", "source", "source_key", "project_name", "name_norm", "operator",
     "operator_norm", "county", "county_norm", "state", "address", "latitude",
-    "longitude", "geo_precision", "project_kind", "kind_confidence", "kind_evidence",
+    "longitude", "geo_precision", "zip_code", "primary_business", "project_kind", "kind_confidence", "kind_evidence",
     "fuel", "technology", "fuel_confidence", "capacity_mw", "load_mw", "acres",
     "status", "status_date", "lifecycle", "stage", "received_date", "decision_date",
     "projected_cod", "permit_type", "permit_program", "permit_action",
@@ -202,6 +204,7 @@ _ADDED_COLUMNS = {
         "decision_date": "TEXT", "permit_program": "TEXT", "permit_action": "TEXT",
         "nox_tpy": "REAL", "co_tpy": "REAL", "voc_tpy": "REAL", "pm_tpy": "REAL",
         "so2_tpy": "REAL", "ghg_tpy": "REAL",
+        "zip_code": "TEXT", "primary_business": "TEXT",
         "air_permit_status": "TEXT", "air_permit_date": "TEXT",
         "construction_start": "TEXT", "construction_end": "TEXT",
     },

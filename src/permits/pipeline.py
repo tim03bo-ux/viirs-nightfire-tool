@@ -13,8 +13,9 @@ import os
 import re
 
 from . import db as dbmod
+from . import normalize
 from . import link as linkmod
-from .sources import ercot, tceq_air, tceq_stormwater
+from .sources import ercot, tceq_air, tceq_registry, tceq_stormwater
 
 SOURCE_GIS = ercot.SOURCE_GIS
 SOURCE_LARGE_LOAD = ercot.SOURCE_LARGE_LOAD
@@ -174,6 +175,73 @@ def fetch_ercot(db_path, dest_dir, sources=None, verbose=True, **ingest_kwargs):
             print(f"  ERROR fetching {source}: {exc}")
             results.append({"source": source, "error": str(exc)})
     return results
+
+
+def enrich_registry(db_path, cache_path=None, limit=None, delay=0.3, verbose=True,
+                    lifecycle=None, county=None):
+    """Fill in real site names and TCEQ's own business classification.
+
+    TCEQ's permit search gives a company name and an RN but never the site's own
+    name, and never says what the site does. Central Registry has both. This
+    writes the site name into `project_name` (keeping the company in `operator`),
+    stores the business classification, and re-geocodes to the ZIP centroid where
+    Central Registry supplies a ZIP.
+    """
+    conn = dbmod.open_db(db_path)
+    try:
+        # Central Registry is one round trip per RN with no bulk endpoint, so a
+        # statewide sweep is hours of traffic against a single query app.
+        # Filtering to what is being asked about keeps it to minutes.
+        sql = ("SELECT entity_id, regulated_entity FROM entities "
+               "WHERE source = 'tceq_air' AND regulated_entity IS NOT NULL")
+        params = []
+        if lifecycle:
+            sql += " AND lifecycle = ?"
+            params.append(lifecycle)
+        if county:
+            sql += " AND county_norm = ?"
+            params.append(county.lower())
+        rows = [dict(row) for row in conn.execute(sql, params)]
+        rns = [row["regulated_entity"] for row in rows]
+        cache = tceq_registry.enrich(
+            rns, cache_path=cache_path or tceq_registry.DEFAULT_CACHE,
+            limit=limit, delay=delay, verbose=verbose,
+        )
+
+        updates = []
+        for row in rows:
+            record = cache.get(str(row["regulated_entity"]))
+            if not record or record.get("not_found") or record.get("error"):
+                continue
+            name = record.get("name")
+            business = record.get("primary_business")
+            zip_code = record.get("near_zip_code")
+            latitude, longitude = normalize.zip_centroid(zip_code)
+            updates.append((
+                name, normalize.norm_project(name) if name else None,
+                business, zip_code, latitude, longitude,
+                "zip" if latitude is not None else None,
+                row["entity_id"],
+            ))
+
+        conn.executemany(
+            "UPDATE entities SET "
+            "  project_name   = COALESCE(?, project_name), "
+            "  name_norm      = COALESCE(?, name_norm), "
+            "  primary_business = COALESCE(?, primary_business), "
+            "  zip_code       = COALESCE(?, zip_code), "
+            "  latitude       = COALESCE(?, latitude), "
+            "  longitude      = COALESCE(?, longitude), "
+            "  geo_precision  = COALESCE(?, geo_precision) "
+            "WHERE entity_id = ?",
+            updates,
+        )
+        conn.commit()
+        if verbose:
+            print(f"  enriched {len(updates)} records from Central Registry")
+        return {"enriched": len(updates), "cached": len(cache)}
+    finally:
+        conn.close()
 
 
 def relink(db_path, threshold=linkmod.DEFAULT_THRESHOLD, verbose=True):

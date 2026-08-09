@@ -159,6 +159,15 @@ def cmd_sites(args):
     return 0
 
 
+def cmd_enrich(args):
+    pipeline.enrich_registry(args.db, limit=args.limit, delay=args.delay,
+                             lifecycle=args.lifecycle, county=args.county)
+    if not args.no_link:
+        print("Linking...")
+        pipeline.relink(args.db)
+    return 0
+
+
 def cmd_timing(args):
     """How long decided authorizations took, from filing to decision."""
     import pandas as pd
@@ -423,6 +432,18 @@ def build_parser():
                      help="only sites with an application still in process")
     sub.add_argument("--limit", type=int, default=40)
     sub.set_defaults(func=cmd_sites)
+
+    sub = subparsers.add_parser(
+        "enrich", help="add real site names + business class from Central Registry"
+    )
+    sub.add_argument("--limit", type=int, default=None,
+                     help="stop after this many new lookups")
+    sub.add_argument("--delay", type=float, default=0.3)
+    sub.add_argument("--lifecycle",
+                     help="only enrich records in this state, e.g. pending")
+    sub.add_argument("--county")
+    sub.add_argument("--no-link", action="store_true")
+    sub.set_defaults(func=cmd_enrich)
 
     sub = subparsers.add_parser(
         "timing", help="how long decided permits took, filing to decision"

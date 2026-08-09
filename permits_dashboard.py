@@ -178,6 +178,20 @@ def load_all(db_path, mtime):
             statusmod.days_sitting
         )
         entities["in_process"] = entities["lifecycle"].isin(statusmod.IN_PROCESS)
+        # One MW column regardless of which side of the meter a record sits on.
+        # SQLite hands these back as object dtype; plotly needs real numbers.
+        entities["mw"] = pd.to_numeric(
+            entities["capacity_mw"].fillna(entities["load_mw"]), errors="coerce"
+        )
+        entities["tech_label"] = entities["technology"].apply(
+            lambda value: statusmod.summarize_stage(value) or "Not stated"
+        )
+        entities["submitted"] = entities["received_date"].fillna(
+            entities["status_date"]
+        )
+        entities["submitted_year"] = pd.to_datetime(
+            entities["submitted"], errors="coerce"
+        ).dt.year
 
     if not sites.empty:
         sites["lifecycle_label"] = sites["lifecycle"].apply(
@@ -353,55 +367,203 @@ def render_headline(sites, entities):
     )
 
 
-def render_map(sites, offline_map):
-    located = sites[sites["latitude"].notna() & sites["longitude"].notna()].copy()
+GEO_LABELS = {
+    "site": "Surveyed site coordinates",
+    "zip": "ZIP centroid (approximate)",
+    "county": "County centroid (coarse)",
+    "none": "No geography",
+}
+
+
+def render_map(records, offline_map):
+    """Clickable, filterable map of individual permit and queue records.
+
+    Records, not resolved sites: the questions asked of this map are about
+    permits — what fuel, which technology, how big, filed when — and collapsing
+    them into sites would hide exactly that detail.
+    """
+    st.subheader("Permit and interconnection map")
+
+    located = records[
+        records["latitude"].notna() & records["longitude"].notna()
+    ].copy()
     if located.empty:
-        st.info("No sites carry coordinates yet.")
+        st.info("No records carry usable geography under the current filters.")
         return
 
-    located["size"] = located["total_mw"].clip(lower=25).fillna(25)
-    located["Geolocation"] = located["geo_precision"].map(
-        {"site": "Site coordinates", "county": "County centroid (approximate)"}
-    ).fillna("Unknown")
+    # Most TCEQ air permits are concrete plants, pipelines and refineries. The
+    # question this map answers is about electric generation, so the default view
+    # keeps records that are classified as generation or load, or that carry a
+    # fuel — and says plainly how many it set aside.
+    generation_related = (
+        located["project_kind"].isin(
+            [classify.KIND_GENERATION, *classify.LOAD_KINDS]
+        )
+        | located["fuel"].notna()
+        | located["primary_business"].fillna("").str.contains(
+            "POWER|ELECTRIC|GENERAT", case=False, regex=True
+        )
+    )
+    total = len(located)
+    only_generation = st.checkbox(
+        "Electric-generation related only", value=True,
+        help="Excludes air permits with no generation signal — concrete plants, "
+             "pipelines, refineries and the like.",
+    )
+    if only_generation:
+        located = located[generation_related]
+        st.caption(
+            f"Showing {len(located):,} generation-related records; "
+            f"{total - len(located):,} other permits hidden."
+        )
+
+    controls = st.columns(4)
+    with controls[0]:
+        techs = sorted(located["tech_label"].dropna().unique().tolist())
+        picked_tech = st.multiselect("Generation type", techs, default=[])
+    with controls[1]:
+        fuels = sorted(located["fuel_label"].dropna().unique().tolist())
+        picked_fuel = st.multiselect("Fuel", fuels, default=[])
+    with controls[2]:
+        sized = located["mw"].dropna()
+        cap = float(sized.max()) if not sized.empty else 0.0
+        min_mw = st.slider("Minimum MW", 0.0, max(cap, 1.0), 0.0, step=25.0)
+    with controls[3]:
+        precisions = [
+            GEO_LABELS.get(value, value)
+            for value in ["site", "zip", "county"]
+            if value in set(located["geo_precision"])
+        ]
+        picked_precision = st.multiselect(
+            "Location precision", precisions, default=precisions,
+            help="ZIP and county centroids are approximate. Neither ERCOT nor "
+                 "TCEQ publishes surveyed coordinates.",
+        )
+
+    years = located["submitted_year"].dropna()
+    if not years.empty:
+        low, high = int(years.min()), int(years.max())
+        if low < high:
+            picked_years = st.slider(
+                "Date submitted", low, high, (low, high), step=1,
+                help="Filing date for TCEQ permits, queue entry year for ERCOT.",
+            )
+            located = located[
+                located["submitted_year"].between(*picked_years)
+                | located["submitted_year"].isna()
+            ]
+
+    if picked_tech:
+        located = located[located["tech_label"].isin(picked_tech)]
+    if picked_fuel:
+        located = located[located["fuel_label"].isin(picked_fuel)]
+    if min_mw > 0:
+        located = located[located["mw"].fillna(0) >= min_mw]
+    if picked_precision:
+        wanted = {
+            key for key, label in GEO_LABELS.items() if label in picked_precision
+        }
+        located = located[located["geo_precision"].isin(wanted)]
+
+    if located.empty:
+        st.info("Nothing matches those filters.")
+        return
+
+    MAX_POINTS = 6000
+    dropped = 0
+    if len(located) > MAX_POINTS:
+        # Largest first, so a truncated view still shows what matters. Never
+        # silently: the count of omitted records is printed below the map.
+        located = located.sort_values("mw", ascending=False, na_position="last")
+        dropped = len(located) - MAX_POINTS
+        located = located.head(MAX_POINTS)
+
+    located["Precision"] = located["geo_precision"].map(GEO_LABELS).fillna("Unknown")
+    # Marker area carries MW where it is known; unsized records stay small and
+    # uniform rather than pretending to a capacity nobody published.
+    located["marker"] = (
+        pd.to_numeric(located["mw"], errors="coerce").fillna(0).clip(lower=0) + 18
+    )
+
     hover = {
-        "operator": True, "county": True, "gen_mw": ":,.0f", "load_mw": ":,.0f",
-        "fuel_labels": True, "Geolocation": True,
-        "latitude": False, "longitude": False, "size": False,
-        "site_class_label": False,
+        "operator": True, "county": True, "fuel_label": True, "tech_label": True,
+        "mw": ":,.1f", "lifecycle_label": True, "program_label": True,
+        "permit_number": True, "submitted": True, "Precision": True,
+        "latitude": False, "longitude": False, "marker": False,
+        "kind_label": False,
+    }
+    labels = {
+        "kind_label": "Record type", "operator": "Operator", "county": "County",
+        "fuel_label": "Fuel", "tech_label": "Technology", "mw": "MW",
+        "lifecycle_label": "State", "program_label": "Program",
+        "permit_number": "Permit / INR", "submitted": "Submitted",
     }
 
     if offline_map:
         figure = px.scatter_geo(
             located, lat="latitude", lon="longitude", scope="usa",
-            color="site_class_label", size="size", size_max=34,
-            color_discrete_map=SITE_CLASS_COLORS,
-            category_orders={"site_class_label": SITE_CLASS_ORDER},
-            hover_name="site_name", hover_data=hover,
-            labels={"site_class_label": "Site type"},
+            color="kind_label", size="marker", size_max=30,
+            color_discrete_map=KIND_COLORS, hover_name="project_name",
+            hover_data=hover, labels=labels,
         )
         figure.update_geos(fitbounds="locations")
     else:
         figure = px.scatter_mapbox(
             located, lat="latitude", lon="longitude", zoom=4.6,
             center={"lat": 31.3, "lon": -99.0},
-            color="site_class_label", size="size", size_max=34,
-            color_discrete_map=SITE_CLASS_COLORS,
-            category_orders={"site_class_label": SITE_CLASS_ORDER},
-            hover_name="site_name", hover_data=hover,
-            labels={"site_class_label": "Site type"},
+            color="kind_label", size="marker", size_max=30,
+            color_discrete_map=KIND_COLORS, hover_name="project_name",
+            hover_data=hover, labels=labels,
         )
         figure.update_layout(mapbox_style="open-street-map")
 
-    # A 2px surface ring keeps overlapping markers readable.
-    figure.update_traces(marker=dict(opacity=0.85))
+    figure.update_traces(marker=dict(opacity=0.8))
     figure.update_layout(
-        height=560, margin=dict(l=0, r=0, t=0, b=0),
+        height=600, margin=dict(l=0, r=0, t=0, b=0),
         legend=dict(orientation="h", yanchor="bottom", y=1.01, x=0, title=None),
     )
-    st.plotly_chart(figure, use_container_width=True)
+    selection = st.plotly_chart(
+        figure, use_container_width=True, on_select="rerun",
+        selection_mode=("points", "box", "lasso"), key="permit_map",
+    )
+
     st.caption(
-        "Marker area scales with gen + load MW. Records without site coordinates "
-        "are placed at their county centroid and labelled as approximate."
+        (f"{dropped:,} smaller records not drawn — narrow the filters to see them. "
+         if dropped else "")
+        + f"{len(located):,} records plotted. Marker area scales with MW where a "
+        "capacity is published — TCEQ never states one, so its records show at "
+        "the base size. Click, box- or lasso-select on the map to inspect."
+    )
+
+    picked = (selection or {}).get("selection", {}).get("points", [])
+    if picked:
+        indices = [p["point_index"] for p in picked if "point_index" in p]
+        # point_index is per-trace, so re-match on coordinates instead.
+        coords = {(round(p["lat"], 5), round(p["lon"], 5)) for p in picked
+                  if "lat" in p and "lon" in p}
+        chosen = located[
+            located.apply(
+                lambda r: (round(r["latitude"], 5), round(r["longitude"], 5)) in coords,
+                axis=1,
+            )
+        ] if coords else located.iloc[indices]
+        st.markdown(f"**{len(chosen)} record(s) selected**")
+        st.dataframe(
+            chosen[[
+                "project_name", "operator", "county", "kind_label", "fuel_label",
+                "tech_label", "mw", "lifecycle_label", "program_label",
+                "submitted", "permit_number", "Precision",
+            ]].rename(columns={**labels, "project_name": "Record",
+                               "Precision": "Location precision"}),
+            use_container_width=True, hide_index=True,
+        )
+    else:
+        st.caption("Select points on the map to list them here.")
+
+    st.download_button(
+        "Download mapped records (CSV)",
+        located.to_csv(index=False).encode("utf-8"),
+        file_name="mapped_permits.csv", mime="text/csv",
     )
 
 
@@ -985,7 +1147,7 @@ def main():
         "Permits & applications", "Site detail", "All records",
     ])
     with tabs[0]:
-        render_map(filtered_sites, offline_map)
+        render_map(filtered_entities, offline_map)
     with tabs[1]:
         render_colocated(filtered_sites)
     with tabs[2]:

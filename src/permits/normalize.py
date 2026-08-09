@@ -7,7 +7,9 @@ collapsed to a canonical form first, so all of that lives here rather than being
 re-invented per adapter.
 """
 
+import json
 import math
+import os
 import re
 import unicodedata
 from datetime import datetime, date
@@ -225,6 +227,32 @@ TX_COUNTY_CENTROIDS = {
     "wood": (32.79, -95.38), "yoakum": (33.17, -102.83), "young": (33.18, -98.69),
     "zapata": (26.99, -99.17), "zavala": (28.87, -99.76),
 }
+
+
+# ZIP centroids from the Census 2023 ZCTA gazetteer, clipped to the Texas
+# bounding box. TCEQ publishes no coordinates at all — only a county, a nearest
+# city, a ZIP and driving directions — so a ZIP centroid is the best real
+# geography available for a permit, and it is roughly an order of magnitude
+# tighter than a county centroid.
+_ZIP_CENTROIDS = None
+
+
+def zip_centroid(zip_code):
+    """Approximate (lat, lon) for a Texas ZIP, or (None, None)."""
+    global _ZIP_CENTROIDS
+    if _ZIP_CENTROIDS is None:
+        path = os.path.join(os.path.dirname(__file__), "data",
+                            "tx_zip_centroids.json")
+        try:
+            with open(path) as handle:
+                _ZIP_CENTROIDS = json.load(handle)
+        except (OSError, ValueError):
+            _ZIP_CENTROIDS = {}
+    digits = re.sub(r"[^0-9]", "", str(zip_code or ""))[:5]
+    if len(digits) != 5:
+        return (None, None)
+    found = _ZIP_CENTROIDS.get(digits)
+    return tuple(found) if found else (None, None)
 
 
 def county_centroid(county):

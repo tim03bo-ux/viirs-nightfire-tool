@@ -14,7 +14,7 @@ import re
 import pandas as pd
 
 from ..normalize import (
-    norm_text, clean_str, county_centroid, norm_company, norm_county, norm_project,
+    norm_text, clean_str, zip_centroid, county_centroid, norm_company, norm_county, norm_project,
     parse_date, parse_mw, parse_number,
 )
 from ..classify import classify_kind, classify_fuel
@@ -158,6 +158,7 @@ def build_entity(
     longitude=None,
     description=None,
     air_permit=None,
+    zip_code=None,
     construction_start=None,
     construction_end=None,
     fuel_code=None,
@@ -214,13 +215,19 @@ def build_entity(
     if latitude is not None and longitude is not None:
         geo_precision = "site"
     else:
-        centroid_lat, centroid_lon = county_centroid(county)
-        if centroid_lat is not None:
-            latitude, longitude = centroid_lat, centroid_lon
-            geo_precision = "county"
+        # ZIP first, county second — a Texas ZIP is far tighter than a county,
+        # and TCEQ supplies one even though it supplies no coordinates.
+        zip_lat, zip_lon = zip_centroid(zip_code)
+        if zip_lat is not None:
+            latitude, longitude, geo_precision = zip_lat, zip_lon, "zip"
         else:
-            latitude = longitude = None
-            geo_precision = "none"
+            centroid_lat, centroid_lon = county_centroid(county)
+            if centroid_lat is not None:
+                latitude, longitude = centroid_lat, centroid_lon
+                geo_precision = "county"
+            else:
+                latitude = longitude = None
+                geo_precision = "none"
 
     capacity_mw = parse_mw(capacity_mw)
     load_mw = parse_mw(load_mw)
@@ -295,6 +302,8 @@ def build_entity(
         "latitude": latitude,
         "longitude": longitude,
         "geo_precision": geo_precision,
+        "zip_code": clean_str(zip_code),
+        "primary_business": None,
         "project_kind": kind,
         "kind_confidence": kind_confidence,
         "kind_evidence": kind_evidence,

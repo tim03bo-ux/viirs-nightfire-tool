@@ -44,3 +44,6 @@ Thumbs.db
 # Claude Code local config / planning notes
 .claude/
 CLAUDE.md
+
+# Central Registry lookup cache (regenerable, grows over time)
+data/cache/
