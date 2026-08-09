@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SOURCES = {
     "ercot_gis": "ERCOT Generator Interconnection Status (GIS) report",
@@ -94,6 +94,11 @@ CREATE TABLE IF NOT EXISTS entities (
     customer_number TEXT,          -- TCEQ CN number
     -- Permitted (allowable) emissions in tons per year, where the export
     -- carries them. These are authorized rates, not measured emissions.
+    -- ERCOT states these for generation projects; TCEQ never does.
+    air_permit_status  TEXT,       -- obtained | not_required | verbatim text
+    air_permit_date    TEXT,
+    construction_start TEXT,
+    construction_end   TEXT,
     nox_tpy         REAL,
     co_tpy          REAL,
     voc_tpy         REAL,
@@ -183,6 +188,7 @@ ENTITY_COLUMNS = [
     "status", "status_date", "lifecycle", "stage", "received_date", "decision_date",
     "projected_cod", "permit_type", "permit_program", "permit_action",
     "permit_number", "regulated_entity", "customer_number",
+    "air_permit_status", "air_permit_date", "construction_start", "construction_end",
     "nox_tpy", "co_tpy", "voc_tpy", "pm_tpy", "so2_tpy", "ghg_tpy",
     "url", "first_seen", "last_seen", "source_file_id", "raw_json",
 ]
@@ -196,6 +202,8 @@ _ADDED_COLUMNS = {
         "decision_date": "TEXT", "permit_program": "TEXT", "permit_action": "TEXT",
         "nox_tpy": "REAL", "co_tpy": "REAL", "voc_tpy": "REAL", "pm_tpy": "REAL",
         "so2_tpy": "REAL", "ghg_tpy": "REAL",
+        "air_permit_status": "TEXT", "air_permit_date": "TEXT",
+        "construction_start": "TEXT", "construction_end": "TEXT",
     },
     "sites": {
         "gen_mw_approved": "REAL", "gen_mw_pending": "REAL",

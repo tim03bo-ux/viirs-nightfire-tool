@@ -14,7 +14,7 @@ import re
 import pandas as pd
 
 from ..normalize import (
-    clean_str, county_centroid, norm_company, norm_county, norm_project,
+    norm_text, clean_str, county_centroid, norm_company, norm_county, norm_project,
     parse_date, parse_mw, parse_number,
 )
 from ..classify import classify_kind, classify_fuel
@@ -77,12 +77,17 @@ def get(row, resolved, field, default=None):
     return value
 
 
-def find_header_row(df, expected_tokens, max_scan=12):
+def find_header_row(df, expected_tokens, max_scan=60):
     """Locate the real header row in a sheet with title/banner rows above it.
 
     ERCOT and TCEQ workbooks routinely carry a title block before the table. The
     row whose cells match the most expected tokens wins; returns its index or
     None when the first row already looks like the header.
+
+    The scan has to be deep: in the real July 2026 GIS report the "Project
+    Details - Large Gen" header is on row 30, under a title plus nine notes,
+    while "Small Gen" puts its header on row 14. A shallow scan silently reads
+    the notes as column names and every downstream lookup misses.
     """
     tokens = {_header_key(token) for token in expected_tokens}
     best_index, best_hits = None, 0
@@ -152,6 +157,9 @@ def build_entity(
     latitude=None,
     longitude=None,
     description=None,
+    air_permit=None,
+    construction_start=None,
+    construction_end=None,
     fuel_code=None,
     technology=None,
     capacity_mw=None,
@@ -242,6 +250,19 @@ def build_entity(
 
     received_date = parse_date(received_date)
     decision_date = parse_date(decision_date)
+
+    # ERCOT states a generation project's air-permit position directly: blank,
+    # the literal "Not Required" (solar, wind and storage), or the date the
+    # permit was obtained. That is a free cross-check on the TCEQ side.
+    air_permit_date = parse_date(air_permit)
+    if air_permit_date:
+        air_permit_status = "obtained"
+    elif norm_text(air_permit).startswith("not required"):
+        air_permit_status = "not_required"
+    elif clean_str(air_permit):
+        air_permit_status = clean_str(air_permit)
+    else:
+        air_permit_status = None
     program = classify_program(
         permit_type=permit_type, permit_number=permit_number, source=source
     )
@@ -296,6 +317,10 @@ def build_entity(
         "permit_number": clean_str(permit_number),
         "regulated_entity": clean_str(regulated_entity),
         "customer_number": clean_str(customer_number),
+        "air_permit_status": air_permit_status,
+        "air_permit_date": air_permit_date,
+        "construction_start": parse_date(construction_start),
+        "construction_end": parse_date(construction_end),
         "nox_tpy": parse_number(nox_tpy),
         "co_tpy": parse_number(co_tpy),
         "voc_tpy": parse_number(voc_tpy),

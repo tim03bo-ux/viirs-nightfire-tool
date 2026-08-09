@@ -386,10 +386,26 @@ class TestScoring:
         assert score == 0.0
         assert method == "county_only_weak_text"
 
-    def test_county_plus_shared_operator_links(self):
+    def test_county_plus_shared_operator_is_not_enough(self):
+        # A shared county and a shared developer describe most of that
+        # developer's portfolio. On the real July 2026 GIS report the old
+        # "name OR operator" rule merged 42 unrelated Brazoria County projects
+        # into one site, so both signals are now required.
         a = self.entity(geo_precision="county")
         b = self.entity(entity_id="e2", geo_precision="county",
                         name_norm="brazos ridge digital campus")
+        score, method, _, _, _ = linkmod.score_pair(a, b)
+        assert method == "county_only_weak_text"
+        assert score == 0.0
+
+    def test_county_plus_strong_name_and_operator_links(self):
+        # "Austin Bayou Solar" / "Austin Bayou Storage I" — a real solar-plus-
+        # storage site that must still merge.
+        a = self.entity(geo_precision="county", name_norm="austin bayou solar",
+                        operator_norm="austin bayou solar")
+        b = self.entity(entity_id="e2", geo_precision="county",
+                        name_norm="austin bayou storage 1",
+                        operator_norm="austin bayou solar")
         score, method, _, _, _ = linkmod.score_pair(a, b)
         assert method == "county_and_name"
         assert score >= linkmod.DEFAULT_THRESHOLD
@@ -597,17 +613,21 @@ class TestEndToEnd:
         assert set(info["by_source"]) == set(pipeline.ADAPTERS)
         assert info["entities"] == 49
 
-    def test_one_site_per_development(self, built):
-        # The demo has 18 invented developments; anything else means the linker
-        # over-merged or failed to join records that belong together.
+    def test_sites_resolve_close_to_one_per_development(self, built):
+        # 18 invented developments resolve to 19 sites. The extra one is Kiowa
+        # Draw, where a wind repower and a crypto mine share only a place name
+        # and a county — ERCOT publishes no coordinates, and refusing to assert
+        # colocation on that evidence is the correct behaviour, not a regression.
         _, _, summary = built
-        assert summary["sites"] == len(seed.DEVELOPMENTS)
+        assert summary["sites"] == len(seed.DEVELOPMENTS) + 1
 
     def test_colocated_sites_detected(self, built):
         _, conn, _ = built
         sites = dbmod.load_sites(conn)
         colocated = sites[sites["site_class"] == linkmod.SITE_COLOCATED]
-        assert len(colocated) == 4
+        # Three, not four: colocation is only claimed where the names or the
+        # coordinates actually support it. See the Kiowa Draw note above.
+        assert len(colocated) == 3
         names = set(colocated["site_name"])
         assert any("Brazos Ridge" in name for name in names)
         assert any("Panhandle Nexus" in name for name in names)
@@ -724,6 +744,85 @@ class TestEndToEnd:
         pipeline.ingest_dir(db_path, raw_dir, force=True, verbose=False)
         after = conn.execute("SELECT COUNT(*) FROM entities").fetchone()[0]
         assert after == before
+
+
+class TestRealGisLayout:
+    """Pins the layout of the actual ERCOT GIS workbook.
+
+    Reconstructed from the real July 2026 report: a title, a nine-paragraph
+    notes block, a grouping band, and only then the header — on row 30. The
+    original 12-row header scan read the notes as column names and resolved
+    nothing.
+    """
+
+    HEADERS = [
+        "INR", "Project Name", "GIM Study Phase", "Interconnecting Entity",
+        "POI Location", "County", "CDR Reporting Zone", "Projected COD", "Fuel",
+        "Technology", "Capacity (MW)", "IA Signed", "Air Permit",
+        "Construction Start", "Construction End", "Approved for Energization",
+    ]
+
+    def _workbook(self, tmp_path, header_row=30):
+        rows = [[None] * len(self.HEADERS) for _ in range(header_row)]
+        rows[6][0] = "GIM Project Details - Large Generators"
+        rows[8][0] = "NOTES:"
+        rows[9][0] = "Due to Protocol confidentiality provisions, ERCOT ..."
+        rows[29][0] = "Project Attributes"
+        rows.append(list(self.HEADERS))
+        rows.append([None] * len(self.HEADERS))          # spacer row, as in the real file
+        rows.append([
+            "25INR0102", "Austin Bayou Solar", "SS Completed, FIS Started, No IA",
+            "Austin Bayou Solar, LLC", "59903 Bearkat 345kV", "Brazoria", "ERCOT",
+            "2027-06-01", "SOL", "PV", 502.48, None, "Not Required", None, None, None,
+        ])
+        rows.append([
+            "23INR0029", "Cedar Bayou 5", "SS Completed, FIS Completed, IA",
+            "NRG Texas Power LLC", "Cedar Bayou 345kV", "Chambers", "ERCOT",
+            "2028-06-01", "GAS", "CC", 697.0, "2022-05-01", "2021-03-17",
+            "2024-01-01", "2027-12-31", "2028-05-01",
+        ])
+        path = tmp_path / "gis.xlsx"
+        pd.DataFrame(rows).to_excel(path, index=False, header=False,
+                                    sheet_name="Project Details - Large Gen")
+        return str(path)
+
+    def test_header_found_on_row_30(self, tmp_path):
+        df = ercot.read_gis(self._workbook(tmp_path))
+        assert "INR" in df.columns
+        assert "Capacity (MW)" in df.columns
+        assert "Air Permit" in df.columns
+
+    def test_records_parse_with_real_codes(self, tmp_path):
+        records = ercot.gis_to_entities(ercot.read_gis(self._workbook(tmp_path)))
+        by_inr = {r["permit_number"]: r for r in records}
+        assert set(by_inr) == {"25INR0102", "23INR0029"}
+
+        solar = by_inr["25INR0102"]
+        assert solar["fuel"] == classify.FUEL_SOLAR
+        assert solar["technology"] == "photovoltaic"
+        assert solar["capacity_mw"] == pytest.approx(502.48)
+        # No IA and no energization approval: still an application.
+        assert solar["lifecycle"] == statusmod.PENDING
+        assert solar["air_permit_status"] == "not_required"
+
+        gas = by_inr["23INR0029"]
+        assert gas["fuel"] == classify.FUEL_GAS
+        assert gas["technology"] == "combined_cycle"
+        assert gas["lifecycle"] == statusmod.APPROVED
+        assert gas["air_permit_status"] == "obtained"
+        assert gas["air_permit_date"] == "2021-03-17"
+        assert gas["construction_start"] == "2024-01-01"
+
+    def test_battery_survives_the_oth_fuel_code(self, tmp_path):
+        # Half the real queue is fuel OTH + technology BA. Reading BA as prose
+        # loses 877 of 1,797 projects to fuel "other" with no technology.
+        fuel, tech, _ = classify.classify_fuel(fuel_code="OTH", technology="BA")
+        assert fuel == classify.FUEL_STORAGE
+        assert tech == "battery"
+
+    def test_spacer_rows_under_the_header_are_dropped(self, tmp_path):
+        records = ercot.gis_to_entities(ercot.read_gis(self._workbook(tmp_path)))
+        assert len(records) == 2
 
 
 class TestSourceInference:

@@ -35,7 +35,7 @@ import zipfile
 import pandas as pd
 
 from . import base
-from ..normalize import clean_str, norm_text
+from ..normalize import clean_str, norm_text, parse_date
 
 SOURCE_GIS = "ercot_gis"
 SOURCE_LARGE_LOAD = "ercot_large_load"
@@ -65,7 +65,10 @@ GIS_SHEETS = [
     "Project Details - Small Gen",
 ]
 
-GIS_HEADER_TOKENS = ["INR", "Project Name", "County", "Fuel", "Capacity"]
+# Verified against the July 2026 workbook: Large Gen headers sit on row 30,
+# Small Gen on row 14, under a title block and up to nine notes paragraphs.
+GIS_HEADER_TOKENS = ["INR", "Project Name", "County", "Fuel", "Technology",
+                     "Capacity", "Interconnecting Entity"]
 
 GIS_COLUMNS = {
     "inr": ["INR", "Interconnection Request Number", "Queue Number"],
@@ -86,6 +89,16 @@ GIS_COLUMNS = {
     "security_posted": ["Financial Security Posted", "Security Posted"],
     "zone": ["CDR Reporting Zone", "Zone"],
     "status": ["Project Status", "Status"],
+    # Present in the real report and genuinely useful: ERCOT states each
+    # generation project's air-permit position and its construction window.
+    "air_permit": ["Air Permit"],
+    "ghg_permit": ["GHG Permit"],
+    "water_availability": ["Water Availability"],
+    "construction_start": ["Construction Start"],
+    "construction_end": ["Construction End"],
+    "energization": ["Approved for Energization"],
+    "synchronization": ["Approved for Synchronization"],
+    "comment": ["Comment"],
 }
 
 
@@ -132,24 +145,27 @@ def gis_to_entities(df, source_file_id=None):
     for _, row in df.iterrows():
         project_name = clean_str(base.get(row, resolved, "project_name"))
         inr = clean_str(base.get(row, resolved, "inr"))
-        if not project_name and not inr:
+        # The real sheets carry blank spacer rows under the header.
+        if not inr:
             continue
 
         # INR is ERCOT's stable key; fall back to name+county when a sheet omits it.
         county = clean_str(base.get(row, resolved, "county"))
         source_key = inr or f"{project_name}|{county or ''}"
 
-        status = clean_str(base.get(row, resolved, "status"))
-        if not status:
-            # Derive a coarse queue stage from the milestone columns.
-            if clean_str(base.get(row, resolved, "ia_signed")):
-                status = "IA signed"
-            elif clean_str(base.get(row, resolved, "security_posted")):
-                status = "Security posted"
-            elif clean_str(base.get(row, resolved, "screening_complete")):
-                status = "Screening complete"
-            else:
-                status = clean_str(base.get(row, resolved, "study_phase")) or "In queue"
+        # GIM Study Phase is a compound string in the real report, e.g.
+        # "SS Completed, FIS Started, No IA" — it already encodes the milestones,
+        # so it is kept verbatim as the displayed status.
+        phase = clean_str(base.get(row, resolved, "study_phase"))
+        status = clean_str(base.get(row, resolved, "status")) or phase or "In queue"
+
+        ia_signed = base.get(row, resolved, "ia_signed")
+        energization = base.get(row, resolved, "energization")
+        # An executed interconnection agreement, or approval to energize, is the
+        # queue's decision point. Everything short of that is still an
+        # application, whatever intermediate milestones have been met.
+        decision_date = parse_date(energization) or parse_date(ia_signed)
+        lifecycle_override = "approved" if decision_date else "pending"
 
         records.append(
             base.build_entity(
@@ -165,9 +181,11 @@ def gis_to_entities(df, source_file_id=None):
                 capacity_mw=base.get(row, resolved, "capacity_mw"),
                 projected_cod=base.get(row, resolved, "projected_cod"),
                 status=status,
-                # An executed interconnection agreement is the queue's decision
-                # point — before it, the project is still an application.
-                decision_date=base.get(row, resolved, "ia_signed"),
+                decision_date=decision_date,
+                lifecycle_override=lifecycle_override,
+                air_permit=base.get(row, resolved, "air_permit"),
+                construction_start=base.get(row, resolved, "construction_start"),
+                construction_end=base.get(row, resolved, "construction_end"),
                 permit_type="ERCOT interconnection request",
                 permit_number=inr,
                 source_file_id=source_file_id,

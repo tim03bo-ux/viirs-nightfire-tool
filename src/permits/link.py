@@ -41,8 +41,20 @@ DEFAULT_THRESHOLD = 0.62      # minimum combined score to link two records
 SAME_SITE_KM = 1.0            # at or under this, spatial evidence is maximal
 MAX_LINK_KM = 5.0             # beyond this, coordinates are evidence *against*
 RN_MATCH_SCORE = 0.98         # shared TCEQ regulated-entity number
-MIN_NAME_FOR_COUNTY_MATCH = 0.55
-MIN_OPERATOR_FOR_COUNTY_MATCH = 0.80
+# Tuned against the real July 2026 GIS report (1,827 records). ERCOT gives no
+# coordinates, only a county, so every ERCOT-to-ERCOT pair falls to this rule —
+# and a county like Brazoria holds dozens of unrelated projects. The original
+# "name OR operator" gate merged 42 distinct Brazoria developments (Austin Bayou,
+# Bell Creek, Bodkin, Cascade, Clutch City...) into a single site, because one
+# big developer's name matching was enough and union-find then chained the rest.
+# Requiring BOTH a strong name and a strong operator caps the largest cluster at
+# 8 and leaves only legitimate phased campuses merged: Watermelon 1-8 Energy
+# Storage, Charro Creek Solar 1-3 with its three colocated storage units,
+# Kickstart Energy Storage I-VI. 0.75 rather than 0.85 because
+# "Austin Bayou Solar" / "Austin Bayou Storage I" scores 0.80 and is a genuine
+# solar-plus-storage site that 0.85 would wrongly split.
+MIN_NAME_FOR_COUNTY_MATCH = 0.75
+MIN_OPERATOR_FOR_COUNTY_MATCH = 0.75
 
 # Preference order when picking a site's display name / operator.
 SOURCE_PRIORITY = ["ercot_gis", "ercot_large_load", "tceq_air", "tceq_swnoi"]
@@ -142,13 +154,17 @@ def score_pair(a, b):
     if not county_a or not county_b or county_a != county_b:
         return (0.0, "no_common_geography", None, name_score, operator_score)
 
+    # BOTH must hold. Either alone is worthless here: a shared county plus a
+    # shared developer describes most of that developer's portfolio, and a
+    # shared name plus a different developer is usually a reused place name.
     if (
         name_score < MIN_NAME_FOR_COUNTY_MATCH
-        and operator_score < MIN_OPERATOR_FOR_COUNTY_MATCH
+        or operator_score < MIN_OPERATOR_FOR_COUNTY_MATCH
     ):
         return (0.0, "county_only_weak_text", None, name_score, operator_score)
 
-    score = 0.15 + 0.50 * name_score + 0.35 * operator_score
+    # The project name carries site identity; the operator only corroborates.
+    score = 0.30 + 0.55 * name_score + 0.15 * operator_score
     return (score, "county_and_name", None, name_score, operator_score)
 
 

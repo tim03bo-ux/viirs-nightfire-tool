@@ -231,11 +231,29 @@ FUEL_ORDER = [
 ]
 
 # ERCOT GIS fuel codes as they appear in the monthly workbook.
+# Verified against the July 2026 GIS report: the codes actually present are
+# OTH, SOL, WIN, GAS, OIL, HYD, NUC and WAT.
 ERCOT_FUEL_CODES = {
     "sol": FUEL_SOLAR, "win": FUEL_WIND, "wat": FUEL_HYDRO, "gas": FUEL_GAS,
     "coa": FUEL_COAL, "lig": FUEL_COAL, "nuc": FUEL_NUCLEAR, "pet": FUEL_PETROLEUM,
-    "bio": FUEL_BIOMASS, "geo": FUEL_GEOTHERMAL, "oth": FUEL_OTHER,
-    "wds": FUEL_BIOMASS, "hyd": FUEL_HYDRO,
+    "oil": FUEL_PETROLEUM, "bio": FUEL_BIOMASS, "geo": FUEL_GEOTHERMAL,
+    "oth": FUEL_OTHER, "wds": FUEL_BIOMASS, "hyd": FUEL_HYDRO,
+}
+
+# ERCOT's Technology column holds two-letter codes, NOT prose. Half the queue is
+# fuel OTH + technology BA (battery), so without this map 877 of 1,797 July 2026
+# projects would classify as fuel "other" with no technology at all.
+# (code -> (canonical technology, fuel implied when the fuel code is
+#  absent or the catch-all OTH))
+ERCOT_TECH_CODES = {
+    "ba": ("battery", FUEL_STORAGE),
+    "pv": ("photovoltaic", FUEL_SOLAR),
+    "wt": ("wind_turbine", FUEL_WIND),
+    "gt": ("combustion_turbine", None),
+    "cc": ("combined_cycle", None),
+    "ic": ("reciprocating_engine", None),
+    "st": ("steam_turbine", None),
+    "ot": (None, None),
 }
 
 # Ordered longest/most-specific first — 'combined cycle' must beat bare 'gas'.
@@ -277,8 +295,8 @@ _TECH_PHRASES = [
 def classify_fuel(fuel_code=None, technology=None, name=None, description=None):
     """Return (fuel, technology, confidence).
 
-    fuel_code is the ERCOT-style short code when the source supplies one; the
-    free-text fields are searched otherwise.
+    fuel_code and technology are the ERCOT short codes when the source supplies
+    them; the free-text fields are searched otherwise.
     """
     code = norm_text(fuel_code).replace(" ", "")
     if code[:3] in ERCOT_FUEL_CODES:
@@ -287,6 +305,16 @@ def classify_fuel(fuel_code=None, technology=None, name=None, description=None):
     else:
         fuel = None
         confidence = 0.0
+
+    # A two-letter ERCOT technology code settles both fields at once, and is the
+    # only thing that distinguishes a battery from any other "OTH" fuel row.
+    tech_code = norm_text(technology).replace(" ", "")
+    if tech_code in ERCOT_TECH_CODES:
+        coded_tech, implied_fuel = ERCOT_TECH_CODES[tech_code]
+        if implied_fuel and fuel in (None, FUEL_OTHER):
+            fuel, confidence = implied_fuel, 0.95
+        if coded_tech:
+            return fuel, coded_tech, (confidence or 0.9)
 
     haystack = " ".join(
         norm_text(part) for part in (technology, name, description, fuel_code) if part
