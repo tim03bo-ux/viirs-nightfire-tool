@@ -31,7 +31,7 @@ summarized into the `sites` table.
 import hashlib
 from collections import defaultdict
 
-from . import classify
+from . import classify, status
 from .db import utcnow
 from .normalize import haversine_km, name_similarity
 
@@ -46,6 +46,14 @@ MIN_OPERATOR_FOR_COUNTY_MATCH = 0.80
 
 # Preference order when picking a site's display name / operator.
 SOURCE_PRIORITY = ["ercot_gis", "ercot_large_load", "tceq_air", "tceq_swnoi"]
+
+# A site's lifecycle is the most advanced state any of its records reached: a
+# campus with an issued air permit and a pending amendment is an operating or
+# approved site that also has something in process, not a pending one.
+_SITE_LIFECYCLE_PRECEDENCE = [
+    status.OPERATING, status.APPROVED, status.PENDING,
+    status.DENIED, status.WITHDRAWN, status.EXPIRED, status.UNKNOWN,
+]
 
 SITE_GENERATION_ONLY = "generation_only"
 SITE_LOAD_ONLY = "load_only"
@@ -227,7 +235,56 @@ def _pick_display(members, field):
     return best
 
 
-def _capacity_by_source(members, field, kinds=None, fuels=None):
+def _winning_source(members, field, kinds=None, fuels=None):
+    """Pick the source whose records account for a site's capacity.
+
+    Returns (source, total). Ties break on source name so the choice is stable
+    across runs. See `_capacity_by_source` for why the largest source wins.
+    """
+    totals = defaultdict(float)
+    for member in members:
+        if kinds and member.get("project_kind") not in kinds:
+            continue
+        if fuels and member.get("fuel") not in fuels:
+            continue
+        value = member.get(field)
+        if value is None:
+            continue
+        totals[member.get("source")] += float(value)
+    if not totals:
+        return (None, None)
+    source = max(sorted(totals), key=lambda name: totals[name])
+    return (source, round(totals[source], 2))
+
+
+def _capacity_in_lifecycle(members, field, source, lifecycles, kinds=None):
+    """Sum one source's records that sit in the given lifecycle states.
+
+    Restricting to the *winning* source is what keeps the approved/pending split
+    a true partition of the site total. Without it, a plant with an executed
+    interconnection agreement but a pending air permit would report its full
+    capacity as approved and again as pending — the same megawatts twice.
+    """
+    if source is None:
+        return None
+    total = 0.0
+    found = False
+    for member in members:
+        if member.get("source") != source:
+            continue
+        if kinds and member.get("project_kind") not in kinds:
+            continue
+        if member.get("lifecycle") not in lifecycles:
+            continue
+        value = member.get(field)
+        if value is None:
+            continue
+        total += float(value)
+        found = True
+    return round(total, 2) if found else None
+
+
+def _capacity_by_source(members, field, kinds=None, fuels=None, lifecycles=None):
     """Sum a capacity field within each source, then take the largest source total.
 
     Summing across sources would double-count: a 400 MW plant appears once in the
@@ -241,6 +298,8 @@ def _capacity_by_source(members, field, kinds=None, fuels=None):
         if kinds and member.get("project_kind") not in kinds:
             continue
         if fuels and member.get("fuel") not in fuels:
+            continue
+        if lifecycles and member.get("lifecycle") not in lifecycles:
             continue
         value = member.get(field)
         if value is None:
@@ -272,10 +331,10 @@ def summarize_site(members, link_scores):
     else:
         site_class = SITE_MIXED
 
-    gen_mw = _capacity_by_source(
+    gen_source, gen_mw = _winning_source(
         members, "capacity_mw", kinds={classify.KIND_GENERATION}
     )
-    load_mw = _capacity_by_source(members, "load_mw")
+    load_source, load_mw = _winning_source(members, "load_mw")
     dispatchable_fuels = {
         fuel for fuel in classify.FUEL_ORDER if classify.is_dispatchable(fuel)
     }
@@ -283,6 +342,39 @@ def summarize_site(members, link_scores):
         members, "capacity_mw",
         kinds={classify.KIND_GENERATION}, fuels=dispatchable_fuels,
     )
+
+    # Split the same capacity the headline uses, so approved + pending never
+    # exceeds gen_mw. A site with an issued permit and a pending amendment shows
+    # both parts; a site whose single project is approved in one feed and pending
+    # in another counts once, with has_pending flagging the open action.
+    gen_mw_approved = _capacity_in_lifecycle(
+        members, "capacity_mw", gen_source, status.AUTHORIZED,
+        kinds={classify.KIND_GENERATION},
+    )
+    gen_mw_pending = _capacity_in_lifecycle(
+        members, "capacity_mw", gen_source, status.IN_PROCESS,
+        kinds={classify.KIND_GENERATION},
+    )
+    load_mw_approved = _capacity_in_lifecycle(
+        members, "load_mw", load_source, status.AUTHORIZED
+    )
+    load_mw_pending = _capacity_in_lifecycle(
+        members, "load_mw", load_source, status.IN_PROCESS
+    )
+
+    member_lifecycles = {member.get("lifecycle") for member in members}
+    site_lifecycle = next(
+        (value for value in _SITE_LIFECYCLE_PRECEDENCE if value in member_lifecycles),
+        status.UNKNOWN,
+    )
+    has_pending = bool(member_lifecycles & status.IN_PROCESS)
+
+    programs = sorted(
+        {member.get("permit_program") for member in members if member.get("permit_program")}
+    )
+    nox_tpy = sum(
+        member["nox_tpy"] for member in members if member.get("nox_tpy") is not None
+    ) or None
 
     fuels = [
         fuel for fuel in classify.FUEL_ORDER
@@ -331,9 +423,17 @@ def summarize_site(members, link_scores):
         "has_load": int(has_load),
         "gen_mw": gen_mw,
         "load_mw": load_mw,
+        "gen_mw_approved": gen_mw_approved,
+        "gen_mw_pending": gen_mw_pending,
+        "load_mw_approved": load_mw_approved,
+        "load_mw_pending": load_mw_pending,
+        "lifecycle": site_lifecycle,
+        "has_pending": int(has_pending),
         "fuels": ",".join(fuels) or None,
         "technologies": ",".join(technologies) or None,
+        "programs": ",".join(programs) or None,
         "dispatchable_mw": dispatchable_mw,
+        "nox_tpy": nox_tpy,
         "n_members": len(members),
         "sources": ",".join(sorted({member["source"] for member in members})),
         "earliest_date": min(dates) if dates else None,

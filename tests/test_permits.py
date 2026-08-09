@@ -10,7 +10,10 @@ import tempfile
 import pandas as pd
 import pytest
 
-from src.permits import classify, db as dbmod, link as linkmod, normalize, pipeline, seed
+from src.permits import (
+    classify, db as dbmod, link as linkmod, normalize, pipeline, seed,
+    status as statusmod,
+)
 from src.permits.sources import base, ercot, tceq_air, tceq_stormwater
 
 
@@ -256,6 +259,23 @@ class TestAirCapacityParsing:
     def test_plain_rating(self):
         assert tceq_air.capacity_from_text("1,120 MW combined cycle") == pytest.approx(1120.0)
 
+    def test_spelled_out_multiplier(self):
+        # "Twenty-two 12 MW engines" is a 264 MW power block, not a 12 MW one.
+        assert tceq_air.capacity_from_text(
+            "Twenty-two 12 MW natural gas reciprocating engines"
+        ) == pytest.approx(264.0)
+        assert tceq_air.capacity_from_text(
+            "Forty-eight 3.0 MW diesel emergency standby generators"
+        ) == pytest.approx(144.0)
+
+    def test_word_to_int(self):
+        assert tceq_air.word_to_int("twenty-two") == 22
+        assert tceq_air.word_to_int("eight") == 8
+        assert tceq_air.word_to_int("banana") is None
+
+    def test_other_units_ignored(self):
+        assert tceq_air.capacity_from_text("two 8 MMBtu/hr process heaters") is None
+
     def test_no_rating(self):
         assert tceq_air.capacity_from_text("concrete batch plant") is None
 
@@ -393,6 +413,169 @@ class TestUnionFind:
         assert frozenset({"d"}) in groups
 
 
+class TestLifecycle:
+    """Approved vs still-sitting-in-process, across every feed's vocabulary."""
+
+    @pytest.mark.parametrize("text,expected", [
+        ("Issued", statusmod.APPROVED),
+        ("Registered", statusmod.APPROVED),
+        ("Final", statusmod.APPROVED),
+        ("Active", statusmod.APPROVED),
+        ("IA Signed", statusmod.APPROVED),
+        ("Approved for energization", statusmod.APPROVED),
+        ("Pending - Technical Review", statusmod.PENDING),
+        ("Pending - Public Notice", statusmod.PENDING),
+        ("Under Review", statusmod.PENDING),
+        ("Notice of Receipt of Application", statusmod.PENDING),
+        ("Study in progress", statusmod.PENDING),
+        ("Screening", statusmod.PENDING),
+        ("Energized", statusmod.OPERATING),
+        ("In Service", statusmod.OPERATING),
+        ("Withdrawn", statusmod.WITHDRAWN),
+        ("Void", statusmod.WITHDRAWN),
+        ("Denied", statusmod.DENIED),
+        ("Expired", statusmod.EXPIRED),
+        ("Terminated", statusmod.EXPIRED),
+    ])
+    def test_status_text(self, text, expected):
+        assert statusmod.classify_lifecycle(status=text)[0] == expected
+
+    def test_pending_beats_approved_in_mixed_text(self):
+        # "FIS Approved" is a queue milestone, not an authorization: the project
+        # is still waiting on an interconnection agreement.
+        assert statusmod.classify_lifecycle(status="FIS Approved")[0] == statusmod.PENDING
+        assert statusmod.classify_lifecycle(
+            status="Screening Study Complete"
+        )[0] == statusmod.PENDING
+        assert statusmod.classify_lifecycle(
+            status="Security posted"
+        )[0] == statusmod.PENDING
+
+    def test_terminal_outcome_beats_progress_words(self):
+        assert statusmod.classify_lifecycle(
+            status="Withdrawn after technical review"
+        )[0] == statusmod.WITHDRAWN
+
+    def test_dates_break_the_tie_when_status_is_unreadable(self):
+        assert statusmod.classify_lifecycle(
+            status="", decision_date="2025-03-04"
+        )[0] == statusmod.APPROVED
+        assert statusmod.classify_lifecycle(
+            status="", received_date="2026-01-12"
+        )[0] == statusmod.PENDING
+        assert statusmod.classify_lifecycle(status="")[0] == statusmod.UNKNOWN
+
+    @pytest.mark.parametrize("text,stage", [
+        ("Pending - Technical Review", "technical_review"),
+        ("Pending - Administrative Review", "administrative_review"),
+        ("Pending - Public Notice", "public_notice"),
+        ("Contested Case Hearing", "contested_case_hearing"),
+        ("IA Signed", "interconnection_agreement"),
+        ("FIS Requested", "full_interconnection_study"),
+        ("Screening Study Started", "screening_study"),
+    ])
+    def test_stage_extraction(self, text, stage):
+        assert statusmod.classify_lifecycle(status=text)[1] == stage
+
+    def test_bucket_membership(self):
+        assert statusmod.PENDING in statusmod.IN_PROCESS
+        assert statusmod.APPROVED in statusmod.AUTHORIZED
+        assert statusmod.OPERATING in statusmod.AUTHORIZED
+        assert not (statusmod.IN_PROCESS & statusmod.AUTHORIZED)
+
+    def test_days_sitting(self):
+        from datetime import date
+
+        assert statusmod.days_sitting("2026-01-01", as_of=date(2026, 3, 2)) == 60
+        assert statusmod.days_sitting(None) is None
+        assert statusmod.days_sitting("not a date") is None
+
+
+class TestProgram:
+    """Which TCEQ air authorization (or other program) a record belongs to."""
+
+    @pytest.mark.parametrize("permit_type,expected", [
+        ("New Source Review - Air Quality Permit", statusmod.PROGRAM_NSR),
+        ("New Source Review - PSD", statusmod.PROGRAM_PSD),
+        ("Nonattainment New Source Review", statusmod.PROGRAM_NNSR),
+        ("Permit by Rule - 30 TAC 106.512", statusmod.PROGRAM_PBR),
+        ("Air Quality Standard Permit", statusmod.PROGRAM_STANDARD),
+        ("Federal Operating Permit - Title V - Renewal", statusmod.PROGRAM_TITLE_V),
+        ("De Minimis", statusmod.PROGRAM_DE_MINIMIS),
+    ])
+    def test_from_permit_type(self, permit_type, expected):
+        assert statusmod.classify_program(permit_type=permit_type) == expected
+
+    def test_major_source_beats_plain_nsr(self):
+        # PSD and nonattainment are flavours of NSR; the specific label is the
+        # useful one, so it must not be swallowed by the generic match.
+        assert statusmod.classify_program(
+            permit_type="New Source Review - PSD"
+        ) == statusmod.PROGRAM_PSD
+
+    def test_from_permit_number_prefix(self):
+        assert statusmod.classify_program(
+            permit_number="PBR-166051"
+        ) == statusmod.PROGRAM_PBR
+        assert statusmod.classify_program(
+            permit_number="TXR15A4471"
+        ) == statusmod.PROGRAM_STORMWATER
+
+    def test_source_default(self):
+        assert statusmod.classify_program(
+            source="ercot_gis"
+        ) == statusmod.PROGRAM_INTERCONNECTION
+        assert statusmod.classify_program(
+            source="tceq_air"
+        ) == statusmod.PROGRAM_OTHER_AIR
+
+    @pytest.mark.parametrize("permit_type,expected", [
+        ("New Source Review - Amendment", statusmod.ACTION_AMENDMENT),
+        ("Title V - Renewal", statusmod.ACTION_RENEWAL),
+        ("Permit Alteration", statusmod.ACTION_ALTERATION),
+        ("Change of Location", statusmod.ACTION_CHANGE_OF_LOCATION),
+        ("New Source Review - Air Quality Permit", statusmod.ACTION_NEW),
+    ])
+    def test_action(self, permit_type, expected):
+        assert statusmod.classify_action(permit_type=permit_type) == expected
+
+
+class TestMigration:
+    """Existing databases pick up new columns without a rebuild."""
+
+    def test_adds_missing_columns(self, tmp_path):
+        db_path = str(tmp_path / "legacy.db")
+        conn = dbmod.connect(db_path)
+        # A database created before the lifecycle columns existed.
+        conn.execute(
+            "CREATE TABLE entities (entity_id TEXT PRIMARY KEY, source TEXT, "
+            "source_key TEXT, status TEXT)"
+        )
+        conn.commit()
+
+        added = dbmod.migrate(conn)
+        assert "entities.lifecycle" in added
+        assert "entities.permit_program" in added
+        assert "entities.nox_tpy" in added
+
+        columns = {row["name"] for row in conn.execute("PRAGMA table_info(entities)")}
+        assert "decision_date" in columns
+        conn.close()
+
+    def test_is_idempotent(self, tmp_path):
+        conn = dbmod.open_db(str(tmp_path / "fresh.db"))
+        assert dbmod.migrate(conn) == []
+        conn.close()
+
+    def test_schema_version_stamped(self, tmp_path):
+        conn = dbmod.open_db(str(tmp_path / "fresh.db"))
+        value = conn.execute(
+            "SELECT value FROM meta WHERE key = 'schema_version'"
+        ).fetchone()[0]
+        assert int(value) == dbmod.SCHEMA_VERSION
+        conn.close()
+
+
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
     """Build the demo database once and share it across the end-to-end tests."""
@@ -412,7 +595,7 @@ class TestEndToEnd:
         _, conn, _ = built
         info = dbmod.stats(conn)
         assert set(info["by_source"]) == set(pipeline.ADAPTERS)
-        assert info["entities"] == 44
+        assert info["entities"] == 49
 
     def test_one_site_per_development(self, built):
         # The demo has 18 invented developments; anything else means the linker
@@ -440,12 +623,14 @@ class TestEndToEnd:
 
     def test_capacity_not_double_counted_across_sources(self, built):
         # Sabine Point appears in the ERCOT queue at 1,120 MW and again on its
-        # TCEQ air permit. The site must report 1,120 MW, not 2,240.
+        # issued TCEQ air permit, plus a pending amendment for another 45 MW.
+        # The site must report 1,165 — the air feed's own total — and never
+        # 2,285, which is what adding the feeds together would give.
         _, conn, _ = built
         sites = dbmod.load_sites(conn)
         sabine = sites[sites["site_name"].str.contains("Sabine Point")].iloc[0]
-        assert sabine["gen_mw"] == 1120.0
-        assert sabine["n_members"] == 3
+        assert sabine["gen_mw"] == 1165.0
+        assert sabine["n_members"] == 4
 
     def test_multiple_queue_entries_at_one_site_are_summed(self, built):
         # Llano Mesa is 250 MW solar plus a 150 MW battery, both in ERCOT.
@@ -473,6 +658,54 @@ class TestEndToEnd:
         entities = dbmod.load_entities(conn, sources=["tceq_swnoi"])
         assert entities["acres"].notna().all()
         assert entities["acres"].max() > 1000
+
+    def test_both_approved_and_pending_present(self, built):
+        _, conn, _ = built
+        info = dbmod.stats(conn)
+        assert info["by_lifecycle"][statusmod.APPROVED] > 0
+        assert info["by_lifecycle"][statusmod.PENDING] > 0
+
+    def test_all_air_programs_represented(self, built):
+        # The demo deliberately spans every TCEQ air authorization family, so a
+        # regression in program classification shows up here.
+        _, conn, _ = built
+        programs = set(dbmod.stats(conn)["by_program"])
+        for program in (statusmod.PROGRAM_NSR, statusmod.PROGRAM_PSD,
+                        statusmod.PROGRAM_PBR, statusmod.PROGRAM_STANDARD,
+                        statusmod.PROGRAM_TITLE_V):
+            assert program in programs
+
+    def test_capacity_split_is_a_partition(self, built):
+        # approved + pending must never exceed the site total, or the same
+        # megawatts are being counted twice.
+        _, conn, _ = built
+        sites = dbmod.load_sites(conn)
+        split = sites[["gen_mw_approved", "gen_mw_pending"]].fillna(0).sum(axis=1)
+        assert (split <= sites["gen_mw"].fillna(0) + 1e-6).all()
+
+    def test_issued_permit_and_pending_amendment_both_counted(self, built):
+        # Sabine Point holds an issued PSD permit plus a pending amendment for
+        # an extra 45 MW; both belong in the split.
+        _, conn, _ = built
+        sites = dbmod.load_sites(conn)
+        sabine = sites[sites["site_name"].str.contains("Sabine Point")].iloc[0]
+        assert sabine["gen_mw_approved"] == 1120.0
+        assert sabine["gen_mw_pending"] == 45.0
+        assert sabine["has_pending"] == 1
+
+    def test_pending_applications_carry_filing_dates(self, built):
+        _, conn, _ = built
+        records = dbmod.load_entities(conn, sources=["tceq_air"])
+        pending = records[records["lifecycle"] == statusmod.PENDING]
+        assert len(pending) > 0
+        assert pending["received_date"].notna().all()
+        assert pending["decision_date"].isna().all()
+
+    def test_permitted_emissions_ingested(self, built):
+        _, conn, _ = built
+        records = dbmod.load_entities(conn, sources=["tceq_air"])
+        assert records["nox_tpy"].notna().sum() >= 5
+        assert records["nox_tpy"].max() > 100
 
     def test_demo_flag_set(self, built):
         _, conn, _ = built

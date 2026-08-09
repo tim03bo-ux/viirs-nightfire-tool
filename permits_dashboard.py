@@ -20,6 +20,7 @@ import streamlit as st
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.permits import classify, db as dbmod, link as linkmod  # noqa: E402
+from src.permits import status as statusmod  # noqa: E402
 
 st.set_page_config(
     page_title="TCEQ / ERCOT Permit Intelligence",
@@ -86,6 +87,29 @@ KIND_COLORS = {
     "Unclassified": NEUTRAL,
 }
 
+# Lifecycle is an ordered state, not an identity — but it is drawn as discrete
+# categories, so it takes fixed slots too. Pending gets the attention colour
+# because "still in process" is the thing being looked for.
+LIFECYCLE_COLORS = {
+    "Application pending": SLOT[2],
+    "Approved / issued": SLOT[1],
+    "Operating": SLOT[3],
+    "Withdrawn / void": NEUTRAL,
+    "Denied": SLOT[8],
+    "Expired / terminated": NEUTRAL,
+    "Status unknown": NEUTRAL,
+}
+LIFECYCLE_ORDER = [
+    statusmod.summarize_lifecycle(value) for value in statusmod.LIFECYCLE_ORDER
+]
+
+PROGRAM_ORDER = [
+    statusmod.PROGRAM_NSR, statusmod.PROGRAM_PSD, statusmod.PROGRAM_NNSR,
+    statusmod.PROGRAM_PBR, statusmod.PROGRAM_STANDARD, statusmod.PROGRAM_TITLE_V,
+    statusmod.PROGRAM_DE_MINIMIS, statusmod.PROGRAM_OTHER_AIR,
+    statusmod.PROGRAM_STORMWATER, statusmod.PROGRAM_INTERCONNECTION,
+]
+
 SOURCE_LABELS = {
     "ercot_gis": "ERCOT generation queue",
     "ercot_large_load": "ERCOT large load queue",
@@ -139,6 +163,26 @@ def load_all(db_path, mtime):
         entities["cod_year"] = pd.to_datetime(
             entities["projected_cod"], errors="coerce"
         ).dt.year
+        entities["lifecycle_label"] = entities["lifecycle"].apply(
+            statusmod.summarize_lifecycle
+        )
+        entities["program_label"] = entities["permit_program"].apply(
+            statusmod.summarize_program
+        )
+        entities["stage_label"] = entities["stage"].apply(statusmod.summarize_stage)
+        entities["action_label"] = entities["permit_action"].apply(
+            statusmod.summarize_action
+        )
+        # Recomputed on every load rather than stored: the answer moves daily.
+        entities["days_sitting"] = entities["received_date"].apply(
+            statusmod.days_sitting
+        )
+        entities["in_process"] = entities["lifecycle"].isin(statusmod.IN_PROCESS)
+
+    if not sites.empty:
+        sites["lifecycle_label"] = sites["lifecycle"].apply(
+            statusmod.summarize_lifecycle
+        )
 
     return sites, entities, members, links, info
 
@@ -226,6 +270,19 @@ def sidebar_filters(sites, info):
     search = st.sidebar.text_input("Search name / operator", "")
 
     st.sidebar.divider()
+    st.sidebar.caption("Permit state")
+    lifecycles = st.sidebar.multiselect(
+        "Lifecycle", LIFECYCLE_ORDER, default=[],
+        help="Empty means all states. Pick 'Application pending' to see only "
+             "what is still sitting in process.",
+    )
+    programs = st.sidebar.multiselect(
+        "Authorization program",
+        [statusmod.summarize_program(value) for value in PROGRAM_ORDER],
+        default=[],
+    )
+
+    st.sidebar.divider()
     st.sidebar.caption("Database")
     st.sidebar.caption(f"`{DB_PATH}`")
     st.sidebar.caption(f"{info['entities']} records · {info['sites']} sites")
@@ -266,25 +323,34 @@ def sidebar_filters(sites, info):
         ).str.lower()
         filtered = filtered[haystack.str.contains(needle, regex=False)]
 
-    return filtered, offline_map
+    return filtered, lifecycles, programs, offline_map
 
 
 # --- Views -------------------------------------------------------------------
 
 def render_headline(sites, entities):
     colocated = sites[sites["site_class"] == linkmod.SITE_COLOCATED]
-    gen_mw = sites["gen_mw"].sum(skipna=True)
-    load_mw = sites["load_mw"].sum(skipna=True)
     data_centers = entities[
         entities["project_kind"].isin([classify.KIND_DATA_CENTER, classify.KIND_CRYPTO])
     ]
+    in_process = entities[entities["in_process"]]
 
-    columns = st.columns(5)
+    columns = st.columns(6)
     columns[0].metric("Sites", f"{len(sites):,}")
     columns[1].metric("Colocated gen + load", f"{len(colocated):,}")
-    columns[2].metric("Permitted generation", mw(gen_mw))
-    columns[3].metric("Requested load", mw(load_mw))
-    columns[4].metric("Data center / crypto records", f"{len(data_centers):,}")
+    columns[2].metric(
+        "Generation approved", mw(sites["gen_mw_approved"].sum(skipna=True))
+    )
+    columns[3].metric(
+        "Generation pending", mw(sites["gen_mw_pending"].sum(skipna=True))
+    )
+    columns[4].metric("Requested load", mw(sites["load_mw"].sum(skipna=True)))
+    columns[5].metric("Applications in process", f"{len(in_process):,}")
+    st.caption(
+        "Approved counts authorizations that have been issued or executed; "
+        "pending counts what is still in review. Both are shown because a queue "
+        "position and a granted permit are very different facts."
+    )
 
 
 def render_map(sites, offline_map):
@@ -411,6 +477,28 @@ def render_generation(entities, members):
         )
         st.plotly_chart(figure, use_container_width=True)
 
+    st.subheader("Approved vs pending capacity by fuel")
+    st.caption(
+        "The same records split by authorization state — what is cleared to be "
+        "built, against what is still being decided."
+    )
+    split = (
+        generation.groupby(["Fuel", "lifecycle_label"], as_index=False)["capacity_mw"]
+        .sum()
+        .rename(columns={"capacity_mw": "MW", "lifecycle_label": "State"})
+    )
+    figure = px.bar(
+        split, x="Fuel", y="MW", color="State", barmode="group",
+        color_discrete_map=LIFECYCLE_COLORS,
+        category_orders={"Fuel": FUEL_ORDER, "State": LIFECYCLE_ORDER},
+    )
+    figure.update_layout(
+        height=340, bargap=0.3, yaxis_title="Nameplate MW", xaxis_title=None,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title=None),
+        margin=dict(l=0, r=0, t=10, b=0),
+    )
+    st.plotly_chart(figure, use_container_width=True)
+
     st.subheader("Project size distribution")
     figure = px.histogram(
         generation, x="capacity_mw", color="Fuel", nbins=30,
@@ -433,12 +521,13 @@ def render_generation(entities, members):
     )
     table = generation_all[[
         "project_name", "operator", "county", "fuel_label", "technology",
-        "capacity_mw", "status", "projected_cod", "source_label", "permit_number",
-        "counted",
+        "capacity_mw", "lifecycle_label", "program_label", "status",
+        "projected_cod", "source_label", "permit_number", "counted",
     ]].rename(columns={
         "project_name": "Project", "operator": "Operator", "county": "County",
         "fuel_label": "Fuel", "technology": "Technology", "capacity_mw": "MW",
-        "status": "Status", "projected_cod": "Projected COD",
+        "lifecycle_label": "State", "program_label": "Program",
+        "status": "Agency status", "projected_cod": "Projected COD",
         "source_label": "Source", "permit_number": "Permit / INR",
         "counted": "Counted in totals",
     }).sort_values("MW", ascending=False)
@@ -560,6 +649,161 @@ def render_colocated(sites):
     st.plotly_chart(figure, use_container_width=True)
 
 
+
+def render_permits(entities):
+    """Permits and applications: what is authorized, what is still sitting."""
+    permits = entities[entities["permit_program"].notna()].copy()
+    if permits.empty:
+        st.info("No permit records in the current filter.")
+        return
+
+    in_process = permits[permits["in_process"]]
+
+    columns = st.columns(4)
+    columns[0].metric("Authorizations tracked", f"{len(permits):,}")
+    columns[1].metric("Still in process", f"{len(in_process):,}")
+    median_days = in_process["days_sitting"].median()
+    columns[2].metric(
+        "Median time sitting",
+        f"{median_days:,.0f} days" if pd.notna(median_days) else "—",
+    )
+    oldest = in_process["days_sitting"].max()
+    columns[3].metric(
+        "Longest sitting", f"{oldest:,.0f} days" if pd.notna(oldest) else "—"
+    )
+
+    left, right = st.columns(2)
+
+    with left:
+        st.subheader("Authorizations by program and state")
+        grouped = (
+            permits.groupby(["program_label", "lifecycle_label"], as_index=False)
+            .size()
+            .rename(columns={"size": "Records", "program_label": "Program",
+                             "lifecycle_label": "State"})
+        )
+        order = [
+            statusmod.summarize_program(value) for value in PROGRAM_ORDER
+            if statusmod.summarize_program(value) in set(grouped["Program"])
+        ]
+        figure = px.bar(
+            grouped, x="Records", y="Program", color="State", orientation="h",
+            color_discrete_map=LIFECYCLE_COLORS,
+            category_orders={"Program": list(reversed(order)),
+                             "State": LIFECYCLE_ORDER},
+        )
+        figure.update_traces(
+            marker_line_width=2, marker_line_color="rgba(255,255,255,0.9)"
+        )
+        figure.update_layout(
+            height=420, xaxis_title="Records", yaxis_title=None,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title=None),
+            margin=dict(l=0, r=0, t=10, b=0),
+        )
+        st.plotly_chart(figure, use_container_width=True)
+
+    with right:
+        st.subheader("Where pending applications are stuck")
+        staged = in_process[in_process["stage_label"].notna()]
+        if staged.empty:
+            st.info("No review stage stated on the pending records.")
+        else:
+            grouped = (
+                staged.groupby("stage_label", as_index=False)
+                .size()
+                .rename(columns={"size": "Records", "stage_label": "Stage"})
+                .sort_values("Records")
+            )
+            figure = px.bar(
+                grouped, x="Records", y="Stage", orientation="h", text="Records",
+                category_orders={"Stage": grouped["Stage"].tolist()},
+            )
+            figure.update_traces(
+                marker_color=SLOT[2], texttemplate="%{text}",
+                textposition="outside", cliponaxis=False,
+            )
+            figure.update_layout(
+                height=420, xaxis_title="Records", yaxis_title=None,
+                margin=dict(l=0, r=30, t=10, b=0),
+            )
+            st.plotly_chart(figure, use_container_width=True)
+
+    st.subheader("Applications sitting in process")
+    st.caption(
+        "Oldest filing first. **Days sitting** is measured from the application "
+        "received date to today, so it moves on its own; blank means the export "
+        "carried no received date."
+    )
+    sitting = in_process.sort_values(
+        "days_sitting", ascending=False, na_position="last"
+    )
+    st.dataframe(
+        sitting[[
+            "project_name", "operator", "county", "program_label", "action_label",
+            "stage_label", "received_date", "days_sitting", "capacity_mw",
+            "load_mw", "fuel_label", "nox_tpy", "permit_number", "status",
+        ]].rename(columns={
+            "project_name": "Project", "operator": "Operator", "county": "County",
+            "program_label": "Program", "action_label": "Action",
+            "stage_label": "Stage", "received_date": "Filed",
+            "days_sitting": "Days sitting", "capacity_mw": "Gen MW",
+            "load_mw": "Load MW", "fuel_label": "Fuel", "nox_tpy": "NOx (tpy)",
+            "permit_number": "Permit / INR", "status": "Agency status",
+        }),
+        use_container_width=True, hide_index=True,
+    )
+    st.download_button(
+        "Download pending applications (CSV)",
+        sitting.to_csv(index=False).encode("utf-8"),
+        file_name="pending_applications.csv",
+        mime="text/csv",
+    )
+
+    approved = permits[permits["lifecycle"].isin(statusmod.AUTHORIZED)]
+    st.subheader("Approved authorizations")
+    st.dataframe(
+        approved[[
+            "project_name", "operator", "county", "program_label", "action_label",
+            "decision_date", "capacity_mw", "load_mw", "fuel_label", "nox_tpy",
+            "permit_number", "status",
+        ]].rename(columns={
+            "project_name": "Project", "operator": "Operator", "county": "County",
+            "program_label": "Program", "action_label": "Action",
+            "decision_date": "Decided", "capacity_mw": "Gen MW",
+            "load_mw": "Load MW", "fuel_label": "Fuel", "nox_tpy": "NOx (tpy)",
+            "permit_number": "Permit / INR", "status": "Agency status",
+        }).sort_values("Decided", ascending=False),
+        use_container_width=True, hide_index=True,
+    )
+
+    emitting = permits[permits["nox_tpy"].notna()]
+    if not emitting.empty:
+        st.subheader("Permitted NOx by project")
+        st.caption(
+            "Allowable emission rates as authorized, not measured emissions. "
+            "Only case-by-case permits and registrations that publish a rate "
+            "appear here."
+        )
+        top = emitting.nlargest(15, "nox_tpy").sort_values("nox_tpy")
+        figure = px.bar(
+            top, x="nox_tpy", y="project_name", orientation="h",
+            color="lifecycle_label", color_discrete_map=LIFECYCLE_COLORS,
+            category_orders={"project_name": top["project_name"].tolist(),
+                             "lifecycle_label": LIFECYCLE_ORDER},
+            text="nox_tpy",
+        )
+        figure.update_traces(
+            texttemplate="%{text:,.1f}", textposition="outside", cliponaxis=False
+        )
+        figure.update_layout(
+            height=max(320, 34 * len(top)),
+            xaxis_title="Permitted NOx, tons per year", yaxis_title=None,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, title=None),
+            margin=dict(l=0, r=40, t=10, b=0),
+        )
+        st.plotly_chart(figure, use_container_width=True)
+
+
 def render_site_detail(sites, entities, members, links):
     st.subheader("Site detail")
     if sites.empty:
@@ -586,6 +830,7 @@ def render_site_detail(sites, entities, members, links):
     st.markdown(
         f"**Operator:** {site['operator'] or '—'} · **County:** {site['county'] or '—'} "
         f"· **Permitted fuel:** {site['fuel_labels'] or '—'} "
+        f"· **Permit state:** {site['lifecycle_label']} "
         f"· **Geolocation:** {site['geo_precision']}"
     )
 
@@ -596,13 +841,15 @@ def render_site_detail(sites, entities, members, links):
     st.dataframe(
         detail[[
             "source_label", "project_name", "operator", "kind_label", "fuel_label",
-            "capacity_mw", "load_mw", "acres", "status", "permit_number",
-            "kind_evidence",
+            "capacity_mw", "load_mw", "acres", "lifecycle_label", "program_label",
+            "stage_label", "status", "permit_number", "kind_evidence",
         ]].rename(columns={
             "source_label": "Feed", "project_name": "Record", "operator": "Operator",
             "kind_label": "Classified as", "fuel_label": "Fuel",
             "capacity_mw": "Gen MW", "load_mw": "Load MW", "acres": "Acres",
-            "status": "Status", "permit_number": "Permit / INR",
+            "lifecycle_label": "State", "program_label": "Program",
+            "stage_label": "Stage", "status": "Agency status",
+            "permit_number": "Permit / INR",
             "kind_evidence": "Classification evidence",
         }),
         use_container_width=True, hide_index=True,
@@ -641,23 +888,33 @@ def render_records(entities):
     selected = st.multiselect("Classified as", kinds, default=kinds)
     sources = sorted(entities["source_label"].unique().tolist())
     selected_sources = st.multiselect("Feed", sources, default=sources)
+    states = [
+        label for label in LIFECYCLE_ORDER
+        if label in set(entities["lifecycle_label"])
+    ]
+    selected_states = st.multiselect("Permit state", states, default=states)
 
     view = entities[
         entities["kind_label"].isin(selected)
         & entities["source_label"].isin(selected_sources)
+        & entities["lifecycle_label"].isin(selected_states)
     ]
     st.dataframe(
         view[[
             "source_label", "project_name", "operator", "county", "kind_label",
             "kind_confidence", "fuel_label", "capacity_mw", "load_mw", "acres",
-            "status", "projected_cod", "permit_number", "regulated_entity",
-            "geo_precision", "kind_evidence",
+            "lifecycle_label", "program_label", "stage_label", "days_sitting",
+            "status", "received_date", "decision_date", "projected_cod",
+            "permit_number", "regulated_entity", "geo_precision", "kind_evidence",
         ]].rename(columns={
             "source_label": "Feed", "project_name": "Record", "operator": "Operator",
             "county": "County", "kind_label": "Classified as",
             "kind_confidence": "Confidence", "fuel_label": "Fuel",
             "capacity_mw": "Gen MW", "load_mw": "Load MW", "acres": "Acres",
-            "status": "Status", "projected_cod": "Projected date",
+            "lifecycle_label": "State", "program_label": "Program",
+            "stage_label": "Stage", "days_sitting": "Days sitting",
+            "status": "Agency status", "received_date": "Filed",
+            "decision_date": "Decided", "projected_cod": "Projected date",
             "permit_number": "Permit / INR", "regulated_entity": "TCEQ RN",
             "geo_precision": "Geolocation", "kind_evidence": "Classification evidence",
         }),
@@ -697,19 +954,35 @@ def main():
             icon="🧪",
         )
 
-    filtered_sites, offline_map = sidebar_filters(sites, info)
+    filtered_sites, lifecycles, programs, offline_map = sidebar_filters(sites, info)
 
     member_ids = set(
         members[members["site_id"].isin(set(filtered_sites["site_id"]))]["entity_id"]
     )
     filtered_entities = entities[entities["entity_id"].isin(member_ids)]
+    # Lifecycle and program filter records, not sites: a site can hold an issued
+    # permit and a pending amendment at once, and dropping the whole site would
+    # hide the half that matched.
+    if lifecycles:
+        filtered_entities = filtered_entities[
+            filtered_entities["lifecycle_label"].isin(lifecycles)
+        ]
+    if programs:
+        filtered_entities = filtered_entities[
+            filtered_entities["program_label"].isin(programs)
+        ]
+    if lifecycles or programs:
+        kept_sites = set(
+            members[members["entity_id"].isin(set(filtered_entities["entity_id"]))]["site_id"]
+        )
+        filtered_sites = filtered_sites[filtered_sites["site_id"].isin(kept_sites)]
 
     render_headline(filtered_sites, filtered_entities)
     st.divider()
 
     tabs = st.tabs([
-        "Map", "Colocated gen + load", "Generation", "Loads", "Site detail",
-        "All records",
+        "Map", "Colocated gen + load", "Generation", "Loads",
+        "Permits & applications", "Site detail", "All records",
     ])
     with tabs[0]:
         render_map(filtered_sites, offline_map)
@@ -720,8 +993,10 @@ def main():
     with tabs[3]:
         render_loads(filtered_entities)
     with tabs[4]:
-        render_site_detail(filtered_sites, filtered_entities, members, links)
+        render_permits(filtered_entities)
     with tabs[5]:
+        render_site_detail(filtered_sites, filtered_entities, members, links)
+    with tabs[6]:
         render_records(filtered_entities)
 
 

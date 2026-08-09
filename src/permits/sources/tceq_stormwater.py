@@ -131,10 +131,8 @@ def to_entities(df, source_file_id=None, min_acres=None):
             description=base.get(row, resolved, "description"),
             acres=base.get(row, resolved, "acres"),
             status=base.get(row, resolved, "status"),
-            status_date=(
-                base.get(row, resolved, "issued_date")
-                or base.get(row, resolved, "start_date")
-            ),
+            decision_date=base.get(row, resolved, "issued_date"),
+            received_date=base.get(row, resolved, "start_date"),
             projected_cod=base.get(row, resolved, "end_date"),
             permit_type="TCEQ stormwater construction NOI (TXR150000)",
             permit_number=permit_number,

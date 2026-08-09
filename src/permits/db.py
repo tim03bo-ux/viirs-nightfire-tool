@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SOURCES = {
     "ercot_gis": "ERCOT Generator Interconnection Status (GIS) report",
@@ -79,13 +79,27 @@ CREATE TABLE IF NOT EXISTS entities (
     capacity_mw     REAL,          -- generation nameplate
     load_mw         REAL,          -- interconnecting load
     acres           REAL,
-    status          TEXT,
+    status          TEXT,          -- verbatim agency text
     status_date     TEXT,
+    lifecycle       TEXT,          -- pending | approved | operating | withdrawn | denied | expired | unknown
+    stage           TEXT,          -- finer step within the lifecycle
+    received_date   TEXT,          -- application filed
+    decision_date   TEXT,          -- issued / final action
     projected_cod   TEXT,
     permit_type     TEXT,
+    permit_program  TEXT,          -- nsr | psd | pbr | standard_permit | title_v | ...
+    permit_action   TEXT,          -- new | amendment | alteration | renewal | ...
     permit_number   TEXT,
     regulated_entity TEXT,         -- TCEQ RN number
     customer_number TEXT,          -- TCEQ CN number
+    -- Permitted (allowable) emissions in tons per year, where the export
+    -- carries them. These are authorized rates, not measured emissions.
+    nox_tpy         REAL,
+    co_tpy          REAL,
+    voc_tpy         REAL,
+    pm_tpy          REAL,
+    so2_tpy         REAL,
+    ghg_tpy         REAL,
     url             TEXT,
     first_seen      TEXT,
     last_seen       TEXT,
@@ -93,10 +107,12 @@ CREATE TABLE IF NOT EXISTS entities (
     raw_json        TEXT,
     UNIQUE(source, source_key)
 );
-CREATE INDEX IF NOT EXISTS ix_entities_source   ON entities(source);
-CREATE INDEX IF NOT EXISTS ix_entities_kind     ON entities(project_kind);
-CREATE INDEX IF NOT EXISTS ix_entities_county   ON entities(county_norm);
-CREATE INDEX IF NOT EXISTS ix_entities_operator ON entities(operator_norm);
+CREATE INDEX IF NOT EXISTS ix_entities_source    ON entities(source);
+CREATE INDEX IF NOT EXISTS ix_entities_kind      ON entities(project_kind);
+CREATE INDEX IF NOT EXISTS ix_entities_county    ON entities(county_norm);
+CREATE INDEX IF NOT EXISTS ix_entities_operator  ON entities(operator_norm);
+CREATE INDEX IF NOT EXISTS ix_entities_lifecycle ON entities(lifecycle);
+CREATE INDEX IF NOT EXISTS ix_entities_program   ON entities(permit_program);
 
 -- Pairwise evidence that two records describe the same development.
 CREATE TABLE IF NOT EXISTS entity_links (
@@ -126,9 +142,19 @@ CREATE TABLE IF NOT EXISTS sites (
     has_load       INTEGER,
     gen_mw         REAL,
     load_mw        REAL,
+    -- Split by authorization state, so "what is actually permitted" can be read
+    -- apart from "what has been applied for".
+    gen_mw_approved  REAL,
+    gen_mw_pending   REAL,
+    load_mw_approved REAL,
+    load_mw_pending  REAL,
+    lifecycle      TEXT,        -- most advanced lifecycle among the members
+    has_pending    INTEGER,     -- any member application still in process
     fuels          TEXT,        -- comma-separated canonical fuels
     technologies   TEXT,
+    programs       TEXT,        -- comma-separated authorization programs present
     dispatchable_mw REAL,
+    nox_tpy        REAL,
     n_members      INTEGER,
     sources        TEXT,        -- comma-separated source ids present
     earliest_date  TEXT,
@@ -154,10 +180,30 @@ ENTITY_COLUMNS = [
     "operator_norm", "county", "county_norm", "state", "address", "latitude",
     "longitude", "geo_precision", "project_kind", "kind_confidence", "kind_evidence",
     "fuel", "technology", "fuel_confidence", "capacity_mw", "load_mw", "acres",
-    "status", "status_date", "projected_cod", "permit_type", "permit_number",
-    "regulated_entity", "customer_number", "url", "first_seen", "last_seen",
-    "source_file_id", "raw_json",
+    "status", "status_date", "lifecycle", "stage", "received_date", "decision_date",
+    "projected_cod", "permit_type", "permit_program", "permit_action",
+    "permit_number", "regulated_entity", "customer_number",
+    "nox_tpy", "co_tpy", "voc_tpy", "pm_tpy", "so2_tpy", "ghg_tpy",
+    "url", "first_seen", "last_seen", "source_file_id", "raw_json",
 ]
+
+# Columns added after the initial release, with their SQL declarations. Existing
+# databases are upgraded in place by `migrate`, so a schema change never means
+# re-downloading and re-ingesting everything.
+_ADDED_COLUMNS = {
+    "entities": {
+        "lifecycle": "TEXT", "stage": "TEXT", "received_date": "TEXT",
+        "decision_date": "TEXT", "permit_program": "TEXT", "permit_action": "TEXT",
+        "nox_tpy": "REAL", "co_tpy": "REAL", "voc_tpy": "REAL", "pm_tpy": "REAL",
+        "so2_tpy": "REAL", "ghg_tpy": "REAL",
+    },
+    "sites": {
+        "gen_mw_approved": "REAL", "gen_mw_pending": "REAL",
+        "load_mw_approved": "REAL", "load_mw_pending": "REAL",
+        "lifecycle": "TEXT", "has_pending": "INTEGER", "programs": "TEXT",
+        "nox_tpy": "REAL",
+    },
+}
 
 
 def utcnow():
@@ -182,9 +228,34 @@ def connect(db_path):
     return conn
 
 
+def migrate(conn):
+    """Add columns introduced after a database was first created.
+
+    SQLite cannot add a column that already exists, and CREATE TABLE IF NOT
+    EXISTS silently leaves an older table alone — so the schema text above only
+    helps new databases. Existing ones are brought forward here. Returns the
+    list of "table.column" additions made.
+    """
+    added = []
+    for table, columns in _ADDED_COLUMNS.items():
+        existing = {
+            row["name"] for row in conn.execute(f"PRAGMA table_info({table})")
+        }
+        if not existing:
+            continue  # table itself is new; the schema script just created it
+        for column, declaration in columns.items():
+            if column not in existing:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {declaration}")
+                added.append(f"{table}.{column}")
+    if added:
+        conn.commit()
+    return added
+
+
 def init_db(conn):
-    """Create the schema if absent and stamp the schema version."""
+    """Create the schema if absent, migrate an older one, and stamp the version."""
     conn.executescript(SCHEMA)
+    migrate(conn)
     conn.execute(
         "INSERT INTO meta(key, value) VALUES('schema_version', ?) "
         "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
@@ -337,6 +408,20 @@ def stats(conn):
         row[0]: row[1]
         for row in conn.execute(
             "SELECT site_class, COUNT(*) FROM sites GROUP BY site_class ORDER BY 2 DESC"
+        )
+    }
+    out["by_lifecycle"] = {
+        row[0]: row[1]
+        for row in conn.execute(
+            "SELECT COALESCE(lifecycle, 'unknown'), COUNT(*) FROM entities "
+            "GROUP BY 1 ORDER BY 2 DESC"
+        )
+    }
+    out["by_program"] = {
+        row[0]: row[1]
+        for row in conn.execute(
+            "SELECT COALESCE(permit_program, 'unclassified'), COUNT(*) FROM entities "
+            "GROUP BY 1 ORDER BY 2 DESC"
         )
     }
     row = conn.execute(

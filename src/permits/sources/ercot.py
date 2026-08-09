@@ -165,7 +165,9 @@ def gis_to_entities(df, source_file_id=None):
                 capacity_mw=base.get(row, resolved, "capacity_mw"),
                 projected_cod=base.get(row, resolved, "projected_cod"),
                 status=status,
-                status_date=base.get(row, resolved, "ia_signed"),
+                # An executed interconnection agreement is the queue's decision
+                # point — before it, the project is still an application.
+                decision_date=base.get(row, resolved, "ia_signed"),
                 permit_type="ERCOT interconnection request",
                 permit_number=inr,
                 source_file_id=source_file_id,

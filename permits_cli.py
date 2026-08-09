@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.permits import db as dbmod          # noqa: E402
 from src.permits import link as linkmod      # noqa: E402
+from src.permits import status as statusmod  # noqa: E402
 from src.permits import pipeline, seed       # noqa: E402
 
 DEFAULT_DB = os.path.join("output", "permits.db")
@@ -103,6 +104,8 @@ def _print_stats(info):
     for title, key in (
         ("By source", "by_source"),
         ("By project kind", "by_kind"),
+        ("By permit lifecycle", "by_lifecycle"),
+        ("By authorization program", "by_program"),
         ("By site class", "by_site_class"),
     ):
         table = info.get(key) or {}
@@ -138,14 +141,65 @@ def cmd_sites(args):
             ]
         if args.colocated:
             sites = sites[sites["site_class"] == linkmod.SITE_COLOCATED]
+        if args.lifecycle:
+            sites = sites[sites["lifecycle"] == args.lifecycle]
+        if args.has_pending:
+            sites = sites[sites["has_pending"] == 1]
         sites = sites.sort_values(
             ["load_mw", "gen_mw"], ascending=False, na_position="last"
         ).head(args.limit)
         columns = [
-            "site_name", "operator", "county", "site_class", "gen_mw", "load_mw",
-            "fuels", "sources", "n_members", "confidence",
+            "site_name", "operator", "county", "site_class", "lifecycle",
+            "gen_mw_approved", "gen_mw_pending", "load_mw", "fuels", "programs",
+            "n_members", "confidence",
         ]
         with_pandas_display(sites[columns])
+    finally:
+        conn.close()
+    return 0
+
+
+def cmd_applications(args):
+    """List authorizations still in process, oldest filing first."""
+    conn = dbmod.open_db(args.db)
+    try:
+        records = dbmod.load_entities(conn)
+        if records.empty:
+            print("No records yet. Run `ingest` then `link`, or `demo`.")
+            return 0
+
+        pending = records[records["lifecycle"].isin(statusmod.IN_PROCESS)].copy()
+        if args.program:
+            pending = pending[pending["permit_program"] == args.program]
+        if args.source:
+            pending = pending[pending["source"] == args.source]
+        if args.county:
+            pending = pending[
+                pending["county"].fillna("").str.lower() == args.county.lower()
+            ]
+
+        pending["days_sitting"] = pending["received_date"].apply(statusmod.days_sitting)
+        if args.min_days:
+            pending = pending[pending["days_sitting"].fillna(-1) >= args.min_days]
+
+        if pending.empty:
+            print("Nothing pending under those filters.")
+            return 0
+
+        pending = pending.sort_values(
+            "days_sitting", ascending=False, na_position="last"
+        ).head(args.limit)
+        columns = [
+            "project_name", "operator", "county", "permit_program", "permit_action",
+            "stage", "received_date", "days_sitting", "capacity_mw", "load_mw",
+            "fuel", "permit_number",
+        ]
+        with_pandas_display(pending[columns])
+        print(
+            f"\n{len(pending)} application(s) in process. "
+            "days_sitting is measured from the filing date to today; blank means "
+            "the export carried no received date."
+        )
     finally:
         conn.close()
     return 0
@@ -303,8 +357,25 @@ def build_parser():
     sub.add_argument("--county")
     sub.add_argument("--colocated", action="store_true",
                      help="only sites with both generation and load")
+    sub.add_argument("--lifecycle", choices=statusmod.LIFECYCLE_ORDER,
+                     help="filter by the site's most advanced permit lifecycle")
+    sub.add_argument("--has-pending", action="store_true",
+                     help="only sites with an application still in process")
     sub.add_argument("--limit", type=int, default=40)
     sub.set_defaults(func=cmd_sites)
+
+    sub = subparsers.add_parser(
+        "applications", help="list authorizations still sitting in process"
+    )
+    sub.add_argument("--program", choices=statusmod.AIR_PROGRAMS + [
+        statusmod.PROGRAM_STORMWATER, statusmod.PROGRAM_INTERCONNECTION,
+    ], help="filter by authorization program")
+    sub.add_argument("--source", choices=list(pipeline.ADAPTERS))
+    sub.add_argument("--county")
+    sub.add_argument("--min-days", type=int, default=None,
+                     help="only applications filed at least this many days ago")
+    sub.add_argument("--limit", type=int, default=40)
+    sub.set_defaults(func=cmd_applications)
 
     sub = subparsers.add_parser("explain", help="show why one site's records were merged")
     sub.add_argument("site_id")

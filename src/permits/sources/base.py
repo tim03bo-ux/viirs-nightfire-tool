@@ -18,6 +18,7 @@ from ..normalize import (
     parse_date, parse_mw, parse_number,
 )
 from ..classify import classify_kind, classify_fuel
+from ..status import classify_lifecycle, classify_program, classify_action
 from ..db import ENTITY_COLUMNS, make_entity_id, to_json
 
 
@@ -158,6 +159,8 @@ def build_entity(
     acres=None,
     status=None,
     status_date=None,
+    received_date=None,
+    decision_date=None,
     projected_cod=None,
     permit_type=None,
     permit_number=None,
@@ -165,10 +168,17 @@ def build_entity(
     customer_number=None,
     naics=None,
     sic=None,
+    nox_tpy=None,
+    co_tpy=None,
+    voc_tpy=None,
+    pm_tpy=None,
+    so2_tpy=None,
+    ghg_tpy=None,
     url=None,
     source_file_id=None,
     state="TX",
     kind_override=None,
+    lifecycle_override=None,
 ):
     """Assemble one normalized entity row: classify, geocode-fallback, normalize.
 
@@ -230,6 +240,25 @@ def build_entity(
         description=description,
     )
 
+    received_date = parse_date(received_date)
+    decision_date = parse_date(decision_date)
+    program = classify_program(
+        permit_type=permit_type, permit_number=permit_number, source=source
+    )
+    if lifecycle_override:
+        lifecycle, stage = lifecycle_override, None
+    else:
+        lifecycle, stage = classify_lifecycle(
+            status=status, program=program,
+            decision_date=decision_date, received_date=received_date,
+            source=source,
+        )
+    action = classify_action(permit_type=permit_type, description=description)
+
+    # status_date is whichever date the status refers to: the decision if one
+    # has been made, otherwise the filing.
+    status_date = parse_date(status_date) or decision_date or received_date
+
     record = {
         "entity_id": make_entity_id(source, source_key),
         "source": source,
@@ -255,12 +284,24 @@ def build_entity(
         "load_mw": load_mw,
         "acres": acres,
         "status": clean_str(status),
-        "status_date": parse_date(status_date),
+        "status_date": status_date,
+        "lifecycle": lifecycle,
+        "stage": stage,
+        "received_date": received_date,
+        "decision_date": decision_date,
         "projected_cod": parse_date(projected_cod),
         "permit_type": clean_str(permit_type),
+        "permit_program": program,
+        "permit_action": action,
         "permit_number": clean_str(permit_number),
         "regulated_entity": clean_str(regulated_entity),
         "customer_number": clean_str(customer_number),
+        "nox_tpy": parse_number(nox_tpy),
+        "co_tpy": parse_number(co_tpy),
+        "voc_tpy": parse_number(voc_tpy),
+        "pm_tpy": parse_number(pm_tpy),
+        "so2_tpy": parse_number(so2_tpy),
+        "ghg_tpy": parse_number(ghg_tpy),
         "url": clean_str(url),
         "first_seen": None,
         "last_seen": None,

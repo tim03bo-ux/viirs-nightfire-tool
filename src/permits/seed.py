@@ -85,50 +85,71 @@ _LARGE_LOAD_ROWS = [
     ("kiowa_draw", "LIR-2024-0199", "Digital Mining Site", 75, "Cryptocurrency mining", "Energized", "2025-08-01", "No"),
 ]
 
-# --- TCEQ air NSR ------------------------------------------------------------
+# --- TCEQ air permits and applications ----------------------------------------
+# Deliberately spans every air authorization family and both lifecycle states:
+# issued permits and applications still sitting in review.
 # (dev_key, project_no, permit_no, rn, cn, name_suffix, permit_type, status,
-#  received, description, naics, lat_offset, lon_offset)
+#  received, issued, description, naics, nox_tpy, lat_offset, lon_offset)
 _AIR_ROWS = [
     ("brazos_ridge", "PROJ-318842", "182204", "RN112900431", "CN605511902", "Energy Center",
-     "New Source Review - Air Quality Permit", "Pending - Technical Review", "2026-01-12",
+     "New Source Review - Air Quality Permit", "Pending - Technical Review", "2026-01-12", None,
      "Construction of 8 x 37.5 MW natural gas simple cycle combustion turbines serving a "
-     "colocated data center campus, with SCR and oxidation catalyst", "221112", 0.006, -0.004),
+     "colocated data center campus, with SCR and oxidation catalyst", "221112", 84.2, 0.006, -0.004),
+    ("brazos_ridge", "PROJ-331902", "O-4488", "RN112900431", "CN605511902", "Energy Center",
+     "Federal Operating Permit - Title V - Initial", "Pending - Public Notice", "2026-05-04", None,
+     "Initial site operating permit application for the generating facility", "221112",
+     None, 0.006, -0.004),
     ("sabine_point", "PROJ-301220", "179115", "RN110044822", "CN604221730", "",
-     "New Source Review - PSD", "Issued", "2025-03-04",
+     "New Source Review - PSD", "Issued", "2024-06-11", "2025-03-04",
      "1,120 MW combined cycle gas turbine generating station with duct burners and auxiliary boiler",
-     "221112", -0.003, 0.005),
+     "221112", 212.5, -0.003, 0.005),
+    ("sabine_point", "PROJ-327740", "179115A", "RN110044822", "CN604221730", "",
+     "New Source Review - Amendment", "Pending - Technical Review", "2026-04-02", None,
+     "Amendment to add a 45 MW auxiliary combustion turbine", "221112", 9.8, -0.003, 0.005),
     ("caprock", "PROJ-322104", "PBR-166051", "RN113408877", "CN606012244", "Data Center",
-     "Permit by Rule", "Registered", "2026-02-20",
+     "Permit by Rule - 30 TAC 106.512", "Registered", "2026-01-30", "2026-02-20",
      "Forty-eight 3.0 MW diesel emergency standby generators for a data center campus, "
-     "each limited to 100 hours per year of non-emergency operation", "518210", 0.004, 0.004),
+     "each limited to 100 hours per year of non-emergency operation", "518210", 46.4, 0.004, 0.004),
     ("concho_peak", "PROJ-315507", "181002", "RN112455018", "CN605880114", "Peaking Facility",
-     "New Source Review - Air Quality Permit", "Issued", "2025-10-08",
+     "New Source Review - Air Quality Permit", "Issued", "2025-02-14", "2025-10-08",
      "Two 93 MW natural gas combustion turbines in simple cycle peaking service", "221112",
-     0.002, -0.006),
+     31.7, 0.002, -0.006),
     ("gulf_terrace", "PROJ-309981", "180334", "RN111788203", "CN605120988", "Cogeneration Plant",
-     "New Source Review - PSD", "Pending - Public Notice", "2025-12-01",
+     "New Source Review - PSD", "Pending - Public Notice", "2025-12-01", None,
      "320 MW combined cycle cogeneration unit supplying process steam to an adjacent chemical plant",
-     "221112", -0.005, 0.003),
+     "221112", 74.0, -0.005, 0.003),
     ("panhandle_nexus", "PROJ-326610", "183990", "RN114002115", "CN606440871", "Power Block",
-     "New Source Review - Air Quality Permit", "Pending - Technical Review", "2026-04-14",
+     "New Source Review - Air Quality Permit", "Pending - Technical Review", "2026-04-14", None,
      "Twenty-two 12 MW natural gas reciprocating internal combustion engines providing "
-     "behind-the-meter power to a data center campus", "221112", 0.003, 0.006),
+     "behind-the-meter power to a data center campus", "221112", 118.6, 0.003, 0.006),
     ("bluff_creek", "PROJ-324455", "PBR-167220", "RN113900654", "CN606201533", "Hydrogen Facility",
-     "Permit by Rule", "Registered", "2026-03-02",
+     "Permit by Rule", "Registered", "2026-02-10", "2026-03-02",
      "Hydrogen electrolyzer facility with two 8 MMBtu/hr natural gas fired process heaters",
-     "325120", 0.002, 0.002),
+     "325120", 3.1, 0.002, 0.002),
     ("redbud", "PROJ-317003", "PBR-165330", "RN112700889", "CN605440217", "Mining Facility",
-     "Permit by Rule", "Registered", "2025-06-18",
+     "Permit by Rule", "Registered", "2025-05-22", "2025-06-18",
      "Immersion-cooled bitcoin mining facility, six 2 MW diesel standby generators", "518210",
-     -0.004, 0.003),
+     8.7, -0.004, 0.003),
     ("marlin_bend", "PROJ-329871", "184551", "RN114330902", "CN606771040", "Generation Facility",
-     "New Source Review - Air Quality Permit", "Pending - Technical Review", "2026-05-27",
+     "New Source Review - Air Quality Permit", "Pending - Administrative Review", "2026-05-27", None,
      "Twenty 11 MW natural gas reciprocating engines serving a colocated data center campus",
-     "221112", 0.005, 0.005),
+     "221112", 97.3, 0.005, 0.005),
     ("twin_buttes", "PROJ-320115", "PBR-166702", "RN113100447", "CN605990312", "Facility",
-     "Permit by Rule", "Registered", "2025-09-22",
+     "Permit by Rule", "Registered", "2025-09-02", "2025-09-22",
      "Battery energy storage facility, one 1.5 MW diesel emergency generator", "221118",
-     0.001, -0.002),
+     1.2, 0.001, -0.002),
+    ("deer_hollow", "PROJ-330554", "SP-77120", None, None, "AI Campus",
+     "Air Quality Standard Permit - Electric Generating Units", "Pending - Technical Review",
+     "2026-06-08", None,
+     "Standard permit registration for thirty 2.5 MW diesel emergency standby generators "
+     "at a computing campus", "518210", 24.9, 0.002, 0.004),
+    ("gulf_terrace", "PROJ-298110", "O-2071", "RN111788203", "CN605120988", "Cogeneration Plant",
+     "Federal Operating Permit - Title V - Renewal", "Issued", "2024-09-15", "2025-06-30",
+     "Renewal of the site operating permit for the cogeneration facility", "221112",
+     None, -0.005, 0.003),
+    ("whitethorn", "PROJ-333001", "PBR-168440", None, None, "Ranch Substation",
+     "Permit by Rule", "Withdrawn", "2026-04-20", None,
+     "Rock crushing and concrete batch plant for site preparation", "327320", None, 0.0, 0.0),
 ]
 
 # --- TCEQ stormwater construction NOI ----------------------------------------
@@ -211,7 +232,7 @@ def _large_load_frame():
 def _air_frame():
     rows = []
     for (key, project_no, permit_no, rn, cn, suffix, permit_type, status, received,
-         description, naics, dlat, dlon) in _AIR_ROWS:
+         issued, description, naics, nox, dlat, dlon) in _AIR_ROWS:
         name, operator, county, lat, lon = _dev(key)
         rows.append(
             {
@@ -228,8 +249,10 @@ def _air_frame():
                 "Permit Type": permit_type,
                 "Application Status": status,
                 "Received Date": received,
+                "Issued Date": issued,
                 "Project Description": description,
                 "NAICS": naics,
+                "NOx (TPY)": nox,
             }
         )
     return pd.DataFrame(rows)
