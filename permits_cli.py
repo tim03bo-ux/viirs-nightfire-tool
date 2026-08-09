@@ -159,6 +159,66 @@ def cmd_sites(args):
     return 0
 
 
+def cmd_timing(args):
+    """How long decided authorizations took, from filing to decision."""
+    import pandas as pd
+
+    conn = dbmod.open_db(args.db)
+    try:
+        records = dbmod.load_entities(conn)
+        if records.empty:
+            print("No records yet.")
+            return 0
+
+        decided = records[records["lifecycle"].isin(statusmod.AUTHORIZED)].copy()
+        decided["days"] = [
+            statusmod.days_to_decision(r, d)
+            for r, d in zip(decided["received_date"], decided["decision_date"])
+        ]
+        decided = decided[decided["days"].notna()]
+        if args.program:
+            decided = decided[decided["permit_program"] == args.program]
+        if decided.empty:
+            print("No decided records carry both a filing and a decision date.")
+            return 0
+
+        def summary(frame):
+            return pd.Series({
+                "n": len(frame),
+                "median": frame["days"].median(),
+                "mean": round(frame["days"].mean(), 1),
+                "p90": frame["days"].quantile(0.90),
+                "max": frame["days"].max(),
+            })
+
+        print(f"Decided authorizations with both dates: {len(decided)}")
+        print(f"Median {decided['days'].median():.0f} days, "
+              f"p90 {decided['days'].quantile(0.9):.0f}, "
+              f"max {decided['days'].max():.0f}\n")
+
+        for label, key in (("By program", "permit_program"),
+                           ("By action", "permit_action")):
+            grouped = decided.groupby(key).apply(summary, include_groups=False)
+            grouped = grouped.sort_values("n", ascending=False).head(args.limit)
+            print(f"{label}:")
+            with_pandas_display(grouped.reset_index())
+            print()
+
+        # Still-pending applications, measured against the same clock.
+        pending = records[records["lifecycle"].isin(statusmod.IN_PROCESS)].copy()
+        pending["days"] = pending["received_date"].apply(statusmod.days_sitting)
+        pending = pending[pending["days"].notna()]
+        if not pending.empty:
+            print(
+                f"For comparison, {len(pending)} applications are still in "
+                f"process, median {pending['days'].median():.0f} days sitting, "
+                f"longest {pending['days'].max():.0f}."
+            )
+    finally:
+        conn.close()
+    return 0
+
+
 def cmd_applications(args):
     """List authorizations still in process, oldest filing first."""
     conn = dbmod.open_db(args.db)
@@ -363,6 +423,13 @@ def build_parser():
                      help="only sites with an application still in process")
     sub.add_argument("--limit", type=int, default=40)
     sub.set_defaults(func=cmd_sites)
+
+    sub = subparsers.add_parser(
+        "timing", help="how long decided permits took, filing to decision"
+    )
+    sub.add_argument("--program", help="restrict to one authorization program")
+    sub.add_argument("--limit", type=int, default=12)
+    sub.set_defaults(func=cmd_timing)
 
     sub = subparsers.add_parser(
         "applications", help="list authorizations still sitting in process"

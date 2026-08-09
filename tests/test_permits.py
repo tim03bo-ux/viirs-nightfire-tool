@@ -619,7 +619,12 @@ class TestEndToEnd:
         # and a county — ERCOT publishes no coordinates, and refusing to assert
         # colocation on that evidence is the correct behaviour, not a regression.
         _, _, summary = built
-        assert summary["sites"] == len(seed.DEVELOPMENTS) + 1
+        # 21 from 18. Two extra splits come from modelling TCEQ's real NSR
+        # export, which carries no site name — only the company — so a plant's
+        # ERCOT entry and its TCEQ permit no longer share a project name. The
+        # third is Kiowa Draw. All three are the linker correctly declining to
+        # assert a merge the public data does not support.
+        assert summary["sites"] == len(seed.DEVELOPMENTS) + 3
 
     def test_colocated_sites_detected(self, built):
         _, conn, _ = built
@@ -632,14 +637,19 @@ class TestEndToEnd:
         assert any("Brazos Ridge" in name for name in names)
         assert any("Panhandle Nexus" in name for name in names)
 
-    def test_colocated_site_joins_all_four_feeds(self, built):
+    def test_colocated_site_joins_multiple_feeds(self, built):
+        # The colocated Brazos Ridge site is held together by the TCEQ regulated
+        # entity number shared across its air permits and its stormwater NOI,
+        # plus the large-load record. The ERCOT generation entry sits apart:
+        # TCEQ's real NSR export has no site name to match it on.
         _, conn, _ = built
         sites = dbmod.load_sites(conn)
-        brazos = sites[sites["site_name"].str.contains("Brazos Ridge")].iloc[0]
-        assert set(brazos["sources"].split(",")) == set(pipeline.ADAPTERS)
-        assert brazos["gen_mw"] == 300.0
+        colocated = sites[sites["site_class"] == linkmod.SITE_COLOCATED]
+        brazos = colocated[colocated["site_name"].str.contains("Brazos Ridge")].iloc[0]
+        feeds = set(brazos["sources"].split(","))
+        assert {"tceq_air", "tceq_swnoi"} <= feeds
         assert brazos["load_mw"] == 400.0
-        assert brazos["fuels"] == classify.FUEL_GAS
+        assert brazos["n_members"] >= 3
 
     def test_capacity_not_double_counted_across_sources(self, built):
         # Sabine Point appears in the ERCOT queue at 1,120 MW and again on its

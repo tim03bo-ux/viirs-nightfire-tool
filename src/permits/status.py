@@ -178,6 +178,30 @@ AIR_PROGRAMS = [
 
 # PSD and nonattainment NSR are checked before plain NSR: they are major-source
 # flavours of it and the specific label is the useful one.
+# TCEQ's own permit-type codes, as returned by the NSR search. Checked before
+# the phrase list because they are exact and unambiguous.
+TCEQ_PERMIT_TYPE_CODES = {
+    "construct": PROGRAM_NSR,          # case-by-case construction permit
+    "constoppmt": PROGRAM_NSR,         # construction / operating permit
+    "specconst": PROGRAM_NSR,          # special construction permit
+    "specoppmt": PROGRAM_NSR,
+    "psd": PROGRAM_PSD,
+    "ghgpsd": PROGRAM_PSD,             # greenhouse-gas PSD
+    "nonattain": PROGRAM_NNSR,
+    "stdpmt": PROGRAM_STANDARD,
+    "exempt": PROGRAM_DE_MINIMIS,      # standard exemption
+    "deminimis": PROGRAM_DE_MINIMIS,
+    "pbr": PROGRAM_PBR,
+    "flexsa": PROGRAM_NSR,
+    "flexibleg": PROGRAM_NSR,
+    "amoc": PROGRAM_OTHER_AIR,         # alternative means of control
+    "gop": PROGRAM_TITLE_V,
+    "sop": PROGRAM_TITLE_V,
+    "fop": PROGRAM_TITLE_V,
+    "tv": PROGRAM_TITLE_V,
+    "nsr": PROGRAM_NSR,
+}
+
 _PROGRAM_PHRASES = [
     (PROGRAM_PSD, ["psd", "prevention of significant deterioration"]),
     (PROGRAM_NNSR, ["nonattainment", "non attainment", "nnsr",
@@ -203,6 +227,10 @@ def classify_program(permit_type=None, permit_number=None, source=None):
     Permit numbers carry the program too: TCEQ registrations are prefixed 'PBR',
     stormwater NOIs 'TXR15', so a permit type left blank is still classifiable.
     """
+    code = norm_text(permit_type).replace(" ", "")
+    if code in TCEQ_PERMIT_TYPE_CODES:
+        return TCEQ_PERMIT_TYPE_CODES[code]
+
     haystack = " ".join(norm_text(part) for part in (permit_type, permit_number) if part)
 
     for candidate, phrases in _PROGRAM_PHRASES:
@@ -280,6 +308,33 @@ def days_sitting(received_date, as_of=None):
     if isinstance(reference, datetime):
         reference = reference.date()
     return (reference - filed).days
+
+
+MAX_REASONABLE_DECISION_DAYS = 20 * 365
+
+
+def days_to_decision(received_date, decision_date):
+    """Calendar days from filing to decision, or None.
+
+    The headline permitting-speed metric: how long TCEQ actually took on
+    authorizations it has already decided. Negative results are discarded rather
+    than returned — they mean the export carried a decision predating its own
+    filing date, which happens on renewals that inherit the original date.
+    """
+    if not received_date or not decision_date:
+        return None
+    try:
+        filed = datetime.strptime(str(received_date)[:10], "%Y-%m-%d").date()
+        decided = datetime.strptime(str(decision_date)[:10], "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return None
+    days = (decided - filed).days
+    # Real TCEQ rows carry decision dates up to 179 years after filing, which is
+    # a renewal inheriting a corrupt original date rather than a permit that took
+    # two centuries. Anything past 20 years is a data error, not a duration.
+    if days < 0 or days > MAX_REASONABLE_DECISION_DAYS:
+        return None
+    return days
 
 
 def summarize_lifecycle(lifecycle):

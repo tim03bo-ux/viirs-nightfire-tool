@@ -133,10 +133,19 @@ def score_pair(a, b):
     name_score = name_similarity(a.get("name_norm"), b.get("name_norm"))
     operator_score = name_similarity(a.get("operator_norm"), b.get("operator_norm"))
 
-    # A shared TCEQ regulated-entity number is an identity statement.
+    # A shared TCEQ regulated-entity number is an identity statement — and so is
+    # a differing one. RN is TCEQ's per-site identifier, so two records carrying
+    # different RNs are different sites no matter how alike they look. Without
+    # this, every permit a company holds in one county collapsed together (the
+    # real data produced a 167-record cluster), because a TCEQ record's project
+    # name *is* its company name, making name and operator identical by
+    # construction.
     rn_a, rn_b = a.get("regulated_entity"), b.get("regulated_entity")
-    if rn_a and rn_b and str(rn_a).strip() == str(rn_b).strip():
-        return (RN_MATCH_SCORE, "tceq_regulated_entity", None, name_score, operator_score)
+    if rn_a and rn_b:
+        if str(rn_a).strip() == str(rn_b).strip():
+            return (RN_MATCH_SCORE, "tceq_regulated_entity", None,
+                    name_score, operator_score)
+        return (0.0, "different_regulated_entity", None, name_score, operator_score)
 
     spatial, distance, comparable = spatial_score(a, b)
 

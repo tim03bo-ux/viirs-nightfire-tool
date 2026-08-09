@@ -78,13 +78,19 @@ SIC_KIND = {
 
 # Operators whose name alone is strong evidence of a data center development.
 # Matched on the normalized company key, as a whole-token phrase.
+# Multi-word only. Single generic tokens produce false positives on real filings:
+# a bare "switch" matched FRAME SWITCH ENERGY INC (a Williamson County place
+# name) and a bare "tract" matches land descriptions. If an operator needs one
+# word to identify it, it is not distinctive enough to classify on.
 DATA_CENTER_OPERATORS = [
     "aligned data centers", "aligned energy", "applied digital", "cloudhq",
-    "compass datacenters", "corescientific", "core scientific", "crusoe",
-    "cyrusone", "dataBank", "digital realty", "edgeconnex", "edged energy",
-    "equinix", "flexential", "fermi", "prime data centers", "provident data",
-    "qts", "quantum loophole", "sabey", "skybox datacenters", "stack infrastructure",
-    "switch", "t5 data centers", "tract", "vantage data centers", "yondr",
+    "compass datacenters", "core scientific", "corescientific", "crusoe energy",
+    "cyrusone", "databank", "digital realty", "edgeconnex", "edged energy",
+    "equinix", "flexential", "fermi america", "prime data centers",
+    "provident data", "qts data centers", "quantum loophole", "sabey data",
+    "skybox datacenters", "stack infrastructure", "switch inc", "switch ltd",
+    "switch data", "t5 data centers", "vantage data centers", "yondr group",
+    "nscale", "lancium", "poolside", "crusoe",
 ]
 
 CRYPTO_OPERATORS = [

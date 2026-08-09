@@ -38,6 +38,7 @@ deliberately generous, and `read_file` accepts csv, xlsx or a saved HTML results
 table.
 """
 
+import html as html_module
 import re
 import urllib.parse
 import urllib.request
@@ -56,45 +57,69 @@ CENTRAL_REGISTRY_BASE = "https://www15.tceq.texas.gov/crpub/index.cfm"
 HEADER_TOKENS = ["Permit", "County", "Company", "Regulated Entity", "RN", "Status"]
 
 COLUMNS = {
-    "permit_number": ["Permit Number", "Permit No", "Permit #", "Air Permit Number",
-                      "Permit"],
+    "permit_number": ["Permit Number", "Permit No", "Permit #", "Air Permit Number"],
     "project_number": ["Project Number", "Project No", "Application Number",
                        "Tracking Number"],
-    "project_name": ["Project Name", "Regulated Entity Name", "RE Name",
-                     "Site Name", "Facility Name", "Plant Name"],
-    "operator": ["Customer Name", "Company Name", "Applicant", "Owner",
+    # TCEQ's NSR search has no site name: "Project Name" holds the *action*
+    # ("STANDARD PERMIT NEW REGISTRATION"), and the site is identified only by
+    # its RN number. The company name is the closest thing to a project name.
+    "project_name": ["Legal Name", "Customer Name", "Regulated Entity Name",
+                     "RE Name", "Site Name", "Facility Name", "Plant Name"],
+    "operator": ["Customer Name", "Legal Name", "Applicant", "Owner",
                  "Permit Holder", "Customer"],
-    "regulated_entity": ["RN Number", "Regulated Entity Number", "RN"],
-    "customer_number": ["CN Number", "Customer Number", "CN"],
-    "county": ["County"],
+    "regulated_entity": ["Regulated Entity", "RN Number", "Regulated Entity Number"],
+    "customer_number": ["CN Number", "Customer Number"],
+    "county": ["County Name", "County"],
     "address": ["Physical Location", "Site Location", "Location Description",
                 "Physical Address", "Street Address", "Address"],
-    "city": ["City", "Nearest City"],
-    "latitude": ["Latitude", "Lat", "Site Latitude"],
-    "longitude": ["Longitude", "Long", "Lon", "Site Longitude"],
-    "permit_type": ["Permit Type", "Authorization Type", "Application Type",
-                    "Permit Action", "Program", "Type"],
-    "status": ["Application Status", "Permit Status", "Status",
-               "Review Status", "Current Status"],
-    "received_date": ["Received Date", "Date Received", "Application Received",
-                      "Filed Date", "Submitted Date", "Application Date"],
-    "issued_date": ["Issued Date", "Date Issued", "Final Action Date",
-                    "Effective Date", "Approval Date"],
-    "description": ["Project Description", "Description", "Project Type",
+    "city": ["Near City Name", "City", "Nearest City"],
+    "region": ["Region Name", "TCEQ Region"],
+    "latitude": ["Latitude", "Site Latitude"],
+    "longitude": ["Longitude", "Site Longitude"],
+    "permit_type": ["Permit Type", "Authorization Type", "Program Area", "Program"],
+    "action_type": ["Project type", "Project Type", "Permit Action", "Action"],
+    # Two different states: the application's and the permit's. Both matter —
+    # a COMPLETE project whose permit is CANCELLED is not an authorization.
+    "status": ["Project Status", "Application Status"],
+    "permit_status": ["Permit Status"],
+    "received_date": ["TCEQ Received Date", "Received Date", "Date Received",
+                      "Application Received", "Filed Date", "Submitted Date"],
+    "issued_date": ["Project Complete Date", "Issued Date", "Date Issued",
+                    "Final Action Date", "Effective Date", "Approval Date"],
+    "renewal_date": ["Renewal Date"],
+    "description": ["Project Name", "Project Description", "Description",
                     "Facility Description", "Process Description", "Comments"],
     "naics": ["NAICS", "NAICS Code", "Primary NAICS"],
     "sic": ["SIC", "SIC Code", "Primary SIC"],
-    "capacity_mw": ["Capacity (MW)", "Rated Capacity MW", "MW", "Megawatts"],
-    # Allowable (permitted) emission rates, tons per year. TCEQ publishes these
-    # on the MAERT for case-by-case permits; many exports carry a subset.
-    "nox_tpy": ["NOx (TPY)", "NOX TPY", "NOx Allowable", "Nitrogen Oxides", "NOx"],
-    "co_tpy": ["CO (TPY)", "CO TPY", "Carbon Monoxide", "CO Allowable"],
-    "voc_tpy": ["VOC (TPY)", "VOC TPY", "Volatile Organic", "VOC Allowable"],
-    "pm_tpy": ["PM2.5 (TPY)", "PM10 (TPY)", "PM TPY", "Particulate Matter", "PM"],
-    "so2_tpy": ["SO2 (TPY)", "SO2 TPY", "Sulfur Dioxide", "SOx"],
-    "ghg_tpy": ["CO2e (TPY)", "GHG TPY", "Greenhouse Gas", "CO2e"],
+    "capacity_mw": ["Capacity (MW)", "Rated Capacity MW", "Megawatts"],
+    "nox_tpy": ["NOx (TPY)", "NOX TPY", "NOx Allowable", "Nitrogen Oxides"],
+    "co_tpy": ["CO (TPY)", "CO TPY", "Carbon Monoxide"],
+    "voc_tpy": ["VOC (TPY)", "VOC TPY", "Volatile Organic"],
+    "pm_tpy": ["PM2.5 (TPY)", "PM10 (TPY)", "PM TPY", "Particulate Matter"],
+    "so2_tpy": ["SO2 (TPY)", "SO2 TPY", "Sulfur Dioxide"],
+    "ghg_tpy": ["CO2e (TPY)", "GHG TPY", "Greenhouse Gas"],
     "url": ["URL", "Link", "Document Link"],
 }
+
+# --- Live query ---------------------------------------------------------------
+
+SEARCH_URL = "https://www2.tceq.texas.gov/airperm/index.cfm"
+
+# The "unit rule" filter is the practical way to pull generation and
+# generation-adjacent authorizations without dragging in every air permit in
+# Texas. Values verified from the live form's unit_id select.
+UNIT_RULES = {
+    "electric_generating_facilities": "8340",
+    "natural_gas_electric_generating_units": "15627",
+    "engines_and_turbines": "7644",
+    "boilers_over_40mmbtu": "8466",
+    "boilers_and_combustion": "5023",
+}
+
+# proj_status_txt accepts these; ALL returns issued and pending together.
+STATUS_ALL = "ALL"
+STATUS_PENDING = "PENDING"
+STATUS_COMPLETE = "COMPLETE"
 
 # Authorization families this adapter reads. All of them ride in the same table:
 # the program is derived per row from the permit type and permit number, so a
@@ -173,6 +198,149 @@ def capacity_from_text(text):
         total += magnitude * multiplier
         found = True
     return total if found else None
+
+
+def search(
+    unit_rule=None,
+    county=None,
+    status=STATUS_ALL,
+    program="NSR",
+    received_from=None,
+    received_to=None,
+    rn_number=None,
+    timeout=180,
+):
+    """Run a live TCEQ NSR air-permit search and return the parsed results.
+
+    The form posts to index.cfm with `fuseaction=airpermits.validate_search_criteria`
+    and `out_form=text`, which returns a pipe-delimited ASCII listing wrapped in
+    HTML. Every argument is optional; the defaults sweep every county and both
+    issued and pending authorizations.
+
+    unit_rule: a UNIT_RULES key, or a raw unit_id string.
+    """
+    unit_id = UNIT_RULES.get(unit_rule, unit_rule) or "0"
+    fields = {
+        "fuseaction": "airpermits.validate_search_criteria",
+        "RequestTimeout": "3000",
+        "loc_cnty_name": (county or "0").upper(),
+        "tnrcc_region_cd": "0",
+        "addn_id_typ_txt": "",
+        "proj_typ_txt": "",
+        "unit_id": unit_id,
+        "proj_status_txt": status,
+        "sort_dir": "desc",
+        "program": program,
+        "order_by": "rcv_dt",
+        "out_form": "text",
+        "rn_ref_num_txt": rn_number or "",
+    }
+    if received_from or received_to:
+        fields["date_option"] = "rcv_dt"
+        fields["date_range_from"] = received_from or ""
+        fields["date_range_to"] = received_to or ""
+    else:
+        fields["date_option"] = "0"
+
+    data = urllib.parse.urlencode(fields).encode("utf-8")
+    request = urllib.request.Request(
+        SEARCH_URL, data=data,
+        headers={"User-Agent": USER_AGENT,
+                 "Content-Type": "application/x-www-form-urlencoded"},
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        payload = response.read().decode("utf-8", errors="replace")
+    return parse_ascii_results(payload)
+
+
+def search_years(years, timeout=240, verbose=True, **kwargs):
+    """Run `search` once per calendar year and concatenate the results.
+
+    A statewide multi-year query times out on TCEQ's side — the server streams
+    the whole listing and gives up part way. Chunking by filing year keeps each
+    request small enough to complete, and a year that still fails is reported
+    and skipped rather than losing the whole pull.
+    """
+    frames = []
+    for year in years:
+        try:
+            frame = search(
+                received_from=f"01/01/{year}", received_to=f"12/31/{year}",
+                timeout=timeout, **kwargs
+            )
+            frame["_filing_year"] = year
+            frames.append(frame)
+            if verbose:
+                print(f"  {year}: {len(frame)} records")
+        except Exception as exc:
+            print(f"  {year}: FAILED ({type(exc).__name__}: {exc})")
+    if not frames:
+        raise RuntimeError("every yearly chunk failed")
+    return pd.concat(frames, ignore_index=True)
+
+
+_HEADER_MARKER = "Program Area|"
+_RECORD_TERMINATOR = "Rules"
+
+
+def parse_ascii_results(payload):
+    """Parse TCEQ's out_form=text listing into a DataFrame.
+
+    The layout is awkward: field names and values are each emitted on their own
+    line with a trailing pipe, and the trailing "Rules" value of one record runs
+    into the "Program Area" of the next ("6005 NSR"). Records are therefore split
+    on the program-area marker rather than by counting fields.
+    """
+    text = re.sub(r"<script.*?</script>", "", payload, flags=re.S | re.I)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = html_module.unescape(text)
+
+    if _HEADER_MARKER not in text:
+        raise ValueError(
+            "TCEQ response carried no results table — check the search criteria"
+        )
+    start = text.index(_HEADER_MARKER)
+    end = text.index(_RECORD_TERMINATOR, start)
+    headers = [part.strip() for part in text[start:end].split("|") if part.strip()]
+
+    tokens = [
+        re.sub(r"\s+", " ", token).replace("\xa0", " ").strip()
+        for token in text[end + len(_RECORD_TERMINATOR):].split("|")
+    ]
+
+    records, current = [], None
+    for token in tokens:
+        split = _split_program_marker(token)
+        if split is not None:
+            trailing, program_area = split
+            if current is not None:
+                current.append(trailing)
+                records.append(current)
+            current = [program_area]
+        elif current is not None:
+            current.append(token)
+    if current:
+        records.append(current)
+
+    rows = [record[: len(headers)] for record in records if len(record) >= len(headers)]
+    if not rows:
+        raise ValueError("TCEQ response parsed to zero records")
+    return pd.DataFrame(rows, columns=headers)
+
+
+# Program-area codes that begin a record in the ASCII listing. The previous
+# record's trailing "Rules" value shares a token with it, e.g. "6005 NSR".
+_PROGRAM_AREAS = ("NSR", "TV", "PBR", "CAPTRADE")
+
+
+def _split_program_marker(token):
+    """Return (trailing value of the previous record, program area), or None."""
+    for code in _PROGRAM_AREAS:
+        if token == code:
+            return ("", code)
+        if token.endswith(" " + code):
+            return (token[: -(len(code) + 1)].strip(), code)
+    return None
 
 
 def read_file(path, sheet=None):
