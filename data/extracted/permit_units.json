@@ -1,0 +1,3349 @@
+[
+ {
+  "regulated_entity": "RN110966884",
+  "entity_name": "DIAMOND GREEN DIESEL PORT ARTHUR FACILITY",
+  "documents_total": 225,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Security"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Security"
+    ],
+    "title": "Applications",
+    "doc_id": "6581549",
+    "bytes": 755797
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (56 MB)",
+    "title": "Agency Review",
+    "doc_id": "5786811",
+    "bytes": 59381789
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6005043",
+    "bytes": 40475408
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (44 MB)",
+    "title": "Agency Review",
+    "doc_id": "6352854",
+    "bytes": 46247030
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN103219127",
+  "entity_name": "WOOD STORAGE PILE EMISSIONS",
+  "documents_total": 194,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "Permit",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1672928",
+    "bytes": 175851
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Applications",
+    "doc_id": "3667858",
+    "bytes": 1374416
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1772738",
+    "bytes": 251264
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1775263",
+    "bytes": 1942710
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104579487",
+  "entity_name": "TEXAS CITY CHEMICAL PLANT",
+  "documents_total": 278,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "174872",
+   "6101205",
+   "ADD",
+   "CHECK",
+   "CORPORATION",
+   "GENERAL",
+   "Name",
+   "RENEWAL",
+   "Service",
+   "ePAY",
+   "ing",
+   "lng"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "6101205",
+     "CHECK",
+     "CORPORATION",
+     "ing",
+     "lng",
+     "lnvestigation"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1322278",
+    "bytes": 1915107
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Name",
+     "RENEWAL"
+    ],
+    "title": "Agency Review",
+    "doc_id": "526541",
+    "bytes": 7406664
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "174872",
+     "ADD",
+     "GENERAL",
+     "ePAY"
+    ],
+    "title": "Agency Review",
+    "doc_id": "526169",
+    "bytes": 2620437
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "GENERAL",
+     "Service"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1200832",
+    "bytes": 994631
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100219963",
+  "entity_name": "SOLAR TURBINES DLS OVERHAUL CENTER",
+  "documents_total": 298,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "106",
+   "DB-14S4-l",
+   "Domestic",
+   "Permit",
+   "and",
+   "application/pdf",
+   "ePAY",
+   "ePay"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1445948",
+    "bytes": 188058
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "106",
+     "DB-14S4-l",
+     "Permit",
+     "and",
+     "ePAY",
+     "ePay"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1449564",
+    "bytes": 4293409
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Applications",
+    "doc_id": "4009908",
+    "bytes": 766155
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Applications",
+    "doc_id": "4321655",
+    "bytes": 51639
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100250844",
+  "entity_name": "",
+  "documents_total": 133,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "111944",
+   "151947",
+   "156686",
+   "159335",
+   "98223",
+   "ADD",
+   "Domestic",
+   "Permit",
+   "REGION",
+   "Site",
+   "ePAY",
+   "locating"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1393118",
+    "bytes": 2199109
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1393128",
+    "bytes": 3028614
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "Permit",
+     "REGION",
+     "Site",
+     "ePAY",
+     "locating",
+     "ofadd-on",
+     "used"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1393124",
+    "bytes": 14105768
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "111944",
+     "151947",
+     "156686",
+     "159335",
+     "98223",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8501985",
+    "bytes": 39699
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100214626",
+  "entity_name": "",
+  "documents_total": 847,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "10476",
+   "10644",
+   "107665",
+   "11669",
+   "118730",
+   "12268",
+   "157107",
+   "167885",
+   "172373",
+   "175826",
+   "179706",
+   "180920"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "10476",
+     "10644",
+     "107665",
+     "11669",
+     "118730",
+     "12268",
+     "157107",
+     "167885",
+     "172373",
+     "175826",
+     "4338",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8480073",
+    "bytes": 40313
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "10476",
+     "10644",
+     "107665",
+     "11669",
+     "118730",
+     "12268",
+     "157107",
+     "175826",
+     "179706",
+     "180920",
+     "4338",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9149244",
+    "bytes": 40255
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "10476",
+     "10644",
+     "107665",
+     "11669",
+     "118730",
+     "12268",
+     "157107",
+     "1980",
+     "4338",
+     "56508",
+     "7394",
+     "AMOC102"
+    ],
+    "title": "Applications",
+    "doc_id": "6483878",
+    "bytes": 50853
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ANO",
+     "S/STANDARD",
+     "Source",
+     "WIDTH"
+    ],
+    "title": "Permits",
+    "doc_id": "4410676",
+    "bytes": 3494477
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110369758",
+  "entity_name": "SOUTH TEXAS GATEWAY TERMINAL",
+  "documents_total": 74,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "1K-1001",
+   "New",
+   "Security",
+   "Site",
+   "Tank"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Security"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8071701",
+    "bytes": 1991108
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "1K-1001",
+     "New",
+     "Security",
+     "Site",
+     "Tank"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3995998",
+    "bytes": 12255666
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (290 MB)",
+    "title": "Project File Folder",
+    "doc_id": "4312329",
+    "bytes": 305067665
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6242816",
+    "bytes": 15478862
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN109222851",
+  "entity_name": "RIO GRANDE LNG AND RIO BRAVO PIPELINE FACILITY",
+  "documents_total": 73,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Revision"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (358 MB)",
+    "title": "Agency Review",
+    "doc_id": "4590511",
+    "bytes": 376433420
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "5805519",
+    "bytes": 1692291
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Revision"
+    ],
+    "title": "Technical Review",
+    "doc_id": "5046716",
+    "bytes": 19751
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (431 MB)",
+    "title": "Agency Review",
+    "doc_id": "6289315",
+    "bytes": 451989427
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100216472",
+  "entity_name": "",
+  "documents_total": 696,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "064-BVS-058-B",
+   "105588",
+   "135656",
+   "157211",
+   "160499",
+   "166137",
+   "166860",
+   "178264",
+   "450",
+   "84490",
+   "Application",
+   "Control/BACT"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "157211",
+     "450",
+     "Application",
+     "Industry",
+     "Shredder",
+     "Source",
+     "TCLP",
+     "Type",
+     "ofShredder"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1314135",
+    "bytes": 3801810
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Control/BACT",
+     "PROJECT",
+     "Request",
+     "Source",
+     "TVpe",
+     "ePAY",
+     "ePay",
+     "locating"
+    ],
+    "title": "Agency Review",
+    "doc_id": "531067",
+    "bytes": 4451464
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "064-BVS-058-B",
+     "160499",
+     "Polyester",
+     "REGION",
+     "Site",
+     "ePay",
+     "locating",
+     "number"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1314138",
+    "bytes": 2201636
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "105588",
+     "135656",
+     "166137",
+     "166860",
+     "178264",
+     "84490",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8468626",
+    "bytes": 39795
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100219526",
+  "entity_name": "HOUSTON PLANT",
+  "documents_total": 1527,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [
+   "cummins"
+  ],
+  "models": [
+   "10296",
+   "10323A",
+   "10352A",
+   "10675A",
+   "10840A",
+   "11427A",
+   "11801A",
+   "13805A",
+   "13806A",
+   "72182",
+   "ADD",
+   "Application"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "cummins"
+    ],
+    "models": [
+     "ADD",
+     "CHECK",
+     "Permit",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1332694",
+    "bytes": 4193251
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "72182",
+     "Application",
+     "CHEMICALPLANT",
+     "ControUBACTType",
+     "Industry"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1332695",
+    "bytes": 4452970
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1329289",
+    "bytes": 86610
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "10296",
+     "10323A",
+     "10352A",
+     "10675A",
+     "10840A",
+     "11427A",
+     "11801A",
+     "13805A",
+     "13806A",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8516180",
+    "bytes": 41178
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN109845768",
+  "entity_name": "BAYPORT POLYMERS",
+  "documents_total": 154,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [
+   "siemens"
+  ],
+  "models": [
+   "ALTERATION",
+   "ING",
+   "Name",
+   "Permit",
+   "RESPONSIBLE",
+   "Received",
+   "Security",
+   "Start",
+   "TECHNICAL",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "Name",
+     "Permit",
+     "Received",
+     "Start",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "4256598",
+    "bytes": 1099338
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "Name",
+     "Permit",
+     "Received",
+     "Start",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "4276922",
+    "bytes": 1099338
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ALTERATION",
+     "ING",
+     "Permit",
+     "RESPONSIBLE",
+     "Received",
+     "Security",
+     "Start",
+     "TECHNICAL",
+     "ing"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "4290351",
+    "bytes": 16698246
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "4677951",
+    "bytes": 27569910
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100825371",
+  "entity_name": "",
+  "documents_total": 552,
+  "documents_read": 4,
+  "max_mw": 910.0,
+  "manufacturers": [
+   "general electric",
+   "mitsubishi",
+   "siemens"
+  ],
+  "models": [
+   "Business",
+   "Investigabon",
+   "New",
+   "PROJECTS",
+   "REGION",
+   "Site",
+   "Used",
+   "ZFA",
+   "and",
+   "change",
+   "employs",
+   "for"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Business",
+     "Investigabon",
+     "REGION",
+     "Site",
+     "and",
+     "locating",
+     "reviews"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1214730",
+    "bytes": 424180
+   },
+   {
+    "mw_values": [
+     69.0,
+     5.0,
+     5.0
+    ],
+    "max_mw": 69.0,
+    "total_mw": 79.0,
+    "manufacturers": [
+     "general electric",
+     "mitsubishi",
+     "siemens"
+    ],
+    "models": [
+     "New",
+     "Site",
+     "ZFA"
+    ],
+    "title": "Site Review",
+    "doc_id": "572886",
+    "bytes": 1569780
+   },
+   {
+    "mw_values": [
+     910.0,
+     885.0,
+     820.0,
+     800.0,
+     750.0,
+     730.0
+    ],
+    "max_mw": 910.0,
+    "total_mw": 4895.0,
+    "manufacturers": [
+     "general electric",
+     "siemens"
+    ],
+    "models": [
+     "PROJECTS",
+     "Used",
+     "and",
+     "change",
+     "employs",
+     "for",
+     "ing",
+     "ing/aermod-datasets",
+     "input",
+     "inputs",
+     "lDs",
+     "options"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "578184",
+    "bytes": 20815809
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "ing",
+     "ingTechniques",
+     "limitations",
+     "predicted",
+     "predictions",
+     "retums",
+     "returns",
+     "run",
+     "runs",
+     "selections",
+     "was"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "578185",
+    "bytes": 5811501
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100209477",
+  "entity_name": "INDIAN ROCK GAS PLANT",
+  "documents_total": 121,
+  "documents_read": 4,
+  "max_mw": 2.0,
+  "manufacturers": [
+   "caterpillar"
+  ],
+  "models": [
+   "163267",
+   "3516",
+   "DPC-2804LE",
+   "Domestic",
+   "ING",
+   "Number",
+   "and",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163267",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8547090",
+    "bytes": 37104
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163267",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9407082",
+    "bytes": 37086
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Applications",
+    "doc_id": "5910336",
+    "bytes": 57936
+   },
+   {
+    "mw_values": [
+     2.0
+    ],
+    "max_mw": 2.0,
+    "total_mw": 2.0,
+    "manufacturers": [
+     "caterpillar"
+    ],
+    "models": [
+     "3516",
+     "DPC-2804LE",
+     "ING",
+     "Number",
+     "and"
+    ],
+    "title": "Applications",
+    "doc_id": "5910335",
+    "bytes": 2295814
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106754989",
+  "entity_name": "ECTOR COUNTY ENERGY CENTER",
+  "documents_total": 121,
+  "documents_read": 4,
+  "max_mw": 436.0,
+  "manufacturers": [
+   "cummins",
+   "general electric"
+  ],
+  "models": [
+   "7FA",
+   "CFP15E-F10",
+   "ING",
+   "Mark",
+   "Name",
+   "TNG",
+   "all",
+   "and",
+   "being",
+   "can",
+   "indicates",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     436.0,
+     330.0,
+     207.0,
+     165.0,
+     165.0
+    ],
+    "max_mw": 436.0,
+    "total_mw": 1303.0,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "7FA",
+     "and",
+     "indicates",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609972",
+    "bytes": 932554
+   },
+   {
+    "mw_values": [
+     424.0,
+     193.0,
+     193.0
+    ],
+    "max_mw": 424.0,
+    "total_mw": 810.0,
+    "manufacturers": [
+     "cummins",
+     "general electric"
+    ],
+    "models": [
+     "7FA",
+     "CFP15E-F10",
+     "Mark",
+     "and",
+     "being",
+     "represented"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1301595",
+    "bytes": 4573898
+   },
+   {
+    "mw_values": [
+     32.0
+    ],
+    "max_mw": 32.0,
+    "total_mw": 32.0,
+    "manufacturers": [],
+    "models": [
+     "Name"
+    ],
+    "title": "Agency Review",
+    "doc_id": "532650",
+    "bytes": 6944519
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "ING",
+     "TNG",
+     "all",
+     "can",
+     "ing",
+     "options",
+     "preferred",
+     "receptor",
+     "selected",
+     "that"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1298644",
+    "bytes": 35337174
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102679867",
+  "entity_name": "",
+  "documents_total": 829,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "303422",
+   "ADD",
+   "Bin",
+   "Bulk",
+   "Industry",
+   "Permit",
+   "Source",
+   "Type",
+   "VOL",
+   "bin",
+   "locating"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "303422",
+     "ADD",
+     "Industry",
+     "Source",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1475621",
+    "bytes": 2480535
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "VOL"
+    ],
+    "title": "Permits",
+    "doc_id": "4024534",
+    "bytes": 973430
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Permits",
+    "doc_id": "4024535",
+    "bytes": 6248169
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Bin",
+     "Bulk",
+     "Permit",
+     "bin",
+     "locating"
+    ],
+    "title": "Permits",
+    "doc_id": "4025382",
+    "bytes": 33435195
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100214386",
+  "entity_name": "VALERO CORPUS CHRISTI REFINERY WEST PLANT",
+  "documents_total": 1291,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [
+   "cummins"
+  ],
+  "models": [
+   "APPL",
+   "APPlication",
+   "Application",
+   "CFP",
+   "CFP15E-F30",
+   "ControUBACT",
+   "Distance",
+   "Height",
+   "Industry",
+   "Name",
+   "Permit",
+   "Permits"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "cummins"
+    ],
+    "models": [
+     "APPlication",
+     "Application",
+     "CFP",
+     "CFP15E-F30",
+     "ControUBACT",
+     "Height",
+     "Industry",
+     "Permit",
+     "Request",
+     "Service",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1441380",
+    "bytes": 5209856
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "3876444",
+    "bytes": 72084
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Distance",
+     "Name",
+     "Permits",
+     "Site",
+     "and",
+     "lndustrial",
+     "locating",
+     "reviews"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1079559",
+    "bytes": 388720
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "APPL",
+     "S/STANDARDS"
+    ],
+    "title": "Agency Review",
+    "doc_id": "551839",
+    "bytes": 194865
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101062255",
+  "entity_name": "OKLAUNION POWER STATION",
+  "documents_total": 184,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "23300",
+   "233004",
+   "30001753",
+   "ADD",
+   "Application",
+   "Control/BACT",
+   "EMrssroN",
+   "ESTTMATES",
+   "FUNDS",
+   "Permit",
+   "RESULTS",
+   "RUN"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "23300",
+     "233004",
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504685",
+    "bytes": 3617047
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "FUNDS",
+     "RESULTS",
+     "RUN",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504609",
+    "bytes": 5052359
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "30001753",
+     "Application",
+     "Control/BACT",
+     "EMrssroN",
+     "ESTTMATES",
+     "RESULTS",
+     "RUN",
+     "Type",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504607",
+    "bytes": 8784904
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1504726",
+    "bytes": 45687
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111330627",
+  "entity_name": "MCGREGOR FACILITY",
+  "documents_total": 29,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7018219",
+    "bytes": 9554
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (55 MB)",
+    "title": "Agency Review",
+    "doc_id": "7009766",
+    "bytes": 58674306
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7009764",
+    "bytes": 9557
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8396605",
+    "bytes": 24773444
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110750965",
+  "entity_name": "SINTON MILL",
+  "documents_total": 61,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Site",
+   "and",
+   "locating",
+   "residential",
+   "reviews"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Site",
+     "and",
+     "locating",
+     "residential",
+     "reviews"
+    ],
+    "title": "Site Review",
+    "doc_id": "6819387",
+    "bytes": 1453923
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (148 MB)",
+    "title": "Project File Folder",
+    "doc_id": "8831598",
+    "bytes": 155336181
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (321 MB)",
+    "title": "Project File Folder",
+    "doc_id": "8839692",
+    "bytes": 337112862
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (183 MB)",
+    "title": "Project File Folder",
+    "doc_id": "8831618",
+    "bytes": 192798716
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106402894",
+  "entity_name": "",
+  "documents_total": 268,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "193455",
+   "208",
+   "9230",
+   "Application",
+   "CIIEMICAL",
+   "Industry",
+   "Permit",
+   "Type",
+   "Welded",
+   "surfaces"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "208",
+     "CIIEMICAL",
+     "Industry",
+     "Type",
+     "Welded"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1290756",
+    "bytes": 7923268
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (151 MB)",
+    "title": "Agency Review",
+    "doc_id": "532300",
+    "bytes": 158473652
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "9230",
+     "Application"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1293334",
+    "bytes": 12059736
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "193455",
+     "Application",
+     "Permit",
+     "surfaces"
+    ],
+    "title": "Agency Review",
+    "doc_id": "529223",
+    "bytes": 27027791
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102457520",
+  "entity_name": "",
+  "documents_total": 2187,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "16185",
+   "16186",
+   "ADD",
+   "CHECK",
+   "ControL/BACT",
+   "ControUBACT",
+   "ControVBACT",
+   "Emlssion",
+   "Emlsslon",
+   "In6ustry",
+   "Industry",
+   "PETROLEUM"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "Emlssion",
+     "Emlsslon",
+     "Industry",
+     "PETROLEUM",
+     "PROJEGT",
+     "Permit",
+     "Request"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1365416",
+    "bytes": 3316049
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "CHECK",
+     "ControVBACT",
+     "Industry",
+     "Request",
+     "Source",
+     "are"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1365467",
+    "bytes": 4983663
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "16186",
+     "ControUBACT",
+     "In6ustry",
+     "Request",
+     "Source",
+     "Status",
+     "are",
+     "transmitter",
+     "writer"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1365466",
+    "bytes": 4646948
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "16185",
+     "CHECK",
+     "ControL/BACT",
+     "Industry",
+     "Request",
+     "Source",
+     "are"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1365462",
+    "bytes": 3049803
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106398795",
+  "entity_name": "MHBA CHOCOLATE BAYOU PLANT",
+  "documents_total": 52,
+  "documents_read": 4,
+  "max_mw": 57.3,
+  "manufacturers": [],
+  "models": [
+   "164524",
+   "172403",
+   "177469",
+   "2000006374",
+   "Authorization",
+   "Domestic",
+   "Industry",
+   "Source",
+   "Type"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "2000006374",
+     "Authorization",
+     "Industry",
+     "Source",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "530404",
+    "bytes": 2279068
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6195171",
+    "bytes": 959216
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "164524",
+     "172403",
+     "177469",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9401108",
+    "bytes": 39008
+   },
+   {
+    "mw_values": [
+     57.3,
+     57.3
+    ],
+    "max_mw": 57.3,
+    "total_mw": 114.6,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6290210",
+    "bytes": 328713
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111258877",
+  "entity_name": "ROEHM AMERICA BAY CITY SITE",
+  "documents_total": 73,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Security"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Security"
+    ],
+    "title": "Applications",
+    "doc_id": "6578577",
+    "bytes": 813794
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6736937",
+    "bytes": 21854431
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6736998",
+    "bytes": 10889
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7093575",
+    "bytes": 30415884
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100214550",
+  "entity_name": "GIBBONS CREEK STEAM ELECTRIC STATION",
+  "documents_total": 258,
+  "documents_read": 4,
+  "max_mw": 480.0,
+  "manufacturers": [],
+  "models": [
+   "ACCT",
+   "APF",
+   "Application",
+   "Approved",
+   "Emissions",
+   "JRVW",
+   "Last",
+   "all"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (126 MB)",
+    "title": "Permits",
+    "doc_id": "4606892",
+    "bytes": 132854496
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (62 MB)",
+    "title": "Permits",
+    "doc_id": "4606895",
+    "bytes": 65615112
+   },
+   {
+    "mw_values": [
+     480.0,
+     480.0
+    ],
+    "max_mw": 480.0,
+    "total_mw": 960.0,
+    "manufacturers": [],
+    "models": [
+     "ACCT",
+     "APF",
+     "Application",
+     "Approved",
+     "Emissions",
+     "JRVW",
+     "Last",
+     "all"
+    ],
+    "title": "Permits",
+    "doc_id": "4606896",
+    "bytes": 23073466
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Permits",
+    "doc_id": "4606897",
+    "bytes": 4681336
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104104716",
+  "entity_name": "",
+  "documents_total": 526,
+  "documents_read": 2,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Amendment",
+   "New",
+   "REGION",
+   "Security",
+   "Site"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "New",
+     "REGION",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1467425",
+    "bytes": 350219
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Amendment",
+     "Security",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3763346",
+    "bytes": 3383942
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102413689",
+  "entity_name": "SMI TEXAS",
+  "documents_total": 333,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "174gg",
+   "187333",
+   "Domestic",
+   "PERMIT",
+   "Project",
+   "ePAY174930",
+   "facility",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "PERMIT",
+     "ePAY174930"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1324301",
+    "bytes": 3126357
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "174gg"
+    ],
+    "title": "Initial Application",
+    "doc_id": "1567170",
+    "bytes": 445457
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "187333",
+     "Project",
+     "facility",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1324327",
+    "bytes": 9195171
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "512676",
+    "bytes": 56028
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104104716",
+  "entity_name": "",
+  "documents_total": 526,
+  "documents_read": 2,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Amendment",
+   "New",
+   "REGION",
+   "Security",
+   "Site"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "New",
+     "REGION",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1467425",
+    "bytes": 350219
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Amendment",
+     "Security",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3763346",
+    "bytes": 3383942
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101062255",
+  "entity_name": "OKLAUNION POWER STATION",
+  "documents_total": 184,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "23300",
+   "233004",
+   "30001753",
+   "ADD",
+   "Application",
+   "Control/BACT",
+   "EMrssroN",
+   "ESTTMATES",
+   "FUNDS",
+   "Permit",
+   "RESULTS",
+   "RUN"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "23300",
+     "233004",
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504685",
+    "bytes": 3617047
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "FUNDS",
+     "RESULTS",
+     "RUN",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504609",
+    "bytes": 5052359
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "30001753",
+     "Application",
+     "Control/BACT",
+     "EMrssroN",
+     "ESTTMATES",
+     "RESULTS",
+     "RUN",
+     "Type",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1504607",
+    "bytes": 8784904
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1504726",
+    "bytes": 45687
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100223569",
+  "entity_name": "",
+  "documents_total": 252,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "136618",
+   "255106",
+   "Application",
+   "Components",
+   "Domestic",
+   "Permit"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "136618",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8563409",
+    "bytes": 38027
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "136618",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9411241",
+    "bytes": 38000
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1340467",
+    "bytes": 218638
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "255106",
+     "Application",
+     "Components"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1363667",
+    "bytes": 2672735
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100226059",
+  "entity_name": "OPTIMUS STEEL BEAUMONT MILL",
+  "documents_total": 298,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "102645",
+   "109724",
+   "112031",
+   "112032",
+   "163593",
+   "165142",
+   "170449",
+   "176936",
+   "52162",
+   "54413",
+   "56165",
+   "82427"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Industry",
+     "Source",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449306",
+    "bytes": 3614451
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102645",
+     "109724",
+     "112031",
+     "112032",
+     "163593",
+     "165142",
+     "170449",
+     "52162",
+     "54413",
+     "56165",
+     "82427",
+     "82455"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8437021",
+    "bytes": 41470
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "176936",
+     "PERMIT",
+     "Perrnit",
+     "Source",
+     "Status",
+     "Type",
+     "locating"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449308",
+    "bytes": 2623276
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "REGION",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449307",
+    "bytes": 369834
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100217389",
+  "entity_name": "FLINT HILLS RESOURCES PORT ARTHUR FACILITY",
+  "documents_total": 1441,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "145895",
+   "151629",
+   "ADD",
+   "Application",
+   "ControUBACT",
+   "CoutroUBACT",
+   "Industry",
+   "PERMIT",
+   "Permit",
+   "Request",
+   "STD",
+   "STDV"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (109 MB)",
+    "title": "Permits",
+    "doc_id": "4810342",
+    "bytes": 114623461
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "145895",
+     "Application",
+     "CoutroUBACT",
+     "Industry",
+     "PERMIT",
+     "Permit",
+     "Request",
+     "STD",
+     "STDV",
+     "Source",
+     "epAy",
+     "permtt"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1377358",
+    "bytes": 4562115
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "151629",
+     "ADD",
+     "Application",
+     "ControUBACT",
+     "Industry",
+     "PERMIT",
+     "Permit",
+     "Request",
+     "STD",
+     "ePAY"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1377376",
+    "bytes": 7228757
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "PERMIT",
+     "STD",
+     "STDX",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1377377",
+    "bytes": 4821219
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106754989",
+  "entity_name": "ECTOR COUNTY ENERGY CENTER",
+  "documents_total": 121,
+  "documents_read": 4,
+  "max_mw": 436.0,
+  "manufacturers": [
+   "cummins",
+   "general electric"
+  ],
+  "models": [
+   "7FA",
+   "CFP15E-F10",
+   "ING",
+   "Mark",
+   "Name",
+   "TNG",
+   "all",
+   "and",
+   "being",
+   "can",
+   "indicates",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     436.0,
+     330.0,
+     207.0,
+     165.0,
+     165.0
+    ],
+    "max_mw": 436.0,
+    "total_mw": 1303.0,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "7FA",
+     "and",
+     "indicates",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609972",
+    "bytes": 932554
+   },
+   {
+    "mw_values": [
+     424.0,
+     193.0,
+     193.0
+    ],
+    "max_mw": 424.0,
+    "total_mw": 810.0,
+    "manufacturers": [
+     "cummins",
+     "general electric"
+    ],
+    "models": [
+     "7FA",
+     "CFP15E-F10",
+     "Mark",
+     "and",
+     "being",
+     "represented"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1301595",
+    "bytes": 4573898
+   },
+   {
+    "mw_values": [
+     32.0
+    ],
+    "max_mw": 32.0,
+    "total_mw": 32.0,
+    "manufacturers": [],
+    "models": [
+     "Name"
+    ],
+    "title": "Agency Review",
+    "doc_id": "532650",
+    "bytes": 6944519
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "ING",
+     "TNG",
+     "all",
+     "can",
+     "ing",
+     "options",
+     "preferred",
+     "receptor",
+     "selected",
+     "that"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1298644",
+    "bytes": 35337174
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110935285",
+  "entity_name": "",
+  "documents_total": 43,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "Expedite",
+   "FIN",
+   "Fire",
+   "Permit",
+   "Polymers"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Fire",
+     "Polymers"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9408659",
+    "bytes": 3084621
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "Expedite"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9408660",
+    "bytes": 12470
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "Expedite"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9704852",
+    "bytes": 12511
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "FIN",
+     "Fire",
+     "Permit"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9704850",
+    "bytes": 2718235
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN107573610",
+  "entity_name": "ROCKWOOD ENERGY CENTER",
+  "documents_total": 41,
+  "documents_read": 4,
+  "max_mw": 900.0,
+  "manufacturers": [
+   "siemens"
+  ],
+  "models": [
+   "Enhancements",
+   "ING",
+   "New",
+   "PROJECT",
+   "Project",
+   "Results",
+   "SELECTION",
+   "TNG",
+   "and",
+   "ing",
+   "predicted",
+   "r-ff9"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (53 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1304150",
+    "bytes": 55927085
+   },
+   {
+    "mw_values": [
+     900.0
+    ],
+    "max_mw": 900.0,
+    "total_mw": 900.0,
+    "manufacturers": [],
+    "models": [
+     "Enhancements",
+     "ING",
+     "Results",
+     "SELECTION",
+     "TNG",
+     "and",
+     "ing",
+     "predicted",
+     "selection",
+     "the",
+     "were"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "578764",
+    "bytes": 17364170
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "New",
+     "and",
+     "r-ff9",
+     "subject"
+    ],
+    "title": "Site Review",
+    "doc_id": "572560",
+    "bytes": 1377541
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "PROJECT",
+     "Project"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1495766",
+    "bytes": 268241
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105380216",
+  "entity_name": "",
+  "documents_total": 107,
+  "documents_read": 4,
+  "max_mw": 5.0,
+  "manufacturers": [],
+  "models": [
+   "04/11/2018",
+   "1-11",
+   "BOILER",
+   "COMBUSTION",
+   "ControUBACT",
+   "Control/BACT",
+   "Date",
+   "ING",
+   "IndustrA",
+   "Industry",
+   "LOW",
+   "Link"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     5.0,
+     5.0
+    ],
+    "max_mw": 5.0,
+    "total_mw": 10.0,
+    "manufacturers": [],
+    "models": [
+     "ControUBACT",
+     "ING",
+     "IndustrA",
+     "Mark",
+     "PROJECT",
+     "Request",
+     "ing"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "8791581",
+    "bytes": 4912380
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "04/11/2018",
+     "1-11",
+     "BOILER",
+     "COMBUSTION",
+     "Control/BACT",
+     "Date",
+     "ING",
+     "Industry",
+     "LOW",
+     "Link",
+     "Name",
+     "Project"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "3913876",
+    "bytes": 37300917
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Renewal"
+    ],
+    "title": "Technical Review",
+    "doc_id": "3872624",
+    "bytes": 73592
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "5084228",
+    "bytes": 6990085
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111530077",
+  "entity_name": "",
+  "documents_total": 35,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7313579",
+    "bytes": 9387
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (79 MB)",
+    "title": "Agency Review",
+    "doc_id": "7313279",
+    "bytes": 83380381
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8412809",
+    "bytes": 4492027
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7313619",
+    "bytes": 9387
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100222223",
+  "entity_name": "BETHEL GAS TREATING FACILITY",
+  "documents_total": 111,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [
+   "waukesha"
+  ],
+  "models": [
+   "178654",
+   "Design",
+   "Domestic",
+   "Electric/Gas",
+   "Electric/Pneumatic",
+   "TEG",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8576719",
+    "bytes": 837681
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "waukesha"
+    ],
+    "models": [
+     "Design",
+     "Electric/Gas",
+     "Electric/Pneumatic",
+     "TEG"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8578257",
+    "bytes": 14093715
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8578259",
+    "bytes": 12556
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "178654",
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8864170",
+    "bytes": 48127
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106592579",
+  "entity_name": "PDH CHOCOLATE BAYOU PLANT",
+  "documents_total": 63,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Mark",
+   "Permits",
+   "Setup",
+   "ing",
+   "ing/aermod-datasets",
+   "limitations",
+   "option",
+   "predictions",
+   "run",
+   "runs",
+   "selections",
+   "under"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permits"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1225963",
+    "bytes": 31933312
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ing",
+     "under"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609957",
+    "bytes": 934162
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Mark"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609958",
+    "bytes": 3434110
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Setup",
+     "ing",
+     "ing/aermod-datasets",
+     "limitations",
+     "option",
+     "predictions",
+     "run",
+     "runs",
+     "selections",
+     "version"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1697881",
+    "bytes": 130363
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN109696153",
+  "entity_name": "CORPUS CHRISTI WATERFRONT TERMINAL",
+  "documents_total": 13,
+  "documents_read": 1,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "New",
+   "Security",
+   "Service",
+   "Site"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "New",
+     "Security",
+     "Service",
+     "Site"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3966536",
+    "bytes": 19863035
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106831423",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN110369758",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111788618",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102147055",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100221985",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106586795",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN101061927",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100212067",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111708863",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106579600",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100217199",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106362262",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN101865715",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN101056851",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN104763099",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102183969",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111419685",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111987863",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100221985",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100693308",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111963427",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN110935285",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106844137",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN108779729",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN110369758",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN107928129",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN104517826",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN112261797",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106831423",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN112259775",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN112258678",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ }
+]

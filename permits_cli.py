@@ -199,7 +199,13 @@ def cmd_scrape(args):
         try:
             with open(args.out) as handle:
                 results = json.load(handle)
-            done = {r.get("regulated_entity") for r in results}
+            # Only entities that actually completed count as done. A transient
+            # failure — the sandbox proxy restarting mid-run, for instance —
+            # has to be retried, not frozen in as a permanent empty result.
+            done = {
+                r.get("regulated_entity") for r in results if not r.get("error")
+            }
+            results = [r for r in results if not r.get("error")]
         except (ValueError, OSError):
             results, done = [], set()
 
