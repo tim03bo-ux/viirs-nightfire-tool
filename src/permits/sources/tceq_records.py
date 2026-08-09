@@ -281,7 +281,8 @@ def extract_units(text, entity_name=None):
 
 
 def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
-                  access=None, delay=1.0, verbose=True):
+                  access=None, delay=1.0, verbose=True, keep_files=False,
+                  max_bytes=40 * 1024 * 1024):
     """Search, download and extract for one regulated entity.
 
     Returns a dict with the documents examined and the merged extraction.
@@ -298,11 +299,27 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
         path = download(document, dest_dir)
         if not path:
             continue
-        extracted = extract_units(
-            extract_text(path), entity_name=document.get("entity_name")
-        )
+        size = os.path.getsize(path)
+        try:
+            # Permit files are big — five entities pulled 726 MB, which projects
+            # to hundreds of gigabytes across the state. The text is what is
+            # wanted, so it is taken and the file dropped unless asked to keep.
+            if size > max_bytes:
+                extracted = extract_units("")
+                extracted["skipped"] = f"file too large ({size // 1048576} MB)"
+            else:
+                extracted = extract_units(
+                    extract_text(path), entity_name=document.get("entity_name")
+                )
+        finally:
+            if not keep_files:
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
         extracted["title"] = document.get("title")
         extracted["doc_id"] = document.get("doc_id")
+        extracted["bytes"] = size
         findings.append(extracted)
         time.sleep(delay)
 

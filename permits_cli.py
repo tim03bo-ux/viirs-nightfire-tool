@@ -212,7 +212,7 @@ def cmd_scrape(args):
         try:
             found = tceq_records.scrape_entity(
                 rn, args.dir, max_docs=args.max_docs, access=access,
-                delay=args.delay, verbose=False,
+                delay=args.delay, verbose=False, keep_files=args.keep_files,
             )
         except Exception as exc:
             print(f"  {rn}: ERROR {type(exc).__name__}: {exc}", flush=True)
@@ -523,6 +523,9 @@ def build_parser():
     sub.add_argument("--delay", type=float, default=1.0)
     sub.add_argument("--dir", default=os.path.join("data", "raw", "tceq_docs"))
     sub.add_argument("--out", default=os.path.join("output", "permit_units.json"))
+    sub.add_argument("--keep-files", action="store_true",
+                     help="retain downloaded PDFs; off by default because a "
+                          "statewide sweep is hundreds of GB")
     sub.add_argument("--restart", action="store_true",
                      help="ignore prior results and scrape everything again")
     sub.set_defaults(func=cmd_scrape)
