@@ -46,6 +46,7 @@ import urllib.request
 import pandas as pd
 
 from . import base
+from ..classify import KIND_GENERATION
 from ..normalize import clean_str, parse_number
 
 SOURCE = "tceq_air"
@@ -115,6 +116,24 @@ UNIT_RULES = {
     "boilers_over_40mmbtu": "8466",
     "boilers_and_combustion": "5023",
 }
+
+# Unit rules whose whole point is electric generation. TCEQ returns these
+# records *because* the site holds an electric generating authorization, which
+# makes the export itself the assertion — the same kind of structural evidence
+# an ERCOT queue row carries, and far better than guessing from a company name.
+# Without this, 1,400 of the 1,556 sites in the Electric Generating Facilities
+# pull classified as "unknown", because a TCEQ record's only text is a company
+# name and "Nexus Hubbard Power, LLC" matches no generation keyword. That miss
+# hid a colocated site: the Nexus Hubbard data center's own on-site generation
+# sat unclassified next to it.
+#
+# The rule also covers standby sets at stores and hospitals. Those genuinely do
+# hold the authorization, so calling them generation is correct; what separates
+# a peaker from a Walmart's backup diesel is scale, not kind.
+GENERATION_UNIT_RULES = frozenset({
+    "electric_generating_facilities",
+    "natural_gas_electric_generating_units",
+})
 
 # proj_status_txt accepts these; ALL returns issued and pending together.
 STATUS_ALL = "ALL"
@@ -357,8 +376,15 @@ def read_file(path, sheet=None):
     return base.read_table(path, sheet=sheet, expected_tokens=HEADER_TOKENS)
 
 
-def to_entities(df, source_file_id=None):
-    """Normalize TCEQ air rows into entity dicts."""
+def to_entities(df, source_file_id=None, unit_rule=None):
+    """Normalize TCEQ air rows into entity dicts.
+
+    `unit_rule` names the TCEQ unit-rule pull the export came from. When that
+    rule is one of GENERATION_UNIT_RULES, every row in it is an electric
+    generating facility by the agency's own selection, so the kind is asserted
+    rather than inferred from a company name.
+    """
+    generation_by_rule = unit_rule in GENERATION_UNIT_RULES
     resolved = base.resolve_columns(df, COLUMNS)
     if not resolved:
         raise KeyError(
@@ -430,6 +456,11 @@ def to_entities(df, source_file_id=None):
                 ghg_tpy=base.get(row, resolved, "ghg_tpy"),
                 url=base.get(row, resolved, "url"),
                 source_file_id=source_file_id,
+                kind_fallback=KIND_GENERATION if generation_by_rule else None,
+                kind_fallback_evidence=(
+                    f"TCEQ unit-rule export '{unit_rule}'" if generation_by_rule
+                    else None
+                ),
             )
         )
     return records

@@ -17,7 +17,7 @@ from ..normalize import (
     norm_text, clean_str, zip_centroid, county_centroid, norm_company, norm_county, norm_project,
     parse_date, parse_mw, parse_number,
 )
-from ..classify import classify_kind, classify_fuel
+from ..classify import classify_kind, classify_fuel, KIND_UNKNOWN
 from ..status import classify_lifecycle, classify_program, classify_action
 from ..db import ENTITY_COLUMNS, make_entity_id, to_json
 
@@ -187,6 +187,8 @@ def build_entity(
     source_file_id=None,
     state="TX",
     kind_override=None,
+    kind_fallback=None,
+    kind_fallback_evidence=None,
     lifecycle_override=None,
 ):
     """Assemble one normalized entity row: classify, geocode-fallback, normalize.
@@ -247,6 +249,14 @@ def build_entity(
             capacity_mw=capacity_mw,
             permit_type=permit_type,
         )
+        # A fallback the *source* asserts, used only where the text says
+        # nothing. It must not outrank a real classification: a TCEQ pull of
+        # electric generating facilities asserts generation, but one of its rows
+        # naming a data center is a data center with generation on site, and the
+        # narrower label is the informative one.
+        if kind_fallback and kind == KIND_UNKNOWN:
+            kind, kind_confidence = kind_fallback, 0.85
+            kind_evidence = kind_fallback_evidence or "asserted by source export"
 
     fuel, tech, fuel_confidence = classify_fuel(
         fuel_code=fuel_code,

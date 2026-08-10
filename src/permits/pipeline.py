@@ -61,6 +61,15 @@ _FILENAME_HINTS = [
 ]
 
 
+def infer_unit_rule(path):
+    """Recover the TCEQ unit rule from an export's filename, or None."""
+    name = os.path.basename(str(path)).lower()
+    for rule in tceq_air.UNIT_RULES:
+        if rule in name:
+            return rule
+    return None
+
+
 def infer_source(path):
     """Guess the source from a filename, or None."""
     name = os.path.basename(str(path)).lower()
@@ -109,6 +118,14 @@ def ingest_file(
         kwargs = {"source_file_id": file_id}
         if source == SOURCE_TCEQ_SWNOI and min_acres is not None:
             kwargs["min_acres"] = min_acres
+        if source == SOURCE_TCEQ_AIR:
+            # TCEQ's unit-rule pulls are named for the rule they used, and the
+            # rule is evidence: an "electric generating facilities" export is
+            # the agency asserting every row generates electricity, which no
+            # amount of reading a company name can recover.
+            rule = infer_unit_rule(path)
+            if rule:
+                kwargs["unit_rule"] = rule
         records = adapter["to_entities"](df, **kwargs)
 
         inserted, updated = dbmod.upsert_entities(conn, records)

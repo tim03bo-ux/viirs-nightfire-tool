@@ -1357,3 +1357,50 @@ class TestStormwaterLiveQuery:
         assert record["acres"] == pytest.approx(84.0)
         assert record["regulated_entity"] == "RN111896825"
         assert record["project_kind"] == classify.KIND_DATA_CENTER
+
+
+class TestUnitRuleAssertsGeneration:
+    """TCEQ's own unit-rule export is evidence about what a site is."""
+
+    ROW = {
+        "Project Number": "P-1", "Regulated Entity Name": "Nexus Hubbard Power, LLC",
+        "Customer Name": "Nexus Hubbard Power, LLC", "County": "Hill",
+        "RN Number": "RN112221833", "Permit Type": "STDPMT",
+    }
+
+    def test_company_name_alone_classifies_as_unknown(self):
+        # "Nexus Hubbard Power, LLC" matches no generation keyword, and a TCEQ
+        # record has no other text — its project name *is* the company name.
+        record = tceq_air.to_entities(pd.DataFrame([self.ROW]))[0]
+        assert record["project_kind"] == classify.KIND_UNKNOWN
+
+    def test_electric_generating_unit_rule_supplies_the_kind(self):
+        record = tceq_air.to_entities(
+            pd.DataFrame([self.ROW]), unit_rule="electric_generating_facilities"
+        )[0]
+        assert record["project_kind"] == classify.KIND_GENERATION
+        assert "electric_generating_facilities" in record["kind_evidence"]
+
+    def test_a_more_specific_kind_still_wins(self):
+        # The same export contains the data center that the generation serves.
+        # The fallback must not overwrite it, or the colocation disappears.
+        row = dict(self.ROW, **{"Regulated Entity Name": "NEXUS DATA CENTER HUBBARD",
+                                "Customer Name": "NEXUS DATA CENTER HUBBARD"})
+        record = tceq_air.to_entities(
+            pd.DataFrame([row]), unit_rule="electric_generating_facilities"
+        )[0]
+        assert record["project_kind"] == classify.KIND_DATA_CENTER
+
+    def test_unrelated_unit_rule_asserts_nothing(self):
+        record = tceq_air.to_entities(
+            pd.DataFrame([self.ROW]), unit_rule="boilers_over_40mmbtu"
+        )[0]
+        assert record["project_kind"] == classify.KIND_UNKNOWN
+
+    @pytest.mark.parametrize("filename,expected", [
+        ("tceq-air-nsr-electric_generating_facilities.csv",
+         "electric_generating_facilities"),
+        ("tceq-air-nsr-pending-all.csv", None),
+    ])
+    def test_unit_rule_recovered_from_filename(self, filename, expected):
+        assert pipeline.infer_unit_rule(filename) == expected
