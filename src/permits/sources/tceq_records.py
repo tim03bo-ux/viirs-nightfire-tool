@@ -191,7 +191,7 @@ def download(document, dest_dir, timeout=240):
 
 # Engine and turbine makers that appear in Texas air permit unit tables.
 MANUFACTURERS = [
-    "caterpillar", "cat", "wartsila", "wärtsilä", "cummins", "waukesha",
+    "caterpillar", "wartsila", "wärtsilä", "cummins", "waukesha",
     "jenbacher", "innio", "man energy", "mtu", "rolls-royce", "guascor",
     "solar turbines", "siemens", "ge vernova", "general electric", "mitsubishi",
     "pratt & whitney", "kawasaki", "capstone", "detroit diesel", "perkins",
@@ -209,6 +209,39 @@ _MODEL_RE = re.compile(
     r"\b(?:model|type)\s*(?:no\.?|number|:)?\s*([A-Z0-9][A-Z0-9\-/]{2,18})\b",
     re.IGNORECASE,
 )
+
+
+def extract_tables(path, max_pages=30):
+    """Table rows as text lines, one line per row, cells joined by ' | '.
+
+    pypdf flattens a table into one line per *cell*, which separates a
+    manufacturer from the rating sitting in the next column and makes same-row
+    pairing impossible. pdfplumber reconstructs the row, so "Caterpillar |
+    G3520C | 2.0 MW" arrives intact.
+    """
+    try:
+        import pdfplumber
+    except ImportError:
+        return ""
+    lines = []
+    try:
+        with pdfplumber.open(path) as document:
+            for page in document.pages[:max_pages]:
+                try:
+                    tables = page.extract_tables() or []
+                except Exception:
+                    continue
+                for table in tables:
+                    for row in table:
+                        cells = [
+                            re.sub(r"\s+", " ", str(cell)).strip()
+                            for cell in row if cell
+                        ]
+                        if cells:
+                            lines.append(" | ".join(cells))
+    except Exception:
+        return ""
+    return "\n".join(lines)
 
 
 def extract_text(path, max_pages=40):
@@ -271,10 +304,6 @@ def extract_units(text, entity_name=None):
     if entity_name:
         own = entity_name.lower()
         makers = [m for m in makers if m not in own]
-    # A bare "cat" is too common in prose to count on its own.
-    if "cat" in makers and "caterpillar" not in makers:
-        makers.remove("cat")
-
     models = sorted(set(_MODEL_RE.findall(text)))[:12]
 
     return {
@@ -284,6 +313,217 @@ def extract_units(text, entity_name=None):
         "manufacturers": makers,
         "models": models,
     }
+
+
+
+
+# --- Unit-level pairing -------------------------------------------------------
+
+# A rating is only evidence about a manufacturer's equipment when the two sit
+# together in the same unit-table row. Document-level aggregation cannot tell a
+# 400 MW plant's GE turbines from the Cummins emergency genset parked beside
+# them: both inherit the largest number anywhere in the file.
+
+_LINE_MW_RE = re.compile(
+    r"(\d[\d,]*\.?\d*)\s*(MW|megawatts?|kW|kilowatts?)\b", re.IGNORECASE
+)
+# "(2)", "2 x", "two", "Qty: 3" — the count that multiplies a per-unit rating.
+# TCEQ sizes combustion units the way an air permit does — horsepower for
+# engines, MMBtu/hr heat input for turbines and boilers. Megawatts are an
+# electrical-output concept that belongs to ERCOT, and are largely absent:
+# a real unit table reads "Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | ..."
+# where those numbers are lb/hr and tpy emission rates, with the size stated in
+# the narrative as "1,945 horsepower".
+_LINE_HP_RE = re.compile(
+    r"(\d[\d,]*\.?\d*)\s*(?:horsepower|hp)\b", re.IGNORECASE
+)
+_LINE_MMBTU_RE = re.compile(
+    r"(\d[\d,]*\.?\d*)\s*MM\s?Btu\s*/?\s*(?:hr|hour)", re.IGNORECASE
+)
+
+# Shaft horsepower to megawatts. Mechanical output, not generator terminal
+# output — an alternator loses a few percent — so a derived figure is flagged
+# as such rather than presented as a nameplate rating.
+HP_TO_MW = 0.000745699
+
+
+def _line_hp(line):
+    values = []
+    for magnitude in _LINE_HP_RE.findall(line):
+        try:
+            number = float(magnitude.replace(",", ""))
+        except ValueError:
+            continue
+        if 1 <= number <= 200000:
+            values.append(number)
+    return values
+
+
+def _line_mmbtu(line):
+    values = []
+    for magnitude in _LINE_MMBTU_RE.findall(line):
+        try:
+            number = float(magnitude.replace(",", ""))
+        except ValueError:
+            continue
+        if 0.1 <= number <= 20000:
+            values.append(number)
+    return values
+
+
+_LINE_COUNT_RE = re.compile(
+    r"(?:qty\.?\s*:?\s*(\d{1,3})\b)"
+    r"|(?:\((\d{1,3})\))"
+    r"|(?:\b(\d{1,3})\s*(?:x|×)\s)",
+    re.IGNORECASE,
+)
+# Two shapes cover most unit tables: "G3520C" (letters then a run of digits) and
+# "SGT6-5000F" (letters, a digit, then a hyphenated block). Requiring two digits
+# in the first form keeps emission point numbers — EPN-1, GT-2 — out.
+_LINE_MODEL_RE = re.compile(
+    r"\b([A-Z]{1,4}[\-]?\d{2,5}[A-Z0-9\-]{0,6})\b"
+    r"|\b([A-Z]{2,4}\d{1,2}[\-]\d{2,5}[A-Z]{0,3})\b"
+)
+
+
+def _line_mw(line):
+    """Ratings stated on one line, normalized to MW."""
+    values = []
+    for magnitude, unit in _LINE_MW_RE.findall(line):
+        try:
+            number = float(magnitude.replace(",", ""))
+        except ValueError:
+            continue
+        if unit.lower().startswith("k"):
+            number /= 1000.0
+        if 0.01 <= number <= 5000:
+            values.append(round(number, 3))
+    return values
+
+
+def _line_makers(line_lower):
+    return [
+        maker for maker in MANUFACTURERS
+        if re.search(rf"\b{re.escape(maker)}\b", line_lower)
+    ]
+
+
+def extract_unit_records(text, entity_name=None, window=1):
+    """Pair manufacturers with the ratings stated alongside them.
+
+    Returns a list of unit dicts, each carrying the manufacturer, the rating in
+    MW, an optional model and unit count, and how the pairing was made:
+
+        same_line  manufacturer and rating on one row — trustworthy
+        nearby     found within `window` lines — a wrapped table row, weaker
+
+    A manufacturer with no rating near it still yields a record with mw=None:
+    knowing Cummins equipment is present is worth keeping even when the rating
+    is unreadable, and it keeps the two facts from being silently merged.
+    """
+    if not text:
+        return []
+
+    own = (entity_name or "").lower()
+    lines = [re.sub(r"[ \t]+", " ", line).strip() for line in text.splitlines()]
+    lines = [line for line in lines if line]
+
+    units = []
+    for index, line in enumerate(lines):
+        lowered = line.lower()
+        makers = [maker for maker in _line_makers(lowered) if maker not in own]
+        if not makers:
+            continue
+
+        values = _line_mw(line)
+        horsepower = _line_hp(line)
+        heat_input = _line_mmbtu(line)
+        proximity = "same_line"
+        if not (values or horsepower or heat_input):
+            for offset in range(1, window + 1):
+                for neighbour in (index - offset, index + offset):
+                    if 0 <= neighbour < len(lines):
+                        values = values or _line_mw(lines[neighbour])
+                        horsepower = horsepower or _line_hp(lines[neighbour])
+                        heat_input = heat_input or _line_mmbtu(lines[neighbour])
+            proximity = (
+                "nearby" if (values or horsepower or heat_input) else "unrated"
+            )
+
+        count_match = _LINE_COUNT_RE.search(line)
+        count = next(
+            (int(group) for group in (count_match.groups() if count_match else ())
+             if group), None
+        )
+        models = [
+            model for match in _LINE_MODEL_RE.findall(line)
+            for model in (match if isinstance(match, tuple) else (match,)) if model
+        ]
+        # Neither a bare year nor an emission point number is a model. TCEQ
+        # tables lead with EPN/ENG/GT identifiers that match the same shape as
+        # a real model code, and they sort first on the line.
+        models = [
+            m for m in models
+            if not re.fullmatch(r"(19|20)\d{2}", m)
+            and not re.match(r"^(EPN|ENG|EG|GT|FIN|STK|TK|VENT|CT|HRSG)[\-]?\d",
+                             m, re.IGNORECASE)
+        ]
+
+        for maker in makers:
+            derived = (
+                round(min(horsepower) * HP_TO_MW, 3) if horsepower else None
+            )
+            units.append({
+                "manufacturer": maker,
+                "mw": min(values) if values else None,
+                "hp": min(horsepower) if horsepower else None,
+                "mmbtu_hr": min(heat_input) if heat_input else None,
+                # Derived from horsepower when the permit states no megawatts,
+                # which is the usual case.
+                "mw_from_hp": derived,
+                "mw_candidates": sorted(set(values))[:6],
+                "count": count,
+                "model": models[0] if models else None,
+                "proximity": proximity,
+                "context": line[:180],
+            })
+    return units
+
+
+def summarize_units(units):
+    """Collapse unit records into per-manufacturer figures.
+
+    Only same-line pairings are used for the rating: a "nearby" match is kept as
+    evidence of presence but is not strong enough to attribute a number to.
+    """
+    by_maker = {}
+    for unit in units:
+        entry = by_maker.setdefault(unit["manufacturer"], {
+            "manufacturer": unit["manufacturer"], "unit_mw": [], "unit_hp": [],
+            "models": [],
+            "mentions": 0, "same_line": 0,
+        })
+        entry["mentions"] += 1
+        rating = unit.get("mw") or unit.get("mw_from_hp")
+        if unit["proximity"] == "same_line" and rating is not None:
+            entry["same_line"] += 1
+            entry["unit_mw"].append(rating)
+        if unit.get("hp"):
+            entry.setdefault("unit_hp", []).append(unit["hp"])
+        if unit.get("model"):
+            entry["models"].append(unit["model"])
+
+    summary = []
+    for entry in by_maker.values():
+        ratings = entry.pop("unit_mw")
+        horsepowers = entry.pop("unit_hp", [])
+        entry["max_unit_hp"] = max(horsepowers) if horsepowers else None
+        entry["models"] = sorted(set(entry["models"]))[:6]
+        entry["max_unit_mw"] = max(ratings) if ratings else None
+        entry["min_unit_mw"] = min(ratings) if ratings else None
+        entry["n_rated"] = len(ratings)
+        summary.append(entry)
+    return sorted(summary, key=lambda e: (-(e["max_unit_mw"] or 0), e["manufacturer"]))
 
 
 def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
@@ -314,8 +554,20 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
                 extracted = extract_units("")
                 extracted["skipped"] = f"file too large ({size // 1048576} MB)"
             else:
+                page_text = extract_text(path)
+                table_text = extract_tables(path)
                 extracted = extract_units(
-                    extract_text(path), entity_name=document.get("entity_name")
+                    page_text, entity_name=document.get("entity_name")
+                )
+                # Table rows first: they are the only place a manufacturer and
+                # its rating reliably share a line.
+                extracted["units"] = (
+                    extract_unit_records(
+                        table_text, entity_name=document.get("entity_name")
+                    )
+                    + extract_unit_records(
+                        page_text, entity_name=document.get("entity_name")
+                    )
                 )
         finally:
             if not keep_files:
@@ -329,8 +581,11 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
         findings.append(extracted)
         time.sleep(delay)
 
+    all_units = [u for f in findings for u in (f.get("units") or [])]
     merged = {
         "regulated_entity": rn_number,
+        "units": all_units,
+        "by_manufacturer": summarize_units(all_units),
         "entity_name": documents[0].get("entity_name") if documents else None,
         "documents_total": total,
         "documents_read": len(findings),
