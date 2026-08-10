@@ -8711,5 +8711,4766 @@
     "bytes": 8657396
    }
   ]
+ },
+ {
+  "regulated_entity": "RN100214188",
+  "entity_name": "",
+  "documents_total": 379,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Initial",
+   "Site",
+   "and",
+   "business",
+   "locating",
+   "ofCustomer",
+   "ofGustomer",
+   "oiiorturants",
+   "reviews"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Site",
+     "and",
+     "business",
+     "locating",
+     "reviews"
+    ],
+    "title": "Site Review",
+    "doc_id": "6818238",
+    "bytes": 512617
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "528723",
+    "bytes": 868251
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ofCustomer",
+     "ofGustomer",
+     "oiiorturants"
+    ],
+    "title": "Agency Review",
+    "doc_id": "528724",
+    "bytes": 1749739
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "528796",
+    "bytes": 848630
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Initial"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3553067",
+    "bytes": 120690
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100238708",
+  "entity_name": "CHOCOLATE BAYOU PLANT",
+  "documents_total": 1248,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "AIR",
+   "JRVW",
+   "Name",
+   "PERMITS",
+   "Project",
+   "REGION",
+   "RESPONSIBLE",
+   "Site",
+   "TECHNICAL",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "PERMITS",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "540582",
+    "bytes": 211466
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "540049",
+    "bytes": 132907
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Name"
+    ],
+    "title": "Agency Review",
+    "doc_id": "533260",
+    "bytes": 1667329
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "AIR",
+     "Name",
+     "PERMITS",
+     "Site",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1286468",
+    "bytes": 12161524
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "JRVW",
+     "PERMITS",
+     "Project",
+     "REGION",
+     "RESPONSIBLE",
+     "Site",
+     "TECHNICAL"
+    ],
+    "title": "Agency Review",
+    "doc_id": "540589",
+    "bytes": 1763328
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN103919817",
+  "entity_name": "",
+  "documents_total": 3272,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "106",
+   "174718",
+   "185897",
+   "ADD",
+   "Application",
+   "ControUBACT",
+   "Control/BACT",
+   "Industry",
+   "IndusttT",
+   "OTHER",
+   "PERMIT",
+   "Permit"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ControUBACT",
+     "IndusttT",
+     "PERMIT",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1329443",
+    "bytes": 1641222
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "185897",
+     "Application",
+     "ControUBACT",
+     "Request",
+     "Source",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1329512",
+    "bytes": 2074177
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "Control/BACT",
+     "Industry",
+     "OTHER",
+     "PERMIT",
+     "Request",
+     "Start",
+     "Status",
+     "ePAY",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1329493",
+    "bytes": 3272627
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "106",
+     "Permit",
+     "ePAY"
+    ],
+    "title": "Agency Review",
+    "doc_id": "532751",
+    "bytes": 731918
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "174718",
+     "Industry",
+     "Source",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1329476",
+    "bytes": 6532318
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110854973",
+  "entity_name": "AUDUBON METALS TEXAS",
+  "documents_total": 61,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "ISCST3",
+   "Initial",
+   "Security",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Security"
+    ],
+    "title": "Applications",
+    "doc_id": "6578521",
+    "bytes": 827870
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (124 MB)",
+    "title": "Agency Review",
+    "doc_id": "5041797",
+    "bytes": 130661358
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "MAERT",
+    "doc_id": "5021997",
+    "bytes": 94119
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ISCST3",
+     "ing"
+    ],
+    "title": "Permit Face",
+    "doc_id": "5021998",
+    "bytes": 157878
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Initial",
+     "ing"
+    ],
+    "title": "Technical Review",
+    "doc_id": "5021999",
+    "bytes": 125124
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110498151",
+  "entity_name": "",
+  "documents_total": 22,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Domestic"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (165 MB)",
+    "title": "Project File Folder",
+    "doc_id": "8853144",
+    "bytes": 173047014
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (267 MB)",
+    "title": "Project File Folder",
+    "doc_id": "8853674",
+    "bytes": 280249228
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "6270325",
+    "bytes": 11420982
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "7185171",
+    "bytes": 1998480
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8151452",
+    "bytes": 37558
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100224765",
+  "entity_name": "CLIFFORD B JONES STATION POWER PLANT",
+  "documents_total": 221,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "16237",
+   "Domestic"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (128 MB)",
+    "title": "Permits",
+    "doc_id": "4600866",
+    "bytes": 134792104
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (60 MB)",
+    "title": "Permits",
+    "doc_id": "4600868",
+    "bytes": 63441712
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "7887460",
+    "bytes": 37510
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "16237",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8399464",
+    "bytes": 38139
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "16237",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9348480",
+    "bytes": 38190
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105862510",
+  "entity_name": "ANTELOPE STATION",
+  "documents_total": 170,
+  "documents_read": 5,
+  "max_mw": 758.0,
+  "manufacturers": [
+   "general electric"
+  ],
+  "models": [
+   "HRSG",
+   "Name",
+   "State",
+   "ers",
+   "for",
+   "ing",
+   "input",
+   "selected"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "Name",
+     "State"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1324336",
+    "bytes": 5501101
+   },
+   {
+    "mw_values": [
+     758.0,
+     480.0,
+     400.0,
+     300.0,
+     300.0,
+     203.0,
+     202.0,
+     202.0,
+     202.0,
+     202.0,
+     200.0,
+     200.0,
+     200.0,
+     200.0,
+     196.0,
+     190.117,
+     190.1,
+     168.0,
+     168.0,
+     100.0,
+     100.0,
+     100.0,
+     78.0,
+     1.656
+    ],
+    "max_mw": 758.0,
+    "total_mw": 5340.87,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "HRSG",
+     "for",
+     "ing",
+     "selected"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609930",
+    "bytes": 1336962
+   },
+   {
+    "mw_values": [
+     480.0,
+     202.0,
+     202.0,
+     202.0,
+     190.1,
+     190.1,
+     168.0,
+     168.0,
+     78.0
+    ],
+    "max_mw": 480.0,
+    "total_mw": 1880.2,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "609931",
+    "bytes": 2862282
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ers",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "5366144",
+    "bytes": 82290
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ing",
+     "input"
+    ],
+    "title": "Agency Review",
+    "doc_id": "5366130",
+    "bytes": 73878
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100542711",
+  "entity_name": "",
+  "documents_total": 2887,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "145301",
+   "ADD",
+   "Application",
+   "Appllcation",
+   "CHEMICAL",
+   "CIIEMICAL",
+   "Emission",
+   "Industry",
+   "PERMIT",
+   "PROJECT",
+   "Permit",
+   "Permlt"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "145301",
+     "Appllcation",
+     "Emission",
+     "Industry",
+     "PERMIT",
+     "Permit",
+     "Source",
+     "TRAGKING",
+     "Type"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449052",
+    "bytes": 3001711
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "CHEMICAL",
+     "Industry",
+     "PROJECT",
+     "Permit",
+     "Request",
+     "ePAY",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449053",
+    "bytes": 2134914
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Application",
+     "Emission",
+     "PERMIT",
+     "Pernit",
+     "Type",
+     "rtso"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449054",
+    "bytes": 2454360
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "4418144",
+    "bytes": 129214
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "CIIEMICAL",
+     "Industry",
+     "PROJECT",
+     "Permit",
+     "Permlt",
+     "Request",
+     "ePAY",
+     "w/o"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1449061",
+    "bytes": 2970315
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102450756",
+  "entity_name": "",
+  "documents_total": 4985,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "100219",
+   "100526",
+   "100527",
+   "100673",
+   "100731",
+   "101372",
+   "101878",
+   "102097",
+   "102188",
+   "102332",
+   "102792",
+   "10291"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "126950",
+     "ADD",
+     "Application",
+     "CHECK",
+     "PROJECT",
+     "Permit",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1377362",
+    "bytes": 4295800
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "100219",
+     "100526",
+     "100527",
+     "100673",
+     "100731",
+     "101372",
+     "101878",
+     "102097",
+     "102188",
+     "102332",
+     "102792",
+     "10291"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8457201",
+    "bytes": 132458
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "100219",
+     "100526",
+     "100527",
+     "100673",
+     "100731",
+     "101372",
+     "101878",
+     "102097",
+     "102188",
+     "102332",
+     "102792",
+     "10291"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9346642",
+    "bytes": 133883
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "146698",
+     "Applicatlon",
+     "Industry",
+     "PERMIT",
+     "Permit",
+     "Source",
+     "Type",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1377356",
+    "bytes": 4875560
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "100219",
+     "100526",
+     "100527",
+     "100673",
+     "100731",
+     "101372",
+     "101878",
+     "102097",
+     "102188",
+     "102332",
+     "102792",
+     "10291"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8457203",
+    "bytes": 132458
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100209451",
+  "entity_name": "",
+  "documents_total": 2868,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "VOL",
+   "and"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (77 MB)",
+    "title": "Permits",
+    "doc_id": "4596523",
+    "bytes": 81095442
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "VOL",
+     "and"
+    ],
+    "title": "Permits",
+    "doc_id": "4596524",
+    "bytes": 10716841
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (141 MB)",
+    "title": "Permits",
+    "doc_id": "4596525",
+    "bytes": 148265359
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (221 MB)",
+    "title": "Permits",
+    "doc_id": "4596526",
+    "bytes": 232298643
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (60 MB)",
+    "title": "Permits",
+    "doc_id": "4596527",
+    "bytes": 63075207
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100215896",
+  "entity_name": "C R WING COGENERATION PLANT",
+  "documents_total": 81,
+  "documents_read": 5,
+  "max_mw": 200.0,
+  "manufacturers": [
+   "general electric"
+  ],
+  "models": [
+   "7EA",
+   "AND",
+   "APPL",
+   "Activity",
+   "CAMD",
+   "CSD",
+   "Code",
+   "Construction",
+   "Name",
+   "PERMITS",
+   "PRES",
+   "Pretest"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     200.0,
+     200.0,
+     200.0,
+     200.0,
+     90.0,
+     90.0,
+     75.0,
+     75.0,
+     45.0,
+     45.0,
+     45.0,
+     45.0,
+     45.0,
+     45.0,
+     45.0
+    ],
+    "max_mw": 200.0,
+    "total_mw": 1445.0,
+    "manufacturers": [],
+    "models": [
+     "Construction",
+     "Name",
+     "RNEW"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1348241",
+    "bytes": 9518138
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (187 MB)",
+    "title": "Permits",
+    "doc_id": "4615840",
+    "bytes": 196154870
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "537478",
+    "bytes": 108736
+   },
+   {
+    "mw_values": [
+     90.0,
+     77.5,
+     45.0,
+     45.0,
+     45.0,
+     45.0
+    ],
+    "max_mw": 90.0,
+    "total_mw": 347.5,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "7EA",
+     "AND",
+     "APPL",
+     "Activity",
+     "CAMD",
+     "CSD",
+     "Code",
+     "PERMITS",
+     "PRES",
+     "Pretest",
+     "all",
+     "facility"
+    ],
+    "title": "Agency Review",
+    "doc_id": "492188",
+    "bytes": 13214451
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Renewal"
+    ],
+    "title": "Agency Review",
+    "doc_id": "8723631",
+    "bytes": 344494
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN107928129",
+  "entity_name": "",
+  "documents_total": 53,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "1114",
+   "129047",
+   "147681",
+   "Application",
+   "Bolted",
+   "ControUBACT",
+   "Domestic",
+   "GHGPSDTX172",
+   "PSDTX1522",
+   "Permit",
+   "Request",
+   "Source"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "1114",
+     "Application",
+     "Bolted",
+     "ControUBACT",
+     "Request",
+     "Source"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1303409",
+    "bytes": 22212972
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Applications",
+    "doc_id": "6542819",
+    "bytes": 48665
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Applications",
+    "doc_id": "7676117",
+    "bytes": 42776
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9347160",
+    "bytes": 42830
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1734812",
+    "bytes": 318422
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102559291",
+  "entity_name": null,
+  "documents_total": 0,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN107928129",
+  "entity_name": "",
+  "documents_total": 53,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "1114",
+   "129047",
+   "147681",
+   "Application",
+   "Bolted",
+   "ControUBACT",
+   "Domestic",
+   "GHGPSDTX172",
+   "PSDTX1522",
+   "Permit",
+   "Request",
+   "Source"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "1114",
+     "Application",
+     "Bolted",
+     "ControUBACT",
+     "Request",
+     "Source"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1303409",
+    "bytes": 22212972
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Applications",
+    "doc_id": "6542819",
+    "bytes": 48665
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Applications",
+    "doc_id": "7676117",
+    "bytes": 42776
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "129047",
+     "147681",
+     "Domestic",
+     "GHGPSDTX172",
+     "PSDTX1522"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9347160",
+    "bytes": 42830
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1734812",
+    "bytes": 318422
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104517826",
+  "entity_name": "",
+  "documents_total": 158,
+  "documents_read": 5,
+  "max_mw": 1530.0,
+  "manufacturers": [
+   "general electric"
+  ],
+  "models": [
+   "FUEL",
+   "Initial",
+   "PRIMAf",
+   "SOf",
+   "Sfr",
+   "and",
+   "combustion",
+   "ing",
+   "rHROI",
+   "utrtT"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Initial",
+     "ing"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1390967",
+    "bytes": 17110396
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (82 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1390988",
+    "bytes": 86781977
+   },
+   {
+    "mw_values": [
+     1530.0,
+     640.0,
+     215.0,
+     176.0,
+     125.0,
+     80.0,
+     64.0,
+     56.0,
+     50.0,
+     45.0,
+     15.0,
+     5.0
+    ],
+    "max_mw": 1530.0,
+    "total_mw": 3001.0,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "FUEL",
+     "PRIMAf",
+     "SOf",
+     "Sfr",
+     "and",
+     "combustion",
+     "rHROI",
+     "utrtT"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1390796",
+    "bytes": 6908795
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "and",
+     "combustion"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1390992",
+    "bytes": 13012697
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (60 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1390991",
+    "bytes": 63459716
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112090626",
+  "entity_name": "PECOS POWER PLANT",
+  "documents_total": 54,
+  "documents_read": 5,
+  "max_mw": 225.6,
+  "manufacturers": [
+   "wartsila"
+  ],
+  "models": [
+   "178398",
+   "Domestic",
+   "Engine",
+   "Fuel",
+   "Power",
+   "RICE",
+   "Serial",
+   "Service",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "178398",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8533182",
+    "bytes": 38226
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8462074",
+    "bytes": 171259
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8462076",
+    "bytes": 12755
+   },
+   {
+    "mw_values": [
+     225.6,
+     10.0
+    ],
+    "max_mw": 225.6,
+    "total_mw": 235.6,
+    "manufacturers": [
+     "wartsila"
+    ],
+    "models": [
+     "Engine",
+     "Fuel",
+     "Power",
+     "RICE",
+     "Serial",
+     "Service"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8462075",
+    "bytes": 6693661
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (126 MB)",
+    "title": "Agency Review",
+    "doc_id": "9629267",
+    "bytes": 132903751
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112261797",
+  "entity_name": "",
+  "documents_total": 53,
+  "documents_read": 2,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Pump",
+   "Security",
+   "and",
+   "locating",
+   "reviews"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (128 MB)",
+    "title": "Agency Review",
+    "doc_id": "10098357",
+    "bytes": 134354439
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Pump",
+     "Security",
+     "and",
+     "locating",
+     "reviews"
+    ],
+    "title": "Site Review",
+    "doc_id": "10003030",
+    "bytes": 5537943
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112259775",
+  "entity_name": "",
+  "documents_total": 44,
+  "documents_read": 1,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (76 MB)",
+    "title": "Agency Review",
+    "doc_id": "9472854",
+    "bytes": 80174644
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112258678",
+  "entity_name": "",
+  "documents_total": 75,
+  "documents_read": 3,
+  "max_mw": 56.0,
+  "manufacturers": [
+   "siemens"
+  ],
+  "models": [
+   "Initial",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (94 MB)",
+    "title": "Agency Review",
+    "doc_id": "9560569",
+    "bytes": 99611879
+   },
+   {
+    "mw_values": [
+     56.0,
+     45.0,
+     45.0
+    ],
+    "max_mw": 56.0,
+    "total_mw": 146.0,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "Initial",
+     "ing"
+    ],
+    "title": "Technical Review",
+    "doc_id": "9562390",
+    "bytes": 250722
+   },
+   {
+    "mw_values": [
+     56.0,
+     45.0,
+     45.0
+    ],
+    "max_mw": 56.0,
+    "total_mw": 146.0,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "Initial",
+     "ing"
+    ],
+    "title": "Technical Review",
+    "doc_id": "9562398",
+    "bytes": 250722
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106716632",
+  "entity_name": "FGE TEXAS",
+  "documents_total": 64,
+  "documents_read": 5,
+  "max_mw": 2307.0,
+  "manufacturers": [
+   "siemens"
+  ],
+  "models": [
+   "Fuel",
+   "GT24",
+   "Gross",
+   "Mark",
+   "Number",
+   "Permit",
+   "Permits",
+   "Serial",
+   "Transfer",
+   "Users",
+   "and",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (51 MB)",
+    "title": "Agency Review",
+    "doc_id": "1231420",
+    "bytes": 54391518
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (53 MB)",
+    "title": "Agency Review",
+    "doc_id": "1231414",
+    "bytes": 55985602
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "Permit",
+     "Permits",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1230811",
+    "bytes": 18034113
+   },
+   {
+    "mw_values": [
+     1620.0,
+     1610.0,
+     810.0,
+     629.0,
+     600.0,
+     431.0,
+     336.0,
+     336.0,
+     271.0,
+     265.0,
+     230.7,
+     230.7,
+     195.0,
+     195.0,
+     183.0,
+     180.0,
+     180.0,
+     168.0,
+     168.0,
+     50.0,
+     25.0
+    ],
+    "max_mw": 1620.0,
+    "total_mw": 8713.4,
+    "manufacturers": [],
+    "models": [
+     "Gross",
+     "Users",
+     "ing",
+     "under"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609969",
+    "bytes": 1011567
+   },
+   {
+    "mw_values": [
+     2307.0,
+     1620.0,
+     810.7,
+     810.7,
+     810.7,
+     810.0,
+     620.0,
+     450.0,
+     336.0,
+     336.0,
+     237.0,
+     237.0,
+     230.7,
+     230.7,
+     230.7,
+     201.0,
+     10.7
+    ],
+    "max_mw": 2307.0,
+    "total_mw": 10288.9,
+    "manufacturers": [],
+    "models": [
+     "Fuel",
+     "GT24",
+     "Mark",
+     "Number",
+     "Serial",
+     "Transfer",
+     "and",
+     "ofDevice",
+     "rcp",
+     "represented"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609970",
+    "bytes": 7530177
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN103758470",
+  "entity_name": "",
+  "documents_total": 280,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "102941",
+   "180354",
+   "25266",
+   "450",
+   "76036",
+   "76908",
+   "Domestic",
+   "PROJECT",
+   "application/pdf",
+   "ePAY",
+   "ofequipment"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "450",
+     "PROJECT",
+     "ePAY",
+     "ofequipment"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1318281",
+    "bytes": 8835473
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102941",
+     "25266",
+     "76036",
+     "76908",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8525008",
+    "bytes": 39190
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102941",
+     "180354",
+     "25266",
+     "76036",
+     "76908",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9410800",
+    "bytes": 39509
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102941",
+     "180354",
+     "25266",
+     "76036",
+     "76908",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9660184",
+    "bytes": 38311
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Applications",
+    "doc_id": "4132144",
+    "bytes": 4762207
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102547957",
+  "entity_name": "GREGORY POWER FACILITY",
+  "documents_total": 206,
+  "documents_read": 5,
+  "max_mw": 168.0,
+  "manufacturers": [],
+  "models": [
+   "179926",
+   "Domestic",
+   "Fuel",
+   "RESULTS",
+   "RUN",
+   "application/pdf",
+   "ing",
+   "outputs"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "179926",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9392373",
+    "bytes": 36974
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Initial Application",
+    "doc_id": "8822130",
+    "bytes": 323524
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8822132",
+    "bytes": 13166
+   },
+   {
+    "mw_values": [
+     168.0,
+     168.0,
+     100.0
+    ],
+    "max_mw": 168.0,
+    "total_mw": 436.0,
+    "manufacturers": [],
+    "models": [
+     "Fuel",
+     "RESULTS",
+     "RUN",
+     "ing",
+     "outputs"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8822131",
+    "bytes": 2407984
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (135 MB)",
+    "title": "Agency Review",
+    "doc_id": "1791359",
+    "bytes": 142485756
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112209382",
+  "entity_name": "",
+  "documents_total": 56,
+  "documents_read": 3,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "180096",
+   "Domestic",
+   "GHGPSDTX251",
+   "PSDTX1668"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (136 MB)",
+    "title": "Agency Review",
+    "doc_id": "9472852",
+    "bytes": 143491575
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "180096",
+     "Domestic",
+     "GHGPSDTX251",
+     "PSDTX1668"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9716826",
+    "bytes": 43287
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "180096",
+     "Domestic",
+     "GHGPSDTX251",
+     "PSDTX1668"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9716975",
+    "bytes": 43287
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112194527",
+  "entity_name": "NAPLES POWER PLANT",
+  "documents_total": 53,
+  "documents_read": 1,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (76 MB)",
+    "title": "Agency Review",
+    "doc_id": "9593195",
+    "bytes": 80626242
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN108733106",
+  "entity_name": "",
+  "documents_total": 85,
+  "documents_read": 5,
+  "max_mw": 1706.0,
+  "manufacturers": [
+   "siemens"
+  ],
+  "models": [
+   "CATALYTIC",
+   "CHECK",
+   "Date",
+   "ING",
+   "Industry",
+   "Name",
+   "PERMIT",
+   "PROJECT",
+   "Permit",
+   "Received",
+   "Request",
+   "Revision"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (138 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1746485",
+    "bytes": 144851767
+   },
+   {
+    "mw_values": [
+     1518.0,
+     59.0
+    ],
+    "max_mw": 1518.0,
+    "total_mw": 1577.0,
+    "manufacturers": [],
+    "models": [
+     "Permit",
+     "ing",
+     "ingTeam",
+     "input"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1746488",
+    "bytes": 27881862
+   },
+   {
+    "mw_values": [
+     426.4,
+     227.5
+    ],
+    "max_mw": 426.4,
+    "total_mw": 653.9,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "CHECK",
+     "ING",
+     "Industry",
+     "PERMIT",
+     "PROJECT",
+     "Request",
+     "UTILITY"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1746491",
+    "bytes": 37678116
+   },
+   {
+    "mw_values": [
+     1706.0,
+     227.5
+    ],
+    "max_mw": 1706.0,
+    "total_mw": 1933.5,
+    "manufacturers": [
+     "siemens"
+    ],
+    "models": [
+     "CATALYTIC",
+     "Date",
+     "Industry",
+     "Name",
+     "Received",
+     "Revision",
+     "Security",
+     "Start",
+     "Type"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "3891290",
+    "bytes": 2714273
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (44 MB)",
+    "title": "Agency Review",
+    "doc_id": "9617169",
+    "bytes": 46478046
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105195655",
+  "entity_name": "OXEA BAY CITY PLANT",
+  "documents_total": 337,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "12786",
+   "ADD",
+   "APplication",
+   "Application",
+   "CHECK",
+   "Concentration",
+   "Control",
+   "Emission",
+   "Hours",
+   "ING",
+   "Ilours",
+   "Information"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "Application",
+     "CHECK",
+     "PROJECT"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1394007",
+    "bytes": 1988084
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "12786",
+     "APplication",
+     "Application",
+     "Control",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1394020",
+    "bytes": 2166261
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1301036",
+    "bytes": 968043
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Concentration",
+     "Emission",
+     "Hours",
+     "ING",
+     "Ilours",
+     "Information",
+     "Modeled",
+     "SELECTION",
+     "Scenario",
+     "Selection",
+     "Setup",
+     "Total"
+    ],
+    "title": "Initial Application",
+    "doc_id": "1340155",
+    "bytes": 13718492
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Concentration",
+     "Emission",
+     "Hours",
+     "ING",
+     "Information",
+     "Modeled",
+     "SELECTION",
+     "Scenario",
+     "Selection",
+     "Setup",
+     "Total",
+     "are"
+    ],
+    "title": "Initial Application",
+    "doc_id": "1340136",
+    "bytes": 13908698
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN107053530",
+  "entity_name": "GOLDEN PASS LNG EXPORT TERMINAL",
+  "documents_total": 105,
+  "documents_read": 5,
+  "max_mw": 100.0,
+  "manufacturers": [],
+  "models": [
+   "New",
+   "REGION",
+   "Site",
+   "StatePer",
+   "and",
+   "ing",
+   "lng",
+   "locating"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "REGION",
+     "Site",
+     "and",
+     "locating"
+    ],
+    "title": "Agency Review",
+    "doc_id": "528755",
+    "bytes": 6522917
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "New"
+    ],
+    "title": "Site Review",
+    "doc_id": "571195",
+    "bytes": 300280
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "StatePer",
+     "ing",
+     "lng"
+    ],
+    "title": "Agency Review",
+    "doc_id": "574723",
+    "bytes": 10742730
+   },
+   {
+    "mw_values": [
+     100.0
+    ],
+    "max_mw": 100.0,
+    "total_mw": 100.0,
+    "manufacturers": [],
+    "models": [],
+    "title": "Project File Folder",
+    "doc_id": "1330992",
+    "bytes": 29617301
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (83 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1332610",
+    "bytes": 87513479
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100214287",
+  "entity_name": "",
+  "documents_total": 211,
+  "documents_read": 5,
+  "max_mw": 625.0,
+  "manufacturers": [],
+  "models": [
+   "102679",
+   "158119",
+   "158388",
+   "3000159440",
+   "41433",
+   "43466",
+   "78665",
+   "80150",
+   "81378",
+   "Domestic",
+   "EMTSSTON",
+   "ESTIMATES"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     625.0,
+     625.0
+    ],
+    "max_mw": 625.0,
+    "total_mw": 1250.0,
+    "manufacturers": [],
+    "models": [
+     "102679",
+     "Standard"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3626465",
+    "bytes": 28828517
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "3000159440",
+     "EMTSSTON",
+     "ESTIMATES",
+     "ESTIMTES",
+     "RESULTS",
+     "RUN",
+     "Renewal",
+     "ing",
+     "ing-ST",
+     "ing-lr"
+    ],
+    "title": "Agency Review",
+    "doc_id": "530434",
+    "bytes": 11420573
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "4447371",
+    "bytes": 115670
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "158119",
+     "158388",
+     "41433",
+     "43466",
+     "78665",
+     "80150",
+     "81378",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8493305",
+    "bytes": 40156
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "158119",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9360359",
+    "bytes": 38146
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100220110",
+  "entity_name": "",
+  "documents_total": 230,
+  "documents_read": 5,
+  "max_mw": 50.0,
+  "manufacturers": [],
+  "models": [
+   "Can",
+   "Compliance",
+   "Domestic",
+   "NSR1",
+   "NewAppointrnent",
+   "Prevention",
+   "QUALITY",
+   "Regulated",
+   "application/pdf",
+   "can",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Can",
+     "Compliance",
+     "NSR1",
+     "QUALITY",
+     "Regulated"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1808649",
+    "bytes": 3561720
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "NewAppointrnent",
+     "Prevention"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1034948",
+    "bytes": 1129361
+   },
+   {
+    "mw_values": [
+     4.0,
+     4.0,
+     3.0,
+     3.0,
+     2.0,
+     2.0
+    ],
+    "max_mw": 4.0,
+    "total_mw": 18.0,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8585905",
+    "bytes": 1020305
+   },
+   {
+    "mw_values": [
+     50.0,
+     4.0,
+     3.0,
+     2.0
+    ],
+    "max_mw": 50.0,
+    "total_mw": 59.0,
+    "manufacturers": [],
+    "models": [
+     "can",
+     "ing"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8585909",
+    "bytes": 3145886
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8585910",
+    "bytes": 12489
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104961164",
+  "entity_name": "BLUE ORIGIN WEST TEXAS FACILITY",
+  "documents_total": 90,
+  "documents_read": 5,
+  "max_mw": 0.41,
+  "manufacturers": [],
+  "models": [
+   "102349",
+   "171130",
+   "181318",
+   "6135HF485",
+   "Application",
+   "Date",
+   "Domestic",
+   "Foreign",
+   "PROJECT",
+   "Permit",
+   "USEFUL",
+   "ePAY"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     0.41,
+     0.01
+    ],
+    "max_mw": 0.41,
+    "total_mw": 0.42,
+    "manufacturers": [],
+    "models": [
+     "6135HF485",
+     "Application",
+     "Date",
+     "Foreign",
+     "PROJECT",
+     "Permit",
+     "USEFUL",
+     "ePAY",
+     "ePay",
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "521490",
+    "bytes": 4568687
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102349",
+     "171130",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8492021",
+    "bytes": 38582
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "102349",
+     "171130",
+     "181318",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9410792",
+    "bytes": 39086
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1640467",
+    "bytes": 242782
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1640469",
+    "bytes": 242845
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100642040",
+  "entity_name": "",
+  "documents_total": 158,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "160554",
+   "181567",
+   "40644",
+   "94488",
+   "Domestic",
+   "Name",
+   "Project",
+   "RESPONSIBLE",
+   "Residence",
+   "Site",
+   "and",
+   "locating"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Residence",
+     "Site",
+     "and",
+     "locating",
+     "reviews"
+    ],
+    "title": "Site Review",
+    "doc_id": "6817800",
+    "bytes": 657732
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "1431920",
+    "bytes": 158043
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Name",
+     "Project",
+     "RESPONSIBLE"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1282341",
+    "bytes": 7304796
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "160554",
+     "40644",
+     "94488",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8504628",
+    "bytes": 38840
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "160554",
+     "181567",
+     "40644",
+     "94488",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9353819",
+    "bytes": 37744
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100552181",
+  "entity_name": "NUECES BAY POWER STATION",
+  "documents_total": 114,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "181559",
+   "94484",
+   "Domestic",
+   "Number",
+   "application/pdf",
+   "application/vnd",
+   "includes",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "181559",
+     "94484",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9662830",
+    "bytes": 37230
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Number",
+     "includes"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9184990",
+    "bytes": 2214777
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf",
+     "application/vnd"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9184988",
+    "bytes": 52998
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Permits",
+    "doc_id": "9781096",
+    "bytes": 7335294
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1432875",
+    "bytes": 457742
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100213198",
+  "entity_name": "PVC RESINS PRODUCTION FACILITY",
+  "documents_total": 477,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "140372",
+   "163618",
+   "Domestic"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (134 MB)",
+    "title": "Permits",
+    "doc_id": "4603425",
+    "bytes": 140896802
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Project File Folder",
+    "doc_id": "1304300",
+    "bytes": 5079109
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Project File Folder",
+    "doc_id": "1332479",
+    "bytes": 3254402
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "140372",
+     "163618",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8503306",
+    "bytes": 37210
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "140372",
+     "163618",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9341105",
+    "bytes": 37214
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100226943",
+  "entity_name": "FAIN GAS PLANT",
+  "documents_total": 319,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "112372",
+   "131291",
+   "144911",
+   "152813",
+   "166148",
+   "166149",
+   "31910",
+   "36205",
+   "37187",
+   "53476",
+   "Domestic",
+   "Permit"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "112372",
+     "131291",
+     "144911",
+     "152813",
+     "166148",
+     "166149",
+     "31910",
+     "36205",
+     "37187",
+     "53476",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8393459",
+    "bytes": 41225
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "112372",
+     "131291",
+     "144911",
+     "152813",
+     "166148",
+     "166149",
+     "31910",
+     "36205",
+     "37187",
+     "53476",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8393527",
+    "bytes": 41225
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "131291",
+     "144911",
+     "166148",
+     "166149",
+     "31910",
+     "36205",
+     "37187",
+     "53476",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9393410",
+    "bytes": 38946
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3561491",
+    "bytes": 189253
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1264034",
+    "bytes": 195210
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112209382",
+  "entity_name": "",
+  "documents_total": 56,
+  "documents_read": 3,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "180096",
+   "Domestic",
+   "GHGPSDTX251",
+   "PSDTX1668"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (136 MB)",
+    "title": "Agency Review",
+    "doc_id": "9472852",
+    "bytes": 143491575
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "180096",
+     "Domestic",
+     "GHGPSDTX251",
+     "PSDTX1668"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9716826",
+    "bytes": 43287
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "180096",
+     "Domestic",
+     "GHGPSDTX251",
+     "PSDTX1668"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9716975",
+    "bytes": 43287
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100219252",
+  "entity_name": "",
+  "documents_total": 3510,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "1500507535",
+   "1500508825",
+   "3606558",
+   "Applicatlon",
+   "Authorization",
+   "CHECK",
+   "ControUBACT",
+   "ControllBACT",
+   "Industry",
+   "Inilustry",
+   "Request",
+   "Source"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "1500507535",
+     "ControUBACT",
+     "Industry",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1378112",
+    "bytes": 2084858
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "1500508825",
+     "Authorization",
+     "CHECK",
+     "ControllBACT",
+     "Inilustry",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1378061",
+    "bytes": 2718477
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Technical Review",
+    "doc_id": "5404422",
+    "bytes": 33817
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "3606558",
+     "Applicatlon",
+     "Authorization",
+     "CHECK",
+     "ControUBACT",
+     "Industry",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1378059",
+    "bytes": 2688853
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Technical Review",
+    "doc_id": "5404492",
+    "bytes": 36735
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100552454",
+  "entity_name": "",
+  "documents_total": 262,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "143492",
+   "157411",
+   "293525",
+   "7808",
+   "82590",
+   "Domestic",
+   "GHGPSDTX187",
+   "Low",
+   "PSDTX256",
+   "PSDTX256M2",
+   "PSDTX256M3",
+   "Permit"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1488601",
+    "bytes": 178937
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "293525",
+     "ePAY"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "1500410",
+    "bytes": 1910406
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "143492",
+     "157411",
+     "7808",
+     "82590",
+     "Domestic",
+     "GHGPSDTX187",
+     "PSDTX256",
+     "PSDTX256M2",
+     "PSDTX256M3"
+    ],
+    "title": "Applications",
+    "doc_id": "5027123",
+    "bytes": 149944
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "5084256",
+    "bytes": 165078
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Low",
+     "Permit",
+     "locating"
+    ],
+    "title": "Agency Review",
+    "doc_id": "4484596",
+    "bytes": 1919479
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112485859",
+  "entity_name": "",
+  "documents_total": 3,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100542281",
+  "entity_name": "",
+  "documents_total": 3182,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [
+   "cummins"
+  ],
+  "models": [
+   "101590",
+   "10586",
+   "106675",
+   "10700",
+   "10812",
+   "110688",
+   "11735",
+   "12334",
+   "12341",
+   "140033",
+   "140461",
+   "140463"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Application",
+     "PERMIT"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1325367",
+    "bytes": 2840291
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "150697",
+     "Application",
+     "ControIlBACT",
+     "Industry",
+     "Permit",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1325372",
+    "bytes": 7811136
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "cummins"
+    ],
+    "models": [
+     "150993",
+     "2SL-9",
+     "PROJECT",
+     "and",
+     "ing",
+     "ing-was",
+     "ingfor",
+     "ingin",
+     "since",
+     "was"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1325371",
+    "bytes": 4985376
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "101590",
+     "10586",
+     "106675",
+     "10700",
+     "10812",
+     "110688",
+     "11735",
+     "12334",
+     "12341",
+     "140033",
+     "140461",
+     "140463"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8393403",
+    "bytes": 53336
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "101590",
+     "10586",
+     "106675",
+     "10700",
+     "10812",
+     "110688",
+     "11735",
+     "12334",
+     "12341",
+     "140033",
+     "140461",
+     "140463"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9313692",
+    "bytes": 51929
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112472139",
+  "entity_name": "",
+  "documents_total": 3,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN112471305",
+  "entity_name": "",
+  "documents_total": 3,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111073623",
+  "entity_name": "COLORADO RIVER PROJECT",
+  "documents_total": 207,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "Permit",
+   "application/pdf",
+   "emissions",
+   "results",
+   "showing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "emissions",
+     "results",
+     "showing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "7910100",
+    "bytes": 8482738
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "emissions",
+     "results",
+     "showing"
+    ],
+    "title": "Agency Review",
+    "doc_id": "5798716",
+    "bytes": 5724077
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Applications",
+    "doc_id": "5762334",
+    "bytes": 202199
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Technical Review",
+    "doc_id": "5113514",
+    "bytes": 239581
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "5764658",
+    "bytes": 16075625
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110119419",
+  "entity_name": "",
+  "documents_total": 37,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "7HA",
+   "Alteration",
+   "ISCST3",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (58 MB)",
+    "title": "Project File Folder",
+    "doc_id": "3791296",
+    "bytes": 61332237
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (105 MB)",
+    "title": "Project File Folder",
+    "doc_id": "4343328",
+    "bytes": 110794230
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "7HA"
+    ],
+    "title": "MAERT",
+    "doc_id": "5002480",
+    "bytes": 121266
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ISCST3",
+     "ing"
+    ],
+    "title": "Permit Face",
+    "doc_id": "5002481",
+    "bytes": 158893
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Alteration"
+    ],
+    "title": "Technical Review",
+    "doc_id": "5002482",
+    "bytes": 28111
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112421490",
+  "entity_name": "",
+  "documents_total": 12,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100213370",
+  "entity_name": "",
+  "documents_total": 473,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "111106",
+   "111107",
+   "111108",
+   "24666",
+   "45464",
+   "46723",
+   "48821",
+   "ADD",
+   "Domestic",
+   "http"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "http"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1491049",
+    "bytes": 2155949
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "4661104",
+    "bytes": 116785
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "111106",
+     "111107",
+     "111108",
+     "24666",
+     "45464",
+     "46723",
+     "48821",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8492194",
+    "bytes": 40169
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "111106",
+     "111107",
+     "111108",
+     "24666",
+     "45464",
+     "46723",
+     "48821",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9358591",
+    "bytes": 40129
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "111106",
+     "111107",
+     "111108",
+     "24666",
+     "45464",
+     "46723",
+     "48821",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8492196",
+    "bytes": 40169
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112221833",
+  "entity_name": "NEXUS DATA CENTER HUBBARD",
+  "documents_total": 55,
+  "documents_read": 5,
+  "max_mw": 612.93,
+  "manufacturers": [],
+  "models": [
+   "180320",
+   "180353",
+   "Domestic",
+   "Serial",
+   "and",
+   "application/pdf",
+   "ing",
+   "which"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "180320",
+     "180353",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9407784",
+    "bytes": 37222
+   },
+   {
+    "mw_values": [
+     612.93,
+     612.93,
+     152.75,
+     20.431
+    ],
+    "max_mw": 612.93,
+    "total_mw": 1399.04,
+    "manufacturers": [],
+    "models": [],
+    "title": "Initial Application",
+    "doc_id": "8922185",
+    "bytes": 258681
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Serial"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8922187",
+    "bytes": 1398022
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "and",
+     "ing",
+     "which"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8922184",
+    "bytes": 1247397
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8922190",
+    "bytes": 14857
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112229901",
+  "entity_name": "GOODNIGHT DATA CENTER BUILDINGS 1-4",
+  "documents_total": 17,
+  "documents_read": 5,
+  "max_mw": 3.0,
+  "manufacturers": [
+   "cat",
+   "caterpillar"
+  ],
+  "models": [
+   "Annual",
+   "ConeRoof",
+   "CountPower",
+   "Domestic",
+   "Horsepower",
+   "Permanent",
+   "Power",
+   "Total",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "9466953",
+    "bytes": 3684976
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9333280",
+    "bytes": 53389
+   },
+   {
+    "mw_values": [
+     3.0,
+     3.0,
+     3.0
+    ],
+    "max_mw": 3.0,
+    "total_mw": 9.0,
+    "manufacturers": [
+     "cat",
+     "caterpillar"
+    ],
+    "models": [
+     "Annual",
+     "ConeRoof",
+     "CountPower",
+     "Horsepower",
+     "Permanent",
+     "Power",
+     "Total"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9333281",
+    "bytes": 11001910
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9653976",
+    "bytes": 53389
+   },
+   {
+    "mw_values": [
+     3.0,
+     3.0,
+     3.0
+    ],
+    "max_mw": 3.0,
+    "total_mw": 9.0,
+    "manufacturers": [
+     "cat",
+     "caterpillar"
+    ],
+    "models": [
+     "Annual",
+     "ConeRoof",
+     "CountPower",
+     "Horsepower",
+     "Permanent",
+     "Power",
+     "Total"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9653977",
+    "bytes": 11001910
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112358460",
+  "entity_name": "",
+  "documents_total": 3,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN112247101",
+  "entity_name": "ABI-1 ELECTRIC GENERATING UNIT",
+  "documents_total": 11,
+  "documents_read": 3,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "Expedite",
+   "VOC"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8988863",
+    "bytes": 503023
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "Expedite"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8984028",
+    "bytes": 12876
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 44.75,
+    "manufacturers": [],
+    "models": [
+     "VOC"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8984027",
+    "bytes": 3299507
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100216159",
+  "entity_name": "EQUISTAR MATAGORDA PLANT",
+  "documents_total": 402,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "132858",
+   "137103",
+   "139733",
+   "141139",
+   "141507",
+   "146625",
+   "149803",
+   "154660",
+   "156283",
+   "158535",
+   "161473",
+   "164328"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "44779",
+     "ADD",
+     "APPlication",
+     "Control/BACT",
+     "Industry",
+     "Permit",
+     "Request",
+     "Source"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1393594",
+    "bytes": 9496667
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "CHEMICAL",
+     "ControUBACT",
+     "Industry",
+     "OTHER",
+     "PROJECT",
+     "Permit",
+     "Request",
+     "Source",
+     "ePay"
+    ],
+    "title": "Agency Review",
+    "doc_id": "531028",
+    "bytes": 4665993
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "210092",
+     "Application",
+     "Appllcatlon"
+    ],
+    "title": "Agency Review",
+    "doc_id": "531528",
+    "bytes": 2908695
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "132858",
+     "137103",
+     "139733",
+     "141139",
+     "141507",
+     "146625",
+     "149803",
+     "154660",
+     "156283",
+     "158535",
+     "161473",
+     "164328"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8452668",
+    "bytes": 44205
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "132858",
+     "137103",
+     "139733",
+     "141139",
+     "141507",
+     "146625",
+     "149803",
+     "154660",
+     "156283",
+     "158535",
+     "161473",
+     "164328"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9651843",
+    "bytes": 44193
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100224534",
+  "entity_name": "TOLK STATION POWER PLANT",
+  "documents_total": 240,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "100565",
+   "106",
+   "113913",
+   "147456",
+   "2161",
+   "91292",
+   "99204",
+   "Domestic",
+   "OTHER",
+   "Permit",
+   "Request",
+   "Source"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "147456",
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1388119",
+    "bytes": 2261994
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "100565",
+     "113913",
+     "91292",
+     "99204",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8399033",
+    "bytes": 39203
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "100565",
+     "113913",
+     "91292",
+     "99204",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9346652",
+    "bytes": 39264
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "106",
+     "2161",
+     "OTHER",
+     "Request",
+     "Source",
+     "and",
+     "ePAY",
+     "reviews"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "567897",
+    "bytes": 2942886
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "3554666",
+    "bytes": 140673
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112029061",
+  "entity_name": "LONGHORN DATA CENTER",
+  "documents_total": 77,
+  "documents_read": 5,
+  "max_mw": 470.0,
+  "manufacturers": [
+   "cat",
+   "caterpillar"
+  ],
+  "models": [
+   "177262",
+   "Cone",
+   "Diesel",
+   "Domestic",
+   "Emission",
+   "Horsepower",
+   "Permanent",
+   "Power",
+   "Serial",
+   "Service",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "177262",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8442502",
+    "bytes": 38295
+   },
+   {
+    "mw_values": [
+     470.0,
+     470.0,
+     35.0,
+     35.0,
+     3.0,
+     2.25,
+     2.25,
+     2.25,
+     2.0,
+     2.0,
+     2.0,
+     2.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "max_mw": 470.0,
+    "total_mw": 1030.75,
+    "manufacturers": [
+     "cat",
+     "caterpillar"
+    ],
+    "models": [
+     "Cone",
+     "Diesel",
+     "Emission",
+     "Horsepower",
+     "Permanent",
+     "Power",
+     "Service"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8153687",
+    "bytes": 11651929
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8153686",
+    "bytes": 53937
+   },
+   {
+    "mw_values": [
+     38.0,
+     34.1,
+     3.0,
+     3.0,
+     3.0,
+     2.5,
+     2.5,
+     2.0,
+     2.0,
+     2.0
+    ],
+    "max_mw": 38.0,
+    "total_mw": 92.1,
+    "manufacturers": [
+     "cat",
+     "caterpillar"
+    ],
+    "models": [
+     "Cone",
+     "Diesel",
+     "Emission",
+     "Horsepower",
+     "Permanent",
+     "Serial",
+     "Service"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8607279",
+    "bytes": 7980720
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8607276",
+    "bytes": 54238
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102536836",
+  "entity_name": "CORPUS CHRISTI TERMINAL",
+  "documents_total": 447,
+  "documents_read": 5,
+  "max_mw": 0.5,
+  "manufacturers": [],
+  "models": [
+   "31401114",
+   "Annual",
+   "ING",
+   "Program",
+   "ing",
+   "ingProcedures",
+   "ingcuidanceforthe",
+   "lng",
+   "releases",
+   "which"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "609922",
+    "bytes": 39957155
+   },
+   {
+    "mw_values": [
+     0.5,
+     0.5,
+     0.1,
+     0.1
+    ],
+    "max_mw": 0.5,
+    "total_mw": 1.2,
+    "manufacturers": [],
+    "models": [
+     "Annual",
+     "ing",
+     "which"
+    ],
+    "title": "Agency Review",
+    "doc_id": "609921",
+    "bytes": 810943
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (86 MB)",
+    "title": "Project File Folder",
+    "doc_id": "1304222",
+    "bytes": 90906809
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "31401114",
+     "ING",
+     "Program",
+     "ing",
+     "ingProcedures",
+     "ingcuidanceforthe",
+     "lng",
+     "releases"
+    ],
+    "title": "Project File Folder",
+    "doc_id": "578974",
+    "bytes": 35420804
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (50 MB)",
+    "title": "Project File Folder",
+    "doc_id": "578981",
+    "bytes": 52758088
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112307673",
+  "entity_name": "",
+  "documents_total": 19,
+  "documents_read": 1,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Road",
+   "Security",
+   "and",
+   "ite5g",
+   "reviews"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Road",
+     "Security",
+     "and",
+     "ite5g",
+     "reviews"
+    ],
+    "title": "Site Review",
+    "doc_id": "10003033",
+    "bytes": 5286753
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112304498",
+  "entity_name": "",
+  "documents_total": 37,
+  "documents_read": 1,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "Compliance"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Compliance"
+    ],
+    "title": "Site Review",
+    "doc_id": "9725787",
+    "bytes": 774065
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN112300066",
+  "entity_name": "",
+  "documents_total": 22,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102181526",
+  "entity_name": "",
+  "documents_total": 3034,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "104792",
+   "10541",
+   "105920",
+   "105923",
+   "105924",
+   "105925",
+   "105927",
+   "105929",
+   "106101",
+   "106105",
+   "106107",
+   "106109"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "158302",
+     "Application"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1218585",
+    "bytes": 7736562
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "104792",
+     "10541",
+     "105920",
+     "105923",
+     "105924",
+     "105925",
+     "105927",
+     "105929",
+     "106101",
+     "106105",
+     "106107",
+     "106109"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8544731",
+    "bytes": 81315
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "104792",
+     "108571",
+     "111680",
+     "112829",
+     "113197",
+     "114503",
+     "118024",
+     "131385",
+     "132097",
+     "141801",
+     "145087",
+     "145327"
+    ],
+    "title": "Initial Application",
+    "doc_id": "9406089",
+    "bytes": 50494
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "104792",
+     "10541",
+     "105920",
+     "105923",
+     "105924",
+     "105925",
+     "105927",
+     "105929",
+     "106101",
+     "106105",
+     "106107",
+     "106109"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8544745",
+    "bytes": 81315
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8557963",
+    "bytes": 38101
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111826111",
+  "entity_name": "",
+  "documents_total": 27,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111368437",
+  "entity_name": "",
+  "documents_total": 66,
+  "documents_read": 0,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN101225746",
+  "entity_name": "",
+  "documents_total": 264,
+  "documents_read": 5,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "117816",
+   "159913",
+   "161880",
+   "162551",
+   "201876",
+   "ACCOUNT",
+   "Author",
+   "Authoriza",
+   "CONSTRUCTION",
+   "Domestic",
+   "OTHER",
+   "Permit"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "201876",
+     "CONSTRUCTION",
+     "OTHER",
+     "Request",
+     "Source",
+     "but",
+     "ePAY",
+     "ePay",
+     "writer"
+    ],
+    "title": "Agency Review",
+    "doc_id": "530085",
+    "bytes": 4720827
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "117816",
+     "159913",
+     "161880",
+     "162551",
+     "Domestic"
+    ],
+    "title": "Initial Application",
+    "doc_id": "8539287",
+    "bytes": 39210
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ACCOUNT",
+     "Permit",
+     "but",
+     "writer"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1200769",
+    "bytes": 1079947
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Author",
+     "Authoriza",
+     "but"
+    ],
+    "title": "Initial Application",
+    "doc_id": "577854",
+    "bytes": 8963641
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "title": "Agency Review",
+    "doc_id": "8812455",
+    "bytes": 265801
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100542851",
+  "entity_name": "",
+  "documents_total": 192,
+  "documents_read": 5,
+  "max_mw": 420.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "and",
+   "ing",
+   "ins"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "title": "Applications",
+    "doc_id": "6389117",
+    "bytes": 47193
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "skipped": "file too large (96 MB)",
+    "title": "Agency Review",
+    "doc_id": "7447109",
+    "bytes": 101478321
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "8819819",
+    "bytes": 3351953
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "title": "Agency Review",
+    "doc_id": "9226134",
+    "bytes": 25298957
+   },
+   {
+    "mw_values": [
+     420.0,
+     72.0,
+     72.0,
+     72.0,
+     72.0,
+     30.0,
+     30.0
+    ],
+    "max_mw": 420.0,
+    "total_mw": 768.0,
+    "manufacturers": [],
+    "models": [
+     "and",
+     "ing",
+     "ins"
+    ],
+    "title": "Agency Review",
+    "doc_id": "1330749",
+    "bytes": 30048326
+   }
+  ]
  }
 ]
