@@ -1142,6 +1142,41 @@ class TestCrossSourceLinking:
         )
         assert score == 0.0, f"linked on an ambiguous operator via {method}"
 
+    def test_operator_with_many_permitted_sites_in_one_county_blocked(self):
+        # Pioneer Natural Resources holds 135 TCEQ permits in Upton County, one
+        # per well site, all carrying the company name — so counting distinct
+        # *names* saw "one project" and let a single ERCOT wind project sharing
+        # the operator and county swallow all 135 into one 145-record site.
+        # TCEQ's identity is the RN, and by RN this is unmistakably ambiguous.
+        wells = [
+            dict(self.TCEQ, entity_id=f"tceq_air:{i}", regulated_entity=f"RN{i:09d}",
+                 name_norm="pioneer natural resources",
+                 operator_norm="pioneer natural resources", county_norm="upton")
+            for i in range(20)
+        ]
+        wind = dict(self.ERCOT, entity_id="ercot_gis:wind",
+                    name_norm="giddings wind",
+                    operator_norm="pioneer natural resources", county_norm="upton")
+        unambiguous = self._unambiguous(wells + [wind])
+        score, method, _, _, _ = linkmod.score_pair(
+            wind, wells[0], unambiguous=unambiguous
+        )
+        assert score == 0.0, f"an E&P's well portfolio linked via {method}"
+
+    def test_one_permitted_site_with_many_actions_still_joins(self):
+        # The counterpart: five TCEQ permit *actions* on one RN are one site,
+        # and must not be mistaken for a portfolio.
+        actions = [
+            dict(self.TCEQ, entity_id=f"tceq_air:{i}", regulated_entity="RN100542831")
+            for i in range(5)
+        ]
+        unambiguous = self._unambiguous(actions + [self.ERCOT])
+        score, method, _, _, _ = linkmod.score_pair(
+            self.ERCOT, actions[0], unambiguous=unambiguous
+        )
+        assert method == "cross_source_operator"
+        assert score >= linkmod.DEFAULT_THRESHOLD
+
     def test_different_counties_never_join(self):
         far = dict(self.TCEQ, county_norm="harris")
         score, _, _, _, _ = linkmod.score_pair(

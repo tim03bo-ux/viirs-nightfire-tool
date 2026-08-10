@@ -253,6 +253,24 @@ def score_pair(a, b, unambiguous=None):
     return (score, "county_and_name", None, name_score, operator_score)
 
 
+def _site_identity(entity):
+    """What distinguishes one of a feed's sites from another within that feed.
+
+    TCEQ's identifier is the regulated-entity number, and it has to be used:
+    counting distinct *names* cannot work there, because a TCEQ record's name is
+    its company name, so every permit one company holds looks like one name no
+    matter how many separate sites it covers. Pioneer Natural Resources holds
+    135 permits in Upton County, one per well site, under a single name — read
+    by name that is "one project", and a single ERCOT wind project sharing the
+    operator and the county swallowed all 135 into one 145-record site. Read by
+    RN it is 135 sites, which is the truth.
+    """
+    rn = entity.get("regulated_entity")
+    if rn:
+        return f"rn:{str(rn).strip()}"
+    return f"name:{entity.get('name_norm') or ''}"
+
+
 def _unambiguous_operator_counties(entities):
     """(operator, county) keys where no feed shows several distinct projects.
 
@@ -260,18 +278,18 @@ def _unambiguous_operator_counties(entities):
     A developer with eight cannot: a permit from that company could belong to
     any of them, and picking one would be a coin flip dressed as a join.
     """
-    names = defaultdict(lambda: defaultdict(set))
+    identities = defaultdict(lambda: defaultdict(set))
     for entity in entities:
         operator = entity.get("operator_norm")
         county = entity.get("county_norm")
         if not operator or not county:
             continue
-        names[(operator, county)][entity.get("source")].add(
-            entity.get("name_norm") or ""
+        identities[(operator, county)][entity.get("source")].add(
+            _site_identity(entity)
         )
     return {
         key
-        for key, by_source in names.items()
+        for key, by_source in identities.items()
         if all(
             len(distinct) <= MAX_NAMES_FOR_OPERATOR_ALONE
             for distinct in by_source.values()
