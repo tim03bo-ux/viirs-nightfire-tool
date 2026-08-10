@@ -367,6 +367,57 @@ def cmd_puct(args):
     return 0
 
 
+def cmd_stormwater(args):
+    """Pull TXR150000 construction NOIs and store them as entities.
+
+    The NOI is the earliest public signal a site exists — filed before earthwork,
+    typically well ahead of an air permit or an energization date — and it is the
+    only feed here that carries real site coordinates and TCEQ's own RN, which is
+    what joins a construction site to its air permit by identity.
+    """
+    from src.permits.sources import tceq_stormwater as sw
+
+    sic = None
+    if args.sic:
+        sic = [code.strip() for code in args.sic.split(",") if code.strip()]
+    elif not args.county:
+        sic = sw.DEFAULT_SIC
+
+    df = sw.collect(
+        sic=sic, county=args.county, details=not args.no_details,
+        detail_limit=args.limit, delay=args.delay,
+    )
+    if df.empty:
+        print("no NOIs returned")
+        return 1
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
+    df.to_csv(args.out, index=False)
+    print(f"  {len(df)} NOIs -> {args.out}")
+
+    if args.no_ingest:
+        return 0
+
+    conn = dbmod.open_db(args.db)
+    try:
+        file_id = dbmod.record_source_file(
+            conn, sw.SOURCE, uri=os.path.abspath(args.out), sha256=None,
+            n_rows=len(df), notes="TCEQ stormwater construction NOI search",
+        )
+        records = sw.to_entities(df, source_file_id=file_id,
+                                 min_acres=args.min_acres)
+        inserted, updated = dbmod.upsert_entities(conn, records)
+        print(f"  tceq_swnoi: {len(records)} records "
+              f"({inserted} new, {updated} updated)")
+    finally:
+        conn.close()
+
+    if not args.no_link:
+        print("Linking...")
+        pipeline.relink(args.db)
+    return 0
+
+
 def cmd_timing(args):
     """How long decided authorizations took, from filing to decision."""
     import pandas as pd
@@ -672,6 +723,25 @@ def build_parser():
     sub.add_argument("--county")
     sub.add_argument("--no-link", action="store_true")
     sub.set_defaults(func=cmd_enrich)
+
+    sub = subparsers.add_parser(
+        "stormwater", help="pull TCEQ construction NOIs (TXR150000) live"
+    )
+    sub.add_argument("--sic", help="comma-separated SIC codes; defaults to the "
+                                   "electric + data-processing set")
+    sub.add_argument("--county", help="one county instead of a SIC sweep")
+    sub.add_argument("--min-acres", type=float, default=None,
+                     help="drop sites below this disturbed acreage")
+    sub.add_argument("--no-details", action="store_true",
+                     help="skip the per-authorization page, losing acreage, "
+                          "coordinates and the RN")
+    sub.add_argument("--limit", type=int, default=None,
+                     help="stop after this many detail fetches")
+    sub.add_argument("--delay", type=float, default=0.4)
+    sub.add_argument("--out", default=os.path.join(DEFAULT_RAW, "tceq_swnoi.csv"))
+    sub.add_argument("--no-ingest", action="store_true")
+    sub.add_argument("--no-link", action="store_true")
+    sub.set_defaults(func=cmd_stormwater)
 
     sub = subparsers.add_parser(
         "puct", help="pull PUCT Interchange dockets (CCN, transmission, large load)"

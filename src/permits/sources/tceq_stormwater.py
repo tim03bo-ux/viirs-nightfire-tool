@@ -10,9 +10,32 @@ projected start/end dates.
 
 Source: TCEQ water quality general permit search,
     https://www2.tceq.texas.gov/wq_dpa/index.cfm
-Export the results grid to csv/xlsx (or save the HTML page) and ingest with
-`--file`. `search_url` builds the query URL for a county if you want to automate
-the export step.
+
+`search()` queries it live. Three things about that app cost real time to work
+out, so they are written down here:
+
+  * The query is a POST to index.cfm with `_fuseaction=home.validate_search_crit`
+    submitted as an image button, so the parameter arrives as
+    `_fuseaction=home.validate_search_crit.x`. A GET with `fuseaction=` (no
+    underscore) serves the form; a POST with `_fuseaction=` runs the search.
+  * `permit_status` and `app_status` are mutually exclusive. Sending both — the
+    obvious thing to do when you want issued permits *and* pending applications
+    — fails with "Select either permit OR application status", and the app
+    reports it as a generic validation banner. Two queries, not one.
+  * Results are held in the session and paged 50 at a time through
+    `fuseaction=home.permit_list&CurrentPage=N`, so the cookie jar from the
+    search POST has to be carried to every page.
+
+The results grid has no acreage and no coordinates. The per-authorization
+summary page has both, plus the site's RN — and the RN is the point: it is the
+same identifier TCEQ air permits carry, so a fetched NOI detail joins a
+construction site to its air permit by identity rather than by name. That is why
+`fetch_detail` exists despite costing one request per record.
+
+Searching by SIC code is what makes this tractable. 4911 (Electric Services)
+finds generation and transmission construction statewide; 7374 (Data Processing)
+finds data centers and crypto mines — Aligned, Cipher Mining, Riot, QTS all
+appear under it. Without SIC the alternative is 254 county queries.
 
 Acreage alone does not say what is being built, so classification here leans on
 the operator name and any project description; NOIs with no such signal are
@@ -20,59 +43,432 @@ tagged `construction` and surface in the dashboard as leads rather than as
 confirmed data centers.
 """
 
+import re
+import time
 import urllib.parse
 
 import pandas as pd
 
 from . import base
+from .. import net
 from ..normalize import clean_str
 
 SOURCE = "tceq_swnoi"
 
 SEARCH_BASE = "https://www2.tceq.texas.gov/wq_dpa/index.cfm"
+PAGE_URL = SEARCH_BASE + "?fuseaction=home.permit_list&CurrentPage={}"
+SUMMARY_BASE = "https://www2.tceq.texas.gov/wq_dpa/"
+
+# The option value is a pipe-composite of the program code and the label, and
+# the server matches the whole string.
+PERMIT_TYPE_NOI = "SWC|Construction Notice of Intent (TXR15)"
+
+PAGE_SIZE = 50
+
+# SIC codes worth sweeping for generation and large load. TCEQ validates each
+# code against its own list and rejects the whole search on one bad entry, so
+# these are the codes confirmed to exist there — 7370 does not, despite being a
+# real SIC code, and 4911 alone is 6,711 authorizations.
+SIC_ELECTRIC = ["4911", "4931", "4939"]
+SIC_DATA = ["7374", "7379"]
+DEFAULT_SIC = SIC_ELECTRIC + SIC_DATA
+
+_BAD_SIC_RE = re.compile(r"SIC Code invalid\s*(?:&#x3a;|:)\s*(\d+)")
+
+GRID_COLUMNS = ["Auth #", "Site Name", "Permittee", "SIC Code", "Segment #",
+                "County", "Region", "City", "Site Location"]
 
 HEADER_TOKENS = ["Permit", "Operator", "County", "Acres", "Site", "NOI"]
 
 COLUMNS = {
-    "permit_number": ["Permit Number", "Authorization Number", "NOI Number",
-                      "TXR Number", "Permit No", "Permit"],
-    "project_name": ["Site Name", "Project Name", "Project Site Name",
-                     "Regulated Entity Name", "Facility Name", "Site"],
-    "operator": ["Operator Name", "Operator", "Customer Name", "Company Name",
-                 "Applicant", "Owner"],
-    "regulated_entity": ["RN Number", "Regulated Entity Number", "RN"],
-    "customer_number": ["CN Number", "Customer Number", "CN"],
+    "permit_number": ["Permit Number", "Auth #", "Authorization Number",
+                      "NOI Number", "TXR Number", "Permit No", "Permit"],
+    "project_name": ["Site Name on Permit", "site_name", "Site Name",
+                     "Project Name", "Project Site Name",
+                     "Regulated Entity Name", "RE Name", "Facility Name", "Site"],
+    "operator": ["Permittee", "Operator Name", "Operator", "Customer Name",
+                 "Company Name", "Applicant", "Owner"],
+    "regulated_entity": ["RN Number", "regulated_entity", "RN",
+                         "Regulated Entity Number"],
+    "customer_number": ["CN Number", "customer_number", "Customer Number", "CN"],
+    "sic": ["SIC Code", "Primary SIC Code", "sic_code"],
     "county": ["County"],
-    "address": ["Site Address", "Physical Location", "Location Description",
-                "Street Address", "Address"],
+    "address": ["Site Location", "Site Address", "Physical Location",
+                "Location Description", "Street Address", "Address"],
     "city": ["City", "Nearest City"],
     "latitude": ["Latitude", "Site Latitude", "Lat"],
     "longitude": ["Longitude", "Site Longitude", "Long", "Lon"],
-    "acres": ["Acres Disturbed", "Disturbed Acres", "Total Acres",
-              "Project Acres", "Acreage", "Acres"],
-    "status": ["Status", "Permit Status", "Authorization Status"],
-    "issued_date": ["Issued Date", "Effective Date", "Date Issued",
-                    "Authorization Date"],
-    "start_date": ["Projected Start Date", "Construction Start", "Start Date"],
-    "end_date": ["Projected End Date", "Construction End", "End Date",
-                 "Termination Date"],
+    "acres": ["Area Disturbed (in Acres)", "acres", "Acres Disturbed",
+              "Disturbed Acres", "Total Acres", "Project Acres", "Acreage",
+              "Acres"],
+    "status": ["Authorization Status", "status", "Status", "Permit Status"],
+    "issued_date": ["Date Coverage Began", "Issued Date", "Effective Date",
+                    "Date Issued", "Authorization Date"],
+    "start_date": ["start_date", "Projected Start Date", "Construction Start",
+                   "Start Date"],
+    "end_date": ["Date Coverage Ended", "end_date", "Projected End Date",
+                 "Construction End", "End Date", "Termination Date"],
     "description": ["Project Description", "Description", "Nature of Activity",
                     "Type of Construction", "Comments"],
     "url": ["URL", "Link"],
 }
 
 
-def search_url(county=None, permit_type="TXR150000", operator=None):
-    """Build a TCEQ water-quality general-permit search URL.
+_TAG_RE = re.compile(r"<[^>]+>")
+_ROW_RE = re.compile(r"<tr[^>]*>(.*?)</tr>", re.S)
+_CELL_RE = re.compile(r"<t[dh][^>]*>(.*?)</t[dh]>", re.S)
+_COUNT_RE = re.compile(r"search returned\s+([\d,]+)\s+records", re.I)
+_SUMMARY_RE = re.compile(r'href="([^"]*permit_summary[^"]*)"')
 
-    Provided so the export step can be scripted; the response is an HTML results
-    grid, which `read_file` can parse once saved.
+
+def _text(html):
+    text = _TAG_RE.sub("", html)
+    for code, char in (("&nbsp;", " "), ("&amp;", "&"), ("&#x27;", "'"),
+                       ("&#x28;", "("), ("&#x29;", ")"), ("&#x7e;", "~"),
+                       ("&quot;", '"'), ("&#39;", "'")):
+        text = text.replace(code, char)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def result_count(html):
+    match = _COUNT_RE.search(_text(html))
+    return int(match.group(1).replace(",", "")) if match else 0
+
+
+def parse_results(html):
+    """Parse one page of the results grid into a DataFrame."""
+    records = []
+    for row_html in _ROW_RE.findall(html):
+        cells = [_text(cell) for cell in _CELL_RE.findall(row_html)]
+        if len(cells) < 9 or not cells[0].upper().startswith("TXR"):
+            continue
+        link = _SUMMARY_RE.search(row_html)
+        records.append({
+            "Auth #": cells[0], "Site Name": cells[1], "Permittee": cells[2],
+            "SIC Code": cells[3], "Segment #": cells[4], "County": cells[5],
+            "Region": cells[6], "City": cells[7], "Site Location": cells[8],
+            "detail_url": link.group(1).replace("&amp;", "&") if link else None,
+        })
+    return pd.DataFrame(records, columns=GRID_COLUMNS + ["detail_url"])
+
+
+def _search_payload(sic=None, county=None, city=None, operator=None,
+                    site_name=None, start_date=None, end_date=None,
+                    permit_status="ALL", app_status=None, permit_type=None):
+    """Build the POST body, in the order and multiplicity the form submits."""
+    if permit_status and app_status:
+        # The app rejects this outright, and reports it only as a generic
+        # banner, so it is worth failing loudly here instead.
+        raise ValueError(
+            "TCEQ accepts permit_status OR app_status, not both — "
+            "run two searches and concatenate"
+        )
+    pairs = [
+        ("newsearch", "yes"),
+        ("permit_type", permit_type or PERMIT_TYPE_NOI),
+        ("start_date", start_date or ""),
+        ("end_date", end_date or ""),
+    ]
+    if permit_status:
+        pairs.append(("permit_status", permit_status))
+    if app_status:
+        pairs.append(("app_status", app_status))
+    pairs += [
+        ("princ_name", operator or ""),
+        ("phys_name", site_name or ""),
+        ("street_name", ""),
+        ("city_name", city or ""),
+        ("cnty_name", (county or "").upper()),
+        ("region_name", ""),
+        ("segment_no", ""),
+    ]
+    # The form renders eight SIC boxes and the server reads them positionally.
+    codes = list(sic or [])[:8]
+    pairs += [("sic_code", code) for code in codes + [""] * (8 - len(codes))]
+    pairs += [
+        ("goto", "search"),
+        ("permitStatusList", "ACTIVE,DENIED,EXPIRED,TERMINATED,WITHDRAWN"),
+        ("appStatusList", "APPROVED,PENDING,DENIED,WITHDRAWN"),
+        # Image submit: the browser sends the button's name with .x/.y appended,
+        # and the name here already contains an '='.
+        ("_fuseaction=home.validate_search_crit.x", "12"),
+        ("_fuseaction=home.validate_search_crit.y", "9"),
+    ]
+    return pairs
+
+
+def search(sic=None, county=None, city=None, operator=None, site_name=None,
+           start_date=None, end_date=None, permit_status="ALL", app_status=None,
+           max_pages=None, delay=0.4, timeout=180, verbose=True, jar=None):
+    """Query TXR150000 NOIs live. Returns a DataFrame of the results grid.
+
+    Pass `sic` (a list of SIC codes) for a statewide sweep, or `county` to walk
+    one county. `permit_status` covers issued authorizations and `app_status`
+    covers applications; they cannot be combined, so `search_all` runs both.
+
+    `jar` carries the session. It matters beyond politeness: the per-row detail
+    links embed session-scoped record ids, so a detail page fetched outside the
+    search's own session quietly returns the search form instead of the record.
+    Pass the same jar to `enrich`, or use `collect`, which does it for you.
     """
-    params = {"fuseaction": "home.gp_search", "gp_type": permit_type}
+    jar = jar or net.new_jar()
+    # The search POST is only honoured inside a session that has seen the form.
+    net.get(SEARCH_BASE, params={"fuseaction": "home.permit_info_search"},
+            timeout=timeout, jar=jar)
+    html = net.post(
+        SEARCH_BASE,
+        _search_payload(sic=sic, county=county, city=city, operator=operator,
+                        site_name=site_name, start_date=start_date,
+                        end_date=end_date, permit_status=permit_status,
+                        app_status=app_status),
+        timeout=timeout, jar=jar,
+    )
+    # TCEQ validates SIC codes against its own list and rejects the entire
+    # search on a single unknown one, naming it. Dropping the offender and
+    # retrying beats losing the sweep over one bad code.
+    attempts = 0
+    while "Errors were found" in html and attempts < 4:
+        bad = _BAD_SIC_RE.search(html)
+        if not bad or not sic:
+            break
+        dropped = bad.group(1)
+        remaining = [code for code in sic if code != dropped]
+        if remaining == list(sic):
+            break
+        if verbose:
+            print(f"    TCEQ rejects SIC {dropped}; retrying without it")
+        sic = remaining
+        attempts += 1
+        if not sic:
+            break
+        html = net.post(
+            SEARCH_BASE,
+            _search_payload(sic=sic, county=county, city=city, operator=operator,
+                            site_name=site_name, start_date=start_date,
+                            end_date=end_date, permit_status=permit_status,
+                            app_status=app_status),
+            timeout=timeout, jar=jar,
+        )
+    if "Errors were found" in html:
+        raise ValueError(f"TCEQ rejected the search: {_search_error(html)}")
+
+    total = result_count(html)
+    frames = [parse_results(html)]
+    pages = (total + PAGE_SIZE - 1) // PAGE_SIZE
+    if max_pages:
+        pages = min(pages, max_pages)
+    if verbose:
+        print(f"  {total} NOIs, {pages} page(s)")
+
+    for page in range(2, pages + 1):
+        time.sleep(delay)
+        try:
+            frames.append(parse_results(
+                net.get(PAGE_URL.format(page), timeout=timeout, jar=jar)
+            ))
+        except Exception as exc:
+            # A statewide sweep is hundreds of pages; losing one beats losing all.
+            print(f"    ERROR page {page}: {str(exc)[:90]}")
+            continue
+        if verbose and page % 20 == 0:
+            print(f"    page {page}/{pages}")
+
+    df = pd.concat(frames, ignore_index=True)
+    # One authorization appears once per receiving-water segment, so the grid
+    # repeats rows that are the same site.
+    return df.drop_duplicates(subset=["Auth #"]).reset_index(drop=True)
+
+
+def _search_error(html):
+    """The specific complaint, not the banner.
+
+    The app renders a generic "Errors were found while validating your search
+    data" heading and puts the useful line — "Select either permit OR
+    application status", "SIC Code invalid : 7370" — a little further down, so
+    the banner alone tells you nothing.
+    """
+    text = _text(re.sub(r"<script.*?</script>", "", html, flags=re.S))
+    for pattern in (r"(SIC Code invalid\s*:?\s*\d+)",
+                    r"(Select either permit OR application status\.?)",
+                    r"(Please enter[^.]{0,90}\.)",
+                    r"([A-Z][^.]{0,90} (?:is required|invalid)\.?)"):
+        match = re.search(pattern, text)
+        if match:
+            return match.group(1).strip()
+    return "unspecified validation error"
+
+
+def search_all(sic=None, county=None, delay=0.4, verbose=True, **kwargs):
+    """Both halves of the record: issued authorizations and pending applications.
+
+    The app makes these mutually exclusive, and the project asks for both — a
+    site whose NOI is still in review is exactly the early signal this feed is
+    here to give.
+    """
+    frames = []
+    for label, status in (("authorizations", {"permit_status": "ALL"}),
+                          ("applications", {"app_status": "ALL",
+                                            "permit_status": None})):
+        try:
+            if verbose:
+                print(f"  {label}:")
+            frames.append(search(sic=sic, county=county, delay=delay,
+                                 verbose=verbose, **dict(kwargs, **status)))
+        except Exception as exc:
+            print(f"  ERROR {label}: {str(exc)[:120]}")
+    if not frames:
+        return pd.DataFrame(columns=GRID_COLUMNS + ["detail_url"])
+    return (pd.concat(frames, ignore_index=True)
+            .drop_duplicates(subset=["Auth #"]).reset_index(drop=True))
+
+
+# Labels on the authorization summary page, in the order they appear. Used as
+# each other's stop markers, since the page is a definition list flattened.
+_DETAIL_LABELS = [
+    "Permit Number:", "Authorization Status:", "Date Coverage Began:",
+    "Date Coverage Ended:", "Replaced Permit Number:", "Site Name on Permit:",
+    "Authorization Type:", "Primary SIC Code:", "Area Disturbed (in Acres)",
+    "common plan of development", "impaired water body", "MS4 Operator",
+    "receiving water body", "segment number", "Operator:", "Address:",
+    "Annual Fee Billing Address:", "RN:", "RE Name:", "Site Location:",
+    "County:", "TCEQ Region:", "Latitude:", "Longitude:",
+    # Longitude is the last labelled field, so without a marker for the section
+    # that follows it swallows the heading and everything after.
+    "Regulated Entity Site Information", "Additional ID", "Back to",
+]
+
+_DETAIL_FIELDS = {
+    "Permit Number:": "permit_number",
+    "Authorization Status:": "status",
+    "Date Coverage Began:": "start_date",
+    "Date Coverage Ended:": "end_date",
+    "Site Name on Permit:": "site_name",
+    "Primary SIC Code:": "sic_code",
+    "Area Disturbed (in Acres)": "acres",
+    "Operator:": "operator",
+    "RN:": "regulated_entity",
+    "RE Name:": "re_name",
+    "Site Location:": "address",
+    "County:": "county",
+    "Latitude:": "latitude",
+    "Longitude:": "longitude",
+}
+
+
+def parse_detail(html):
+    """Pull acreage, coordinates and the RN out of one summary page."""
+    text = _text(re.sub(r"<script.*?</script>", "", html, flags=re.S))
+    record = {}
+    for label, key in _DETAIL_FIELDS.items():
+        start = text.find(label)
+        if start < 0:
+            continue
+        start += len(label)
+        end = len(text)
+        for other in _DETAIL_LABELS:
+            if other == label:
+                continue
+            position = text.find(other, start)
+            if 0 <= position < end:
+                end = position
+        record[key] = clean_str(text[start:end].strip(" :"))
+    # "CN603448994 - ROSENDIN ELECTRIC INC" carries the customer number.
+    operator = record.get("operator") or ""
+    match = re.match(r"(CN\d+)\s*-\s*(.+)", operator)
+    if match:
+        record["customer_number"], record["operator"] = match.group(1), match.group(2)
+    return record
+
+
+def fetch_detail(detail_url, timeout=90, jar=None):
+    """Fetch and parse one authorization summary page.
+
+    `jar` must be the session that produced `detail_url`; the ids in the link
+    are session-scoped and a stale one serves the search form instead.
+    """
+    if not detail_url:
+        return {}
+    url = detail_url if detail_url.startswith("http") else (
+        SUMMARY_BASE + detail_url.lstrip("/").replace("wq_dpa/", "", 1)
+    )
+    html = net.get(url, timeout=timeout, jar=jar)
+    if "Summary of Authorization" not in html:
+        # The session expired or was never established; a silently wrong record
+        # is worse than none, and parse_detail would happily return the form.
+        raise ValueError("detail page not returned (session expired?)")
+    return parse_detail(html)
+
+
+def enrich(df, delay=0.4, limit=None, verbose=True, timeout=90, jar=None):
+    """Add acreage, coordinates, dates and the RN to each grid row.
+
+    One request per authorization, so it is opt-in — but it is what turns a
+    construction notice into something joinable: the RN is TCEQ's own site
+    identifier, shared with the air permit record, and the coordinates are real
+    rather than a county centroid.
+    """
+    rows = df.to_dict("records")
+    if limit:
+        rows = rows[:limit]
+    out = []
+    for index, row in enumerate(rows, 1):
+        try:
+            row = dict(row, **fetch_detail(row.get("detail_url"), timeout=timeout,
+                                           jar=jar))
+        except Exception as exc:
+            row = dict(row, detail_error=str(exc)[:120])
+        out.append(row)
+        if verbose and index % 25 == 0:
+            print(f"    {index}/{len(rows)} details")
+        time.sleep(delay)
+    return pd.DataFrame(out)
+
+
+def collect(sic=None, county=None, details=True, detail_limit=None,
+            delay=0.4, verbose=True, **kwargs):
+    """Search and enrich in one pass. Returns a DataFrame ready for ingest.
+
+    This is the entry point worth using. Two things it gets right that are easy
+    to get wrong: it keeps the cookie jar the detail links depend on, and it
+    enriches each half of the record *before* running the next search — a second
+    search replaces the session's held result set, which silently invalidates
+    every detail link the first one handed back.
+    """
+    halves = (("authorizations", {"permit_status": "ALL"}),
+              ("applications", {"app_status": "ALL", "permit_status": None}))
+    frames = []
+    for label, status in halves:
+        jar = net.new_jar()
+        try:
+            if verbose:
+                print(f"  {label}:")
+            found = search(sic=sic, county=county, delay=delay, verbose=verbose,
+                           jar=jar, **dict(kwargs, **status))
+        except Exception as exc:
+            print(f"  ERROR {label}: {str(exc)[:140]}")
+            continue
+        if found.empty:
+            continue
+        if details:
+            if verbose:
+                print(f"    details for {len(found)} authorizations...")
+            found = enrich(found, delay=delay, limit=detail_limit,
+                           verbose=verbose, jar=jar)
+        frames.append(found)
+
+    if not frames:
+        return pd.DataFrame(columns=GRID_COLUMNS + ["detail_url"])
+    return (pd.concat(frames, ignore_index=True)
+            .drop_duplicates(subset=["Auth #"]).reset_index(drop=True))
+
+
+def search_url(county=None, sic=None):
+    """The form URL, for a human who wants to run the query by hand."""
+    params = {"fuseaction": "home.permit_info_search"}
     if county:
-        params["county"] = county
-    if operator:
-        params["operator"] = operator
+        params["cnty_name"] = county.upper()
+    if sic:
+        params["sic_code"] = sic[0] if isinstance(sic, (list, tuple)) else sic
     return f"{SEARCH_BASE}?{urllib.parse.urlencode(params)}"
 
 
@@ -130,9 +526,13 @@ def to_entities(df, source_file_id=None, min_acres=None):
             longitude=base.get(row, resolved, "longitude"),
             description=base.get(row, resolved, "description"),
             acres=base.get(row, resolved, "acres"),
+            sic=base.get(row, resolved, "sic"),
             status=base.get(row, resolved, "status"),
             decision_date=base.get(row, resolved, "issued_date"),
-            received_date=base.get(row, resolved, "start_date"),
+            received_date=base.get(row, resolved, "start_date")
+            or base.get(row, resolved, "issued_date"),
+            construction_start=base.get(row, resolved, "issued_date"),
+            construction_end=base.get(row, resolved, "end_date"),
             projected_cod=base.get(row, resolved, "end_date"),
             permit_type="TCEQ stormwater construction NOI (TXR150000)",
             permit_number=permit_number,

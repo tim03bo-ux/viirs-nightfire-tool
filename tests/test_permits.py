@@ -1246,3 +1246,114 @@ class TestPuctApplicantExtraction:
         records = puct.to_entities(df, relevant_only=False)
         assert records[0]["permit_type"] == "PUCT rulemaking / generic proceeding"
         assert not linkmod.is_site_bearing(records[0])
+
+
+class TestStormwaterLiveQuery:
+    """The TCEQ water-quality app's rules, pinned so they are not re-learned."""
+
+    GRID_HTML = """
+    <table><tr><th>Auth #</th><th>Site Name</th><th>Permittee</th><th>SIC Code</th>
+      <th>Segment #</th><th>County</th><th>Region</th><th>City</th>
+      <th>Site Location</th></tr>
+    <tr><td><a href="index.cfm?fuseaction=home.permit_summary&amp;lgl_id=1">TXR1532PU</a></td>
+      <td>MICROSOFT SAT 8990 DATA CENTER PROJECT SITE</td><td>Lemartec Corporation</td>
+      <td>7374</td><td>1904</td><td>MEDINA</td><td>13</td><td>SAN ANTONIO</td>
+      <td>FM 471 &#x7e;2 MI WEST</td></tr>
+    <tr><td>TXR1532PU</td><td>MICROSOFT SAT 8990 DATA CENTER PROJECT SITE</td>
+      <td>Lemartec Corporation</td><td>7374</td><td>1905</td><td>MEDINA</td>
+      <td>13</td><td>SAN ANTONIO</td><td>FM 471 &#x7e;2 MI WEST</td></tr>
+    </table>
+    <p>Your search returned 36 records.</p>"""
+
+    DETAIL_HTML = """
+    <div>Summary of Authorization TXR150024629
+    <b>Permit Number:</b> TXR150024629
+    <b>Authorization Status:</b> EXPIRED
+    <b>Date Coverage Began:</b> 02/28/2016
+    <b>Date Coverage Ended:</b> 06/05/2018
+    <b>Site Name on Permit:</b> SN4 EARTHWORK
+    <b>Authorization Type:</b> CONSTRUCTION
+    <b>Primary SIC Code:</b> 7374
+    <b>Area Disturbed (in Acres)</b>: 18.94
+    <b>Operator:</b> CN603448994 - ROSENDIN ELECTRIC INC
+    <b>RN:</b> RN109142042
+    <b>Site Location:</b> 3823 WISEMAN BLVD SAN ANTONIO TX 78251
+    <b>County:</b> BEXAR
+    <b>Latitude:</b> 29.478888
+    <b>Longitude:</b> -98.690555
+    Regulated Entity Site Information</div>"""
+
+    def test_grid_parsed_and_segment_duplicates_are_one_site(self):
+        df = tceq_stormwater.parse_results(self.GRID_HTML)
+        assert len(df) == 2                     # the grid really does repeat
+        assert df.iloc[0]["Auth #"] == "TXR1532PU"
+        assert df["Auth #"].nunique() == 1      # one authorization, two segments
+        assert "~2 MI WEST" in df.iloc[0]["Site Location"]
+
+    def test_result_count_read_from_the_page(self):
+        assert tceq_stormwater.result_count(self.GRID_HTML) == 36
+
+    def test_detail_gives_acreage_coordinates_and_the_rn(self):
+        record = tceq_stormwater.parse_detail(self.DETAIL_HTML)
+        assert record["acres"] == "18.94"
+        assert record["latitude"] == "29.478888"
+        # Longitude is the last labelled field; without a stop marker for the
+        # section heading that follows it swallowed the rest of the page.
+        assert record["longitude"] == "-98.690555"
+        # The RN is why the detail page is worth a request each: it is the same
+        # identifier the air permits carry, so this joins by identity.
+        assert record["regulated_entity"] == "RN109142042"
+        assert record["customer_number"] == "CN603448994"
+        assert record["operator"] == "ROSENDIN ELECTRIC INC"
+
+    def test_both_statuses_at_once_is_refused_before_the_request(self):
+        # TCEQ answers this with a generic banner, so failing here is clearer.
+        with pytest.raises(ValueError, match="not both"):
+            tceq_stormwater._search_payload(permit_status="ALL", app_status="ALL")
+
+    def test_payload_shape_matches_the_form(self):
+        pairs = tceq_stormwater._search_payload(sic=["7374"], county="medina")
+        names = [name for name, _ in pairs]
+        # Eight SIC boxes, read positionally by the server.
+        assert names.count("sic_code") == 8
+        values = dict(pairs)
+        assert values["permit_type"] == tceq_stormwater.PERMIT_TYPE_NOI
+        assert values["cnty_name"] == "MEDINA"
+        # Image submit: the button's name already contains an '=', and the
+        # browser appends .x/.y.
+        assert any(n.startswith("_fuseaction=home.validate_search_crit.")
+                   for n in names)
+
+    @pytest.mark.parametrize("html,expected", [
+        ("<p>Errors were found</p> SIC Code invalid &#x3a; 7370", "SIC Code invalid"),
+        ("<p>Errors were found</p> Select either permit OR application status.",
+         "Select either permit"),
+    ])
+    def test_specific_error_extracted_not_the_banner(self, html, expected):
+        assert expected in tceq_stormwater._search_error(html)
+
+    def test_detail_without_a_session_is_an_error_not_a_bad_record(self):
+        # Detail links embed session-scoped ids; fetched outside their session
+        # the app serves the search form, which parse_detail would happily
+        # scrape into a record full of form text.
+        import unittest.mock as mock
+        with mock.patch.object(netmod, "request", return_value="<html>search form</html>"):
+            with pytest.raises(ValueError, match="session"):
+                tceq_stormwater.fetch_detail("index.cfm?fuseaction=home.permit_summary&x=1")
+
+    def test_entities_carry_real_coordinates(self):
+        df = pd.DataFrame([{
+            "Auth #": "TXR1532PU", "Site Name": "MICROSOFT SAT 8990 DATA CENTER",
+            "Permittee": "Lemartec Corporation", "SIC Code": "7374",
+            "County": "MEDINA", "City": "SAN ANTONIO",
+            "Site Location": "FM 471", "acres": "84",
+            "latitude": "29.35138", "longitude": "-98.93942",
+            "regulated_entity": "RN111896825", "status": "ACTIVE",
+        }])
+        record = tceq_stormwater.to_entities(df)[0]
+        # The only feed here that states where a site actually is.
+        assert record["geo_precision"] == "site"
+        assert record["latitude"] == pytest.approx(29.35138)
+        assert record["acres"] == pytest.approx(84.0)
+        assert record["regulated_entity"] == "RN111896825"
+        assert record["project_kind"] == classify.KIND_DATA_CENTER
