@@ -1454,3 +1454,27 @@ class TestRnConflictSplitting:
                 "ercot:2": {"entity_id": "ercot:2", "regulated_entity": None}}
         split = linkmod.split_conflicting_rns({"root": list(rows)}, rows, [])
         assert len(split) == 1
+
+
+class TestStormwaterNameSearch:
+    """Renewables are reachable by name, not by SIC."""
+
+    @pytest.mark.parametrize("name,term,expected", [
+        ("PALO DURO WIND", "WIND", True),
+        ("WINDSOR PARK ADDITION", "WIND", False),
+        ("STAMPEDE SOLAR BESS AND SUBSTATION", "BESS", True),
+        # TCEQ matches substrings, so this really does come back for "BESS".
+        ("OBESSO RESIDENCE", "BESS", False),
+        ("BROOKE HEIGHTS AKA SOLARIS ESTATES", "SOLAR", False),
+        ("OCI - ALAMO 3 SOLAR PV PROJECT", "SOLAR", True),
+        ("NEXUS DATA CENTER HUBBARD", "DATA CENTER", True),
+        ("MIDLAND DATA CENTRE", "DATA CENTER", False),
+    ])
+    def test_word_boundary_filter(self, name, term, expected):
+        assert tceq_stormwater.matches_term(name, term) is expected
+
+    def test_site_name_reaches_the_payload(self):
+        values = dict(tceq_stormwater._search_payload(site_name="SOLAR"))
+        # phys_name is the site name; princ_name is the permittee.
+        assert values["phys_name"] == "SOLAR"
+        assert values["princ_name"] == ""

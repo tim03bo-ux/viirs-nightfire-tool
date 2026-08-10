@@ -378,15 +378,24 @@ def cmd_stormwater(args):
     from src.permits.sources import tceq_stormwater as sw
 
     sic = None
-    if args.sic:
+    if args.name is not None:
+        sic = None
+    elif args.sic:
         sic = [code.strip() for code in args.sic.split(",") if code.strip()]
     elif not args.county:
         sic = sw.DEFAULT_SIC
 
-    df = sw.collect(
-        sic=sic, county=args.county, details=not args.no_details,
-        detail_limit=args.limit, delay=args.delay,
-    )
+    if args.name:
+        terms = [t.strip() for t in args.name.split(",") if t.strip()] or None
+        df = sw.collect_names(
+            terms=terms, details=not args.no_details,
+            detail_limit=args.limit, delay=args.delay,
+        )
+    else:
+        df = sw.collect(
+            sic=sic, county=args.county, details=not args.no_details,
+            detail_limit=args.limit, delay=args.delay,
+        )
     if df.empty:
         print("no NOIs returned")
         return 1
@@ -730,6 +739,11 @@ def build_parser():
     sub.add_argument("--sic", help="comma-separated SIC codes; defaults to the "
                                    "electric + data-processing set")
     sub.add_argument("--county", help="one county instead of a SIC sweep")
+    sub.add_argument("--name", help="comma-separated site-name terms, or an "
+                                    "empty value for the built-in generation + "
+                                    "load set; the only way to reach solar, "
+                                    "wind and storage, which carry no "
+                                    "distinguishing SIC code")
     sub.add_argument("--min-acres", type=float, default=None,
                      help="drop sites below this disturbed acreage")
     sub.add_argument("--no-details", action="store_true",

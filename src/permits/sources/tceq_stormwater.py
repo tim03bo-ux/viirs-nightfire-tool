@@ -78,6 +78,20 @@ _BAD_SIC_RE = re.compile(r"SIC Code invalid\s*(?:&#x3a;|:)\s*(\d+)")
 GRID_COLUMNS = ["Auth #", "Site Name", "Permittee", "SIC Code", "Segment #",
                 "County", "Region", "City", "Site Location"]
 
+# Site-name terms that find generation and large load. Searching by name is the
+# only way to reach renewables: they do not cluster under a SIC code the way
+# utilities do. Solar and wind NOIs land mostly in 1629 (heavy construction,
+# generic) with 4911 a distant second, so a SIC sweep misses them. Name search
+# also finds 153 data-center NOIs against SIC 7374's 34.
+#
+# The app matches substrings, so "WIND" returns Windsor and Winding Creek and
+# "BESS" returns OBESSO RESIDENCE. `matches_term` re-checks on word boundaries.
+NAME_TERMS_GENERATION = [
+    "SOLAR", "WIND", "BESS", "ENERGY STORAGE", "GENERATING", "POWER PLANT",
+    "ENERGY CENTER", "SUBSTATION",
+]
+NAME_TERMS_LOAD = ["DATA CENTER", "DATACENTER", "MINING"]
+
 HEADER_TOKENS = ["Permit", "Operator", "County", "Acres", "Site", "NOI"]
 
 COLUMNS = {
@@ -150,6 +164,17 @@ def parse_results(html):
             "detail_url": link.group(1).replace("&amp;", "&") if link else None,
         })
     return pd.DataFrame(records, columns=GRID_COLUMNS + ["detail_url"])
+
+
+def matches_term(name, term):
+    """Whether a site name really contains the term, on word boundaries.
+
+    TCEQ matches substrings, so a search for WIND returns Windsor and a search
+    for BESS returns OBESSO RESIDENCE. Dropping those is the difference between
+    a wind-project list and a subdivision list.
+    """
+    pattern = r"\b" + r"\s+".join(re.escape(word) for word in str(term).split()) + r"\b"
+    return re.search(pattern, str(name or ""), re.I) is not None
 
 
 def _search_payload(sic=None, county=None, city=None, operator=None,
@@ -422,6 +447,38 @@ def enrich(df, delay=0.4, limit=None, verbose=True, timeout=90, jar=None):
             print(f"    {index}/{len(rows)} details")
         time.sleep(delay)
     return pd.DataFrame(out)
+
+
+def collect_names(terms=None, details=True, detail_limit=None, delay=0.4,
+                  verbose=True, **kwargs):
+    """Sweep by site name, keeping only real word-boundary matches.
+
+    Returns a DataFrame with a `matched_term` column recording which term found
+    each row, so a result can be traced back to why it is here.
+    """
+    terms = list(terms or (NAME_TERMS_GENERATION + NAME_TERMS_LOAD))
+    frames = []
+    for term in terms:
+        try:
+            if verbose:
+                print(f"  '{term}':")
+            found = collect(site_name=term, details=details,
+                            detail_limit=detail_limit, delay=delay,
+                            verbose=verbose, **kwargs)
+        except Exception as exc:
+            print(f"  ERROR '{term}': {str(exc)[:120]}")
+            continue
+        if found.empty:
+            continue
+        keep = found[found["Site Name"].apply(lambda n: matches_term(n, term))].copy()
+        if verbose:
+            print(f"    {len(keep)} of {len(found)} are word-boundary matches")
+        keep["matched_term"] = term
+        frames.append(keep)
+    if not frames:
+        return pd.DataFrame(columns=GRID_COLUMNS + ["detail_url", "matched_term"])
+    return (pd.concat(frames, ignore_index=True)
+            .drop_duplicates(subset=["Auth #"]).reset_index(drop=True))
 
 
 def collect(sic=None, county=None, details=True, detail_limit=None,
