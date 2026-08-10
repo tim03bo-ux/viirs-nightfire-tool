@@ -366,6 +366,72 @@ def build_links(entities, threshold=DEFAULT_THRESHOLD):
     return links
 
 
+def split_conflicting_rns(groups, by_id, links):
+    """Break apart clusters that ended up holding more than one TCEQ site.
+
+    `score_pair` refuses any pair carrying different regulated-entity numbers —
+    RN is TCEQ's per-site identifier, so two records with different ones are
+    different sites. But that refusal is pairwise and clustering is transitive:
+    a record with *no* RN, which is every ERCOT and PUCT row, can link to two
+    TCEQ records that were explicitly refused each other and chain them anyway.
+    Air Products in Galveston merged that way, and so did Enchanted Rock's
+    distributed-generation fleet — five separate sites in Montgomery County
+    bridged into one by a shared operator name.
+
+    So the rule is re-applied after the fact. Each RN present becomes its own
+    site, and an RN-less record joins whichever of them it scored highest
+    against, keeping the ERCOT queue entry with the permit it actually matched
+    rather than with all of them at once.
+    """
+    best = defaultdict(dict)   # entity -> {other entity: score}
+    for link in links:
+        a, b, score = link["entity_a"], link["entity_b"], link["score"]
+        best[a][b] = max(best[a].get(b, 0.0), score)
+        best[b][a] = max(best[b].get(a, 0.0), score)
+
+    out = {}
+    for root, entity_ids in groups.items():
+        rns = {
+            str(by_id[entity_id].get("regulated_entity")).strip()
+            for entity_id in entity_ids
+            if by_id[entity_id].get("regulated_entity")
+        }
+        if len(rns) <= 1:
+            out[root] = entity_ids
+            continue
+
+        by_rn = defaultdict(list)
+        unassigned = []
+        for entity_id in entity_ids:
+            rn = by_id[entity_id].get("regulated_entity")
+            if rn:
+                by_rn[str(rn).strip()].append(entity_id)
+            else:
+                unassigned.append(entity_id)
+
+        for entity_id in unassigned:
+            scores = best.get(entity_id, {})
+            ranked = sorted(
+                by_rn,
+                key=lambda rn: max(
+                    (scores.get(other, 0.0) for other in by_rn[rn]), default=0.0
+                ),
+                reverse=True,
+            )
+            top = ranked[0] if ranked else None
+            if top is not None and max(
+                (scores.get(other, 0.0) for other in by_rn[top]), default=0.0
+            ) > 0:
+                by_rn[top].append(entity_id)
+            else:
+                # Linked only to other RN-less records; it is its own site.
+                out[f"{root}:free:{entity_id}"] = [entity_id]
+
+        for rn, members in by_rn.items():
+            out[f"{root}:{rn}"] = members
+    return out
+
+
 def _site_id(entity_ids):
     digest = hashlib.sha1("|".join(sorted(entity_ids)).encode("utf-8")).hexdigest()
     return f"site:{digest[:16]}"
@@ -643,8 +709,10 @@ def rebuild_sites(conn, threshold=DEFAULT_THRESHOLD, verbose=False):
     for link in links:
         scores_by_root[union.find(link["entity_a"])].append(link["score"])
 
+    clusters = split_conflicting_rns(union.groups(), by_id, links)
+
     site_rows, member_rows = [], []
-    for root, entity_ids in union.groups().items():
+    for root, entity_ids in clusters.items():
         members = [by_id[entity_id] for entity_id in entity_ids]
         site = summarize_site(members, scores_by_root.get(root, []))
         site_rows.append(site)

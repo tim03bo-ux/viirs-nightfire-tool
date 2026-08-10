@@ -1404,3 +1404,53 @@ class TestUnitRuleAssertsGeneration:
     ])
     def test_unit_rule_recovered_from_filename(self, filename, expected):
         assert pipeline.infer_unit_rule(filename) == expected
+
+
+class TestRnConflictSplitting:
+    """A refusal that is pairwise must survive transitive clustering."""
+
+    def _rows(self):
+        return {
+            "tceq:a": {"entity_id": "tceq:a", "regulated_entity": "RN111"},
+            "tceq:b": {"entity_id": "tceq:b", "regulated_entity": "RN222"},
+            "ercot:x": {"entity_id": "ercot:x", "regulated_entity": None},
+        }
+
+    def test_rn_less_record_cannot_bridge_two_tceq_sites(self):
+        # score_pair refuses tceq:a to tceq:b outright, but union-find chains
+        # them through the ERCOT row that links to both.
+        links = [
+            {"entity_a": "ercot:x", "entity_b": "tceq:a", "score": 0.90},
+            {"entity_a": "ercot:x", "entity_b": "tceq:b", "score": 0.70},
+        ]
+        groups = {"root": ["tceq:a", "tceq:b", "ercot:x"]}
+        split = linkmod.split_conflicting_rns(groups, self._rows(), links)
+        assert len(split) == 2, "two RNs are two sites"
+        sizes = sorted(len(members) for members in split.values())
+        assert sizes == [1, 2]
+
+    def test_the_bridging_record_goes_to_its_best_match(self):
+        links = [
+            {"entity_a": "ercot:x", "entity_b": "tceq:a", "score": 0.90},
+            {"entity_a": "ercot:x", "entity_b": "tceq:b", "score": 0.70},
+        ]
+        split = linkmod.split_conflicting_rns(
+            {"root": ["tceq:a", "tceq:b", "ercot:x"]}, self._rows(), links
+        )
+        home = [m for m in split.values() if "ercot:x" in m][0]
+        assert "tceq:a" in home, "the ERCOT row belongs with the permit it matched"
+        assert "tceq:b" not in home
+
+    def test_one_rn_with_many_permit_actions_is_left_alone(self):
+        rows = {f"tceq:{i}": {"entity_id": f"tceq:{i}", "regulated_entity": "RN111"}
+                for i in range(4)}
+        groups = {"root": list(rows)}
+        split = linkmod.split_conflicting_rns(groups, rows, [])
+        assert len(split) == 1
+        assert len(split["root"]) == 4
+
+    def test_rn_less_only_cluster_is_untouched(self):
+        rows = {"ercot:1": {"entity_id": "ercot:1", "regulated_entity": None},
+                "ercot:2": {"entity_id": "ercot:2", "regulated_entity": None}}
+        split = linkmod.split_conflicting_rns({"root": list(rows)}, rows, [])
+        assert len(split) == 1
