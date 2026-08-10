@@ -1,15 +1,19 @@
 """
 TCEQ / ERCOT permit and interconnection dashboard.
 
-Connects four feeds — ERCOT generation queue, ERCOT large load queue, TCEQ air
-permits, TCEQ stormwater construction NOIs — into resolved sites, and surfaces
-generation projects, data centers, and the colocated gen+load developments that
-only become visible once the feeds are joined.
+Connects five feeds — ERCOT generation queue, ERCOT large load queue, TCEQ air
+permits, TCEQ stormwater construction NOIs and PUCT Interchange dockets — into
+resolved sites, and surfaces generation projects, data centers, and the
+colocated gen+load developments that only become visible once the feeds are
+joined. PUCT stays alongside rather than inside that join: a docket is a
+proceeding, not a site, and it is where large-load customers are named at all,
+since ERCOT publishes its large-load queue in aggregate.
 
 Run:  streamlit run permits_dashboard.py
 Build the database first:  python permits_cli.py demo   (or `ingest` + `link`)
 """
 
+import json
 import os
 import sys
 
@@ -115,6 +119,7 @@ SOURCE_LABELS = {
     "ercot_large_load": "ERCOT large load queue",
     "tceq_air": "TCEQ air permit",
     "tceq_swnoi": "TCEQ stormwater NOI",
+    "puct": "PUCT docket",
 }
 
 
@@ -178,11 +183,17 @@ def load_all(db_path, mtime):
             statusmod.days_sitting
         )
         entities["in_process"] = entities["lifecycle"].isin(statusmod.IN_PROCESS)
+        # SQLite hands a column back as object dtype when every value it saw was
+        # NULL, which is what a source of pure dockets or pure permits produces.
+        # Coerce once, here, rather than at each use: pandas raises on nlargest
+        # and plotly on marker sizing, and both failures are far from the cause.
+        for column in ("capacity_mw", "load_mw", "acres", "latitude", "longitude",
+                       "nox_tpy", "co_tpy", "voc_tpy", "pm_tpy", "so2_tpy",
+                       "ghg_tpy"):
+            if column in entities:
+                entities[column] = pd.to_numeric(entities[column], errors="coerce")
         # One MW column regardless of which side of the meter a record sits on.
-        # SQLite hands these back as object dtype; plotly needs real numbers.
-        entities["mw"] = pd.to_numeric(
-            entities["capacity_mw"].fillna(entities["load_mw"]), errors="coerce"
-        )
+        entities["mw"] = entities["capacity_mw"].fillna(entities["load_mw"])
         entities["tech_label"] = entities["technology"].apply(
             lambda value: statusmod.summarize_stage(value) or "Not stated"
         )
@@ -337,7 +348,7 @@ def sidebar_filters(sites, info):
         ).str.lower()
         filtered = filtered[haystack.str.contains(needle, regex=False)]
 
-    return filtered, lifecycles, programs, offline_map
+    return filtered, lifecycles, programs, offline_map, selected_counties
 
 
 # --- Views -------------------------------------------------------------------
@@ -966,6 +977,126 @@ def render_permits(entities):
         st.plotly_chart(figure, use_container_width=True)
 
 
+def render_puct(entities, counties=None):
+    """PUCT Interchange dockets, and who is on the record in them.
+
+    This tab exists because of a hole in the ERCOT data. ERCOT publishes its
+    large-load queue in aggregate — MW by zone, no customer named — so the
+    question the rest of this tool is built around ("which data center, sited
+    where, next to which plant?") has no answer on the ERCOT side. PUCT dockets
+    name the parties. A docket is a proceeding rather than a site, so nothing
+    here is joined to a plant automatically; it is the name list that matters.
+    """
+    dockets = entities[entities["source"] == "puct"].copy()
+    if counties and not dockets.empty:
+        # Only the county filter carries over: fuel, MW and site type are
+        # properties of a plant, and a proceeding has none of them.
+        dockets = dockets[dockets["county"].isin(counties)]
+        st.caption(f"Filtered to {', '.join(counties)}.")
+    if dockets.empty:
+        st.info(
+            "No PUCT dockets yet. Pull them with:\n\n"
+            "`python permits_cli.py puct --parties`"
+        )
+        return
+
+    dockets["Docket type"] = (
+        dockets["permit_type"].fillna("PUCT docket")
+        .str.replace("^PUCT ", "", regex=True)
+        # Only the first letter — .capitalize() would lowercase the CCN acronym.
+        .str.replace("^(.)", lambda m: m.group(1).upper(), regex=True)
+    )
+
+    counts = dockets["Docket type"].value_counts()
+    columns = st.columns(min(len(counts), 4) or 1)
+    for column, (label, count) in zip(columns, counts.items()):
+        column.metric(label, f"{count:,}")
+
+    st.caption(
+        "A docket is a proceeding, not a plant: it carries no capacity, and it "
+        "is placed on the map only where the case style itself names a county."
+    )
+
+    parties = _puct_parties(dockets)
+    left, right = st.columns([3, 2])
+
+    with left:
+        st.subheader("Dockets")
+        chosen = st.multiselect(
+            "Docket type", sorted(dockets["Docket type"].unique()),
+            default=sorted(dockets["Docket type"].unique()),
+            key="puct_types",
+        )
+        view = dockets[dockets["Docket type"].isin(chosen)] if chosen else dockets
+        table = view[[
+            "permit_number", "Docket type", "operator", "county",
+            "received_date", "status_date", "project_name", "url",
+        ]].rename(columns={
+            "permit_number": "Control", "operator": "Filed by",
+            "county": "County", "received_date": "First filed",
+            "status_date": "Last filed", "project_name": "Case style",
+            "url": "Interchange",
+        }).sort_values("First filed", ascending=False, na_position="last")
+        # A docket that names no county has none; "None" printed in the cell
+        # reads as a value rather than as an absence.
+        table["County"] = table["County"].fillna("—")
+        st.dataframe(
+            table, hide_index=True, use_container_width=True, height=430,
+            column_config={
+                "Interchange": st.column_config.LinkColumn(
+                    "Interchange", display_text="open"
+                ),
+                "Case style": st.column_config.TextColumn("Case style", width="large"),
+            },
+        )
+
+    with right:
+        st.subheader("Who files in these dockets")
+        if parties.empty:
+            st.info(
+                "No party lists stored. Re-run with `--parties` to open each "
+                "docket's filing list."
+            )
+        else:
+            st.caption(
+                "Commission staff and the docket-management offices file in "
+                "everything and are excluded. Names are printed as filed — "
+                "Interchange records a joint filing as one party."
+            )
+            figure = px.bar(
+                parties.head(20).sort_values("Dockets"),
+                x="Dockets", y="Party", orientation="h",
+            )
+            figure.update_layout(
+                height=520, yaxis_title=None, xaxis_title="Dockets appeared in",
+                margin=dict(l=0, r=0, t=10, b=0),
+            )
+            figure.update_traces(marker_color="#7c9ce8")
+            st.plotly_chart(figure, use_container_width=True)
+            st.dataframe(parties, hide_index=True, use_container_width=True,
+                         height=240)
+
+
+def _puct_parties(dockets):
+    """Party -> docket count, from the payloads stored by `puct --parties`."""
+    counts = {}
+    for payload in dockets["raw_json"].dropna():
+        try:
+            names = json.loads(payload).get("parties") or []
+        except (ValueError, TypeError):
+            continue
+        if isinstance(names, str):
+            names = [part.strip() for part in names.split(";")]
+        for name in {n.strip() for n in names if n and n.strip()}:
+            counts[name] = counts.get(name, 0) + 1
+    if not counts:
+        return pd.DataFrame(columns=["Party", "Dockets"])
+    return (
+        pd.DataFrame(sorted(counts.items(), key=lambda kv: -kv[1]),
+                     columns=["Party", "Dockets"])
+    )
+
+
 def render_site_detail(sites, entities, members, links):
     st.subheader("Site detail")
     if sites.empty:
@@ -1105,7 +1236,7 @@ def main():
     st.title("⚡ TCEQ / ERCOT Permit Intelligence")
     st.caption(
         "ERCOT generation queue · ERCOT large load queue · TCEQ air NSR permits · "
-        "TCEQ stormwater construction NOIs, resolved into sites"
+        "TCEQ stormwater construction NOIs · PUCT Interchange dockets"
     )
 
     if info.get("is_demo"):
@@ -1116,7 +1247,8 @@ def main():
             icon="🧪",
         )
 
-    filtered_sites, lifecycles, programs, offline_map = sidebar_filters(sites, info)
+    (filtered_sites, lifecycles, programs, offline_map,
+     selected_counties) = sidebar_filters(sites, info)
 
     member_ids = set(
         members[members["site_id"].isin(set(filtered_sites["site_id"]))]["entity_id"]
@@ -1144,7 +1276,7 @@ def main():
 
     tabs = st.tabs([
         "Map", "Colocated gen + load", "Generation", "Loads",
-        "Permits & applications", "Site detail", "All records",
+        "Permits & applications", "PUCT dockets", "Site detail", "All records",
     ])
     with tabs[0]:
         render_map(filtered_entities, offline_map)
@@ -1157,8 +1289,12 @@ def main():
     with tabs[4]:
         render_permits(filtered_entities)
     with tabs[5]:
-        render_site_detail(filtered_sites, filtered_entities, members, links)
+        # Dockets deliberately have no site, so the site-shaped filters cannot
+        # reach them; this tab reads the unfiltered frame and filters itself.
+        render_puct(entities, selected_counties)
     with tabs[6]:
+        render_site_detail(filtered_sites, filtered_entities, members, links)
+    with tabs[7]:
         render_records(filtered_entities)
 
 

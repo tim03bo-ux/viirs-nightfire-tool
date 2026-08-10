@@ -32,6 +32,7 @@ SOURCES = {
     "ercot_large_load": "ERCOT Large Load interconnection status report",
     "tceq_air": "TCEQ air New Source Review permit applications",
     "tceq_swnoi": "TCEQ stormwater construction NOI (TXR150000)",
+    "puct": "PUCT Interchange dockets (CCN, transmission, large load)",
 }
 
 SCHEMA = """

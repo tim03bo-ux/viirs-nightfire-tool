@@ -15,12 +15,13 @@ import re
 from . import db as dbmod
 from . import normalize
 from . import link as linkmod
-from .sources import ercot, tceq_air, tceq_registry, tceq_stormwater
+from .sources import ercot, puct, tceq_air, tceq_registry, tceq_stormwater
 
 SOURCE_GIS = ercot.SOURCE_GIS
 SOURCE_LARGE_LOAD = ercot.SOURCE_LARGE_LOAD
 SOURCE_TCEQ_AIR = tceq_air.SOURCE
 SOURCE_TCEQ_SWNOI = tceq_stormwater.SOURCE
+SOURCE_PUCT = puct.SOURCE
 
 ADAPTERS = {
     SOURCE_GIS: {
@@ -43,12 +44,18 @@ ADAPTERS = {
         "read": tceq_stormwater.read_file,
         "to_entities": tceq_stormwater.to_entities,
     },
+    SOURCE_PUCT: {
+        "label": dbmod.SOURCES[SOURCE_PUCT],
+        "read": puct.read_file,
+        "to_entities": puct.to_entities,
+    },
 }
 
 # Filename hints used by ingest_dir when --source is not given.
 _FILENAME_HINTS = [
     (SOURCE_LARGE_LOAD, r"large[_\- ]?load|load[_\- ]?interconnect"),
     (SOURCE_GIS, r"\bgis\b|generator[_\- ]?interconnect|rpt[_\- ]?00015933"),
+    (SOURCE_PUCT, r"puct|interchange|\bccn\b|docket"),
     (SOURCE_TCEQ_SWNOI, r"txr150|stormwater|storm[_\- ]?water|\bnoi\b|construction"),
     (SOURCE_TCEQ_AIR, r"\bair\b|\bnsr\b|permit|tceq"),
 ]

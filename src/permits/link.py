@@ -35,6 +35,20 @@ from . import classify, status
 from .db import utcnow
 from .normalize import haversine_km, name_similarity
 
+# Records that are proceedings rather than places, held out of site resolution.
+# A PUCT rulemaking is statewide policy: docket 58481 has 130 parties and no
+# location, and clustering it would drag every party's projects together into
+# one meaningless site. A docket about a *named* project is different — an
+# application by Braes Bayou Generating LLC names the same legal entity ERCOT
+# and TCEQ name — so those stay in, matched on their applicant.
+NON_SITE_PERMIT_TYPES = frozenset({"PUCT rulemaking / generic proceeding"})
+
+
+def is_site_bearing(row):
+    """Whether a record describes a place that can be merged with others."""
+    return (row["permit_type"] if "permit_type" in row.keys() else None) \
+        not in NON_SITE_PERMIT_TYPES
+
 # Scoring knobs. Exposed as module constants so the CLI can override them and
 # the effect is visible in one place.
 DEFAULT_THRESHOLD = 0.62      # minimum combined score to link two records
@@ -55,6 +69,28 @@ RN_MATCH_SCORE = 0.98         # shared TCEQ regulated-entity number
 # solar-plus-storage site that 0.85 would wrongly split.
 MIN_NAME_FOR_COUNTY_MATCH = 0.75
 MIN_OPERATOR_FOR_COUNTY_MATCH = 0.75
+
+# The rule above is right within one feed and wrong across feeds, because the
+# two failure modes are not the same shape.
+#
+# Within ERCOT, one developer really does hold dozens of separate projects in a
+# county, so a shared operator says almost nothing and the project name has to
+# do the work. Across feeds the opposite holds — and worse, the name evidence
+# the rule demands does not exist. A TCEQ air permit carries no site name at
+# all: the export's "Regulated Entity Name" is the company, so name_norm and
+# operator_norm are the same string by construction. Hays Energy is the case in
+# point — ERCOT calls it "Hays Energy Unit 3 Repower" operated by HAYS ENERGY,
+# LLC; TCEQ calls it "Hays Energy, LLC" in both fields, in Hays County. Same
+# plant, obviously, but the names score ~0.6 and the pair was rejected. Across
+# 1,827 ERCOT projects and 41,829 TCEQ permits the strict rule found 17 joins.
+#
+# So a cross-source pair may match on operator and county alone, at a higher
+# operator bar — but only where that operator+county is *unambiguous*, meaning
+# neither feed shows several distinct projects there. Where a developer does
+# hold a portfolio in one county, a permit could belong to any of them and the
+# name has to decide, exactly as before.
+CROSS_SOURCE_OPERATOR_MATCH = 0.88
+MAX_NAMES_FOR_OPERATOR_ALONE = 3
 
 # Preference order when picking a site's display name / operator.
 SOURCE_PRIORITY = ["ercot_gis", "ercot_large_load", "tceq_air", "tceq_swnoi"]
@@ -128,8 +164,33 @@ def spatial_score(a, b):
     )
 
 
-def score_pair(a, b):
-    """Score two entity dicts. Returns (score, method, distance_km, name, operator)."""
+def _best_name_score(a, b):
+    """Strongest name agreement across both records' name and operator fields.
+
+    Feeds disagree about which field holds a project's identity. ERCOT puts it
+    in the project name and the company in the operator; TCEQ has only the
+    company and writes it into both. Comparing name-to-name and
+    operator-to-operator alone therefore misses the pairing that actually
+    identifies the site — ERCOT's project name against TCEQ's company — so all
+    four combinations are tried and the best is taken.
+    """
+    name_a, name_b = a.get("name_norm"), b.get("name_norm")
+    operator_a, operator_b = a.get("operator_norm"), b.get("operator_norm")
+    return max(
+        name_similarity(name_a, name_b),
+        name_similarity(name_a, operator_b),
+        name_similarity(operator_a, name_b),
+        name_similarity(operator_a, operator_b),
+    )
+
+
+def score_pair(a, b, unambiguous=None):
+    """Score two entity dicts. Returns (score, method, distance_km, name, operator).
+
+    `unambiguous` is the set of (operator_norm, county_norm) keys where no feed
+    shows more than `MAX_NAMES_FOR_OPERATOR_ALONE` distinct projects, built once
+    by `build_links`. Only those keys may match on operator and county alone.
+    """
     name_score = name_similarity(a.get("name_norm"), b.get("name_norm"))
     operator_score = name_similarity(a.get("operator_norm"), b.get("operator_norm"))
 
@@ -163,6 +224,21 @@ def score_pair(a, b):
     if not county_a or not county_b or county_a != county_b:
         return (0.0, "no_common_geography", None, name_score, operator_score)
 
+    # Across feeds, a strong operator in an unambiguous county is enough on its
+    # own — it is the only evidence a TCEQ permit can offer, and where that
+    # operator has just one project in the county there is nothing else it could
+    # refer to. Within a feed this stays closed: that is where a portfolio of
+    # unrelated projects shares an operator and a county.
+    if (
+        a.get("source") != b.get("source")
+        and operator_score >= CROSS_SOURCE_OPERATOR_MATCH
+        and unambiguous is not None
+        and (a.get("operator_norm"), county_a) in unambiguous
+    ):
+        best_name = _best_name_score(a, b)
+        score = 0.45 + 0.35 * operator_score + 0.20 * best_name
+        return (score, "cross_source_operator", None, best_name, operator_score)
+
     # BOTH must hold. Either alone is worthless here: a shared county plus a
     # shared developer describes most of that developer's portfolio, and a
     # shared name plus a different developer is usually a reused place name.
@@ -175,6 +251,32 @@ def score_pair(a, b):
     # The project name carries site identity; the operator only corroborates.
     score = 0.30 + 0.55 * name_score + 0.15 * operator_score
     return (score, "county_and_name", None, name_score, operator_score)
+
+
+def _unambiguous_operator_counties(entities):
+    """(operator, county) keys where no feed shows several distinct projects.
+
+    A developer with one project in a county can be matched on operator alone.
+    A developer with eight cannot: a permit from that company could belong to
+    any of them, and picking one would be a coin flip dressed as a join.
+    """
+    names = defaultdict(lambda: defaultdict(set))
+    for entity in entities:
+        operator = entity.get("operator_norm")
+        county = entity.get("county_norm")
+        if not operator or not county:
+            continue
+        names[(operator, county)][entity.get("source")].add(
+            entity.get("name_norm") or ""
+        )
+    return {
+        key
+        for key, by_source in names.items()
+        if all(
+            len(distinct) <= MAX_NAMES_FOR_OPERATOR_ALONE
+            for distinct in by_source.values()
+        )
+    }
 
 
 def _candidate_pairs(entities):
@@ -217,10 +319,13 @@ def build_links(entities, threshold=DEFAULT_THRESHOLD):
     dicts ready for the entity_links table.
     """
     entities = [dict(entity) for entity in entities]
+    unambiguous = _unambiguous_operator_counties(entities)
     links = []
     for left, right in _candidate_pairs(entities):
         a, b = entities[left], entities[right]
-        score, method, distance, name_score, operator_score = score_pair(a, b)
+        score, method, distance, name_score, operator_score = score_pair(
+            a, b, unambiguous=unambiguous
+        )
         if score < threshold:
             continue
         first, second = sorted((a["entity_id"], b["entity_id"]))
@@ -474,7 +579,10 @@ def rebuild_sites(conn, threshold=DEFAULT_THRESHOLD, verbose=False):
     Safe to re-run: both derived tables are cleared first, so tuning `threshold`
     and re-running is the intended workflow.
     """
-    rows = [dict(row) for row in conn.execute("SELECT * FROM entities")]
+    rows = [
+        dict(row) for row in conn.execute("SELECT * FROM entities")
+        if is_site_bearing(row)
+    ]
     if not rows:
         conn.execute("DELETE FROM site_members")
         conn.execute("DELETE FROM sites")

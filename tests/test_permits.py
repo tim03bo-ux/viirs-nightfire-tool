@@ -4,6 +4,7 @@ test_permits.py — Unit tests for the TCEQ / ERCOT permit database.
 Run with: python -m pytest tests/test_permits.py -v
 """
 
+import json
 import os
 import tempfile
 
@@ -14,7 +15,8 @@ from src.permits import (
     classify, db as dbmod, link as linkmod, normalize, pipeline, seed,
     status as statusmod,
 )
-from src.permits.sources import base, ercot, tceq_air, tceq_stormwater
+from src.permits import net as netmod
+from src.permits.sources import base, ercot, puct, tceq_air, tceq_stormwater
 
 
 class TestNormalize:
@@ -607,11 +609,12 @@ def built(tmp_path_factory):
 class TestEndToEnd:
     """The demo dataset exercises ingest, classification and linking together."""
 
-    def test_all_four_sources_ingested(self, built):
+    def test_every_registered_source_ingested(self, built):
         _, conn, _ = built
         info = dbmod.stats(conn)
         assert set(info["by_source"]) == set(pipeline.ADAPTERS)
-        assert info["entities"] == 49
+        # 49 project records plus the 4 PUCT dockets.
+        assert info["entities"] == 53
 
     def test_sites_resolve_close_to_one_per_development(self, built):
         # 18 invented developments resolve to 19 sites. The extra one is Kiowa
@@ -619,20 +622,25 @@ class TestEndToEnd:
         # and a county — ERCOT publishes no coordinates, and refusing to assert
         # colocation on that evidence is the correct behaviour, not a regression.
         _, _, summary = built
-        # 21 from 18. Two extra splits come from modelling TCEQ's real NSR
-        # export, which carries no site name — only the company — so a plant's
-        # ERCOT entry and its TCEQ permit no longer share a project name. The
-        # third is Kiowa Draw. All three are the linker correctly declining to
-        # assert a merge the public data does not support.
+        # 21 from 18. Cross-source matching closed the splits that came from
+        # TCEQ carrying no site name — a plant's ERCOT entry and its TCEQ permit
+        # now join on operator and county, which is the only evidence TCEQ has.
+        # What remains are the three project-specific PUCT dockets: a CCN
+        # docket's applicant is the *utility* building the line, not the
+        # developer, so it correctly does not merge into the plant it serves.
+        # The fourth docket is the SB 6 rulemaking, held out of site resolution
+        # entirely.
         assert summary["sites"] == len(seed.DEVELOPMENTS) + 3
 
     def test_colocated_sites_detected(self, built):
         _, conn, _ = built
         sites = dbmod.load_sites(conn)
         colocated = sites[sites["site_class"] == linkmod.SITE_COLOCATED]
-        # Three, not four: colocation is only claimed where the names or the
-        # coordinates actually support it. See the Kiowa Draw note above.
-        assert len(colocated) == 3
+        # Four. Kiowa Draw joined the other three once cross-source matching
+        # landed: its wind repower and its mining load share an operator and a
+        # county across two feeds, which is the colocation pattern itself rather
+        # than a coincidence of place names.
+        assert len(colocated) == 4
         names = set(colocated["site_name"])
         assert any("Brazos Ridge" in name for name in names)
         assert any("Panhandle Nexus" in name for name in names)
@@ -846,6 +854,7 @@ class TestSourceInference:
             ("tceq-stormwater-noi-2026.csv", pipeline.SOURCE_TCEQ_SWNOI),
             ("TXR150000_export.csv", pipeline.SOURCE_TCEQ_SWNOI),
             ("tceq-air-nsr-pending.xlsx", pipeline.SOURCE_TCEQ_AIR),
+            ("puct-interchange-dockets-demo.csv", pipeline.SOURCE_PUCT),
             ("holiday_photos.csv", None),
         ],
     )
@@ -907,3 +916,298 @@ class TestAdapterParsing:
         kept = tceq_stormwater.to_entities(df, min_acres=50)
         assert len(kept) == 1
         assert kept[0]["source_key"] == "TXR1"
+
+
+class TestPuctParsing:
+    """PUCT Interchange: docket search, docket detail, and what a docket is."""
+
+    SEARCH_HTML = """
+    <table><tr><th>Control</th><th>Filings</th><th>Utility</th><th>Description</th></tr>
+    <tr><td>52455</td><td>31</td><td>ONCOR ELECTRIC DELIVERY CO</td>
+        <td>APPLICATION OF ONCOR ELECTRIC DELIVERY COMPANY LLC TO AMEND ITS
+            CERTIFICATE OF CONVENIENCE AND NECESSITY FOR THE OLD COUNTRY SWITCH
+            345-KV TAP TRANSMISSION LINE IN ELLIS COUNTY</td></tr>
+    <tr><td>56903</td><td>57</td><td>EL PASO ELECTRIC COMPANY</td>
+        <td>APPLICATION OF EL PASO ELECTRIC COMPANY FOR AN ECONOMIC DEVELOPMENT
+            RATE RIDER FOR A NEW DATA CENTER TO BE LOCATED IN EL PASO TEXAS</td></tr>
+    </table>"""
+
+    DOCKET_HTML = """
+    <table><tr><th>Item</th><th>File Stamp</th><th>Party</th><th>Item Type</th>
+                <th>Filing Description</th></tr>
+    <tr><td>1</td><td>7/31/2025</td><td>PUC RULES &amp; PROJECTS</td><td>PRJ</td>
+        <td>Request for Control Number</td></tr>
+    <tr><td>2</td><td>10/10/2025</td><td>EdgeConneX</td><td>PC</td>
+        <td>EDGECONNEX RESPONSE TO STAFF&#8217;S QUESTIONS</td></tr>
+    <tr><td>3</td><td>4/20/2026</td><td>EdgeConneX</td><td>PC</td>
+        <td>Reply comments</td></tr>
+    </table>"""
+
+    def test_search_table_parsed(self):
+        df = puct.parse_results(self.SEARCH_HTML)
+        assert len(df) == 2
+        assert list(df.control_number) == ["52455", "56903"]
+        # The header row leads with a label, not a docket number, so it drops.
+        assert "Control" not in set(df.control_number)
+
+    def test_html_entities_decoded(self):
+        df = puct.parse_docket(self.DOCKET_HTML)
+        assert df.iloc[0].party == "PUC RULES & PROJECTS"
+        assert "'" in df.iloc[1].filing_description
+
+    def test_county_and_voltage_from_case_style(self):
+        style = puct.parse_results(self.SEARCH_HTML).iloc[0].case_style
+        assert puct.extract_county(style) == "Ellis"
+        assert puct.extract_voltage_kv(style) == 345
+
+    def test_county_absent_when_case_style_names_none(self):
+        # "IN EL PASO TEXAS" is a city, not a county; inventing one would place
+        # a rate proceeding on the map at a location it never claimed.
+        style = puct.parse_results(self.SEARCH_HTML).iloc[1].case_style
+        assert puct.extract_county(style) is None
+
+    @pytest.mark.parametrize("style,expected", [
+        ("APPLICATION FOR A NEW DATA CENTER RATE", "data_center"),
+        ("RULEMAKING TO IMPLEMENT LARGE LOAD INTERCONNECTION STANDARDS "
+         "UNDER PURA 37.0561", "large_load"),
+        ("APPLICATION OF LUMINANT POWER GENERATION LLC", "generation"),
+        ("AMEND ITS CERTIFICATE OF CONVENIENCE AND NECESSITY", "transmission"),
+        ("PETITION FOR ARBITRATION OF INTERCONNECTION RATES", "other"),
+    ])
+    def test_docket_relevance(self, style, expected):
+        assert puct.classify_docket(style) == expected
+
+    def test_docket_dates_and_parties(self):
+        filings = puct.parse_docket(self.DOCKET_HTML)
+        assert puct.docket_dates(filings) == ("2025-07-31", "2026-04-20")
+        # Commission staff file in every docket; who *came to* it is the signal.
+        assert puct.docket_parties(filings) == ["EdgeConneX"]
+
+    def test_utility_type_sent_as_code(self):
+        # The form displays "Electric" but posts "E"; sending the label is
+        # accepted and silently matches nothing.
+        assert puct._utility_code("Electric") == "E"
+        assert puct._utility_code("all") == "A"
+
+    def test_transmission_docket_is_not_generation(self):
+        df = puct.parse_results(self.SEARCH_HTML)
+        records = {r["source_key"]: r for r in puct.to_entities(df)}
+        line = records["52455"]
+        # A CCN for a tap line is paperwork about a plant, never a plant.
+        assert line["project_kind"] == classify.KIND_UNKNOWN
+        assert line["county"] == "Ellis"
+        assert line["geo_precision"] == "county"
+        assert line["capacity_mw"] is None
+
+    def test_data_center_docket_kept_as_load(self):
+        df = puct.parse_results(self.SEARCH_HTML)
+        records = {r["source_key"]: r for r in puct.to_entities(df)}
+        assert records["56903"]["project_kind"] == classify.KIND_DATA_CENTER
+        # No county in the case style means no coordinates, not a guess.
+        assert records["56903"]["geo_precision"] == "none"
+
+    def test_irrelevant_dockets_dropped_by_default(self):
+        df = pd.DataFrame([{
+            "control_number": "12345", "filings": "2", "utility": "SOME TELCO",
+            "case_style": "PETITION FOR ARBITRATION OF INTERCONNECTION RATES",
+        }])
+        assert puct.to_entities(df) == []
+        assert len(puct.to_entities(df, relevant_only=False)) == 1
+
+    def test_parties_reach_the_description(self):
+        df = pd.DataFrame([{
+            "control_number": "58481", "filings": "203",
+            "utility": "PUC RULES & PROJECTS",
+            "case_style": "RULEMAKING TO IMPLEMENT LARGE LOAD INTERCONNECTION "
+                          "STANDARDS UNDER PURA 37.0561",
+            "parties": "GOOGLE LLC; ROWAN DIGITAL INFRASTRUCTURE LLC",
+        }])
+        record = puct.to_entities(df)[0]
+        # ERCOT publishes the large-load queue in aggregate with no customer
+        # named; the docket's party list is where the names actually are, so it
+        # has to survive into the stored payload rather than only informing
+        # classification and then being dropped.
+        assert "GOOGLE LLC" in json.loads(record["raw_json"])["parties"]
+
+
+class TestProxyDiscovery:
+    """The transport must outlive a proxy that moves ports mid-run."""
+
+    def test_refused_connection_triggers_rediscovery(self, monkeypatch):
+        calls = []
+        monkeypatch.setattr(netmod, "_PROXY", "http://127.0.0.1:9", raising=False)
+        monkeypatch.setattr(netmod, "_PROXY_CHECKED", True, raising=False)
+        monkeypatch.setattr(netmod, "_discover", lambda: calls.append(1) or "")
+        netmod.current_proxy(rediscover=True)
+        assert calls, "a refused connection must re-ask which port the proxy is on"
+
+    def test_listening_ports_are_read_from_proc(self):
+        # The point of reading /proc rather than the environment: a running
+        # process's os.environ was snapshotted at exec and never updates.
+        ports = netmod._listening_ports()
+        assert isinstance(ports, list)
+        assert all(isinstance(p, int) for p in ports)
+
+
+class TestCrossSourceLinking:
+    """One project seen by ERCOT, TCEQ, PUCT and stormwater must resolve to one site."""
+
+    ERCOT = {
+        "entity_id": "ercot_gis:1", "source": "ercot_gis",
+        "name_norm": "hays energy unit 3 repower", "operator_norm": "hays energy",
+        "county_norm": "hays", "latitude": None, "longitude": None,
+        "geo_precision": "county",
+        "regulated_entity": None,
+    }
+    TCEQ = {
+        "entity_id": "tceq_air:1", "source": "tceq_air",
+        # TCEQ's export has no site name: the company goes in both fields.
+        "name_norm": "hays energy", "operator_norm": "hays energy",
+        "county_norm": "hays", "latitude": None, "longitude": None,
+        "geo_precision": "county",
+        "regulated_entity": "RN100542831",
+    }
+    PUCT = {
+        "entity_id": "puct:1", "source": "puct",
+        "name_norm": "hays energy", "operator_norm": "hays energy",
+        "county_norm": "hays", "latitude": None, "longitude": None,
+        "geo_precision": "county",
+        "regulated_entity": None, "permit_type": "PUCT generation docket",
+    }
+    NOI = {
+        "entity_id": "tceq_swnoi:1", "source": "tceq_swnoi",
+        "name_norm": "hays energy expansion", "operator_norm": "hays energy",
+        "county_norm": "hays", "latitude": None, "longitude": None,
+        "geo_precision": "county",
+        "regulated_entity": None,
+    }
+
+    def _unambiguous(self, rows):
+        return linkmod._unambiguous_operator_counties(rows)
+
+    def test_ercot_and_tceq_join_on_operator_and_county(self):
+        rows = [self.ERCOT, self.TCEQ]
+        score, method, _, _, _ = linkmod.score_pair(
+            self.ERCOT, self.TCEQ, unambiguous=self._unambiguous(rows)
+        )
+        # The names score too low to clear the same-source rule; the operator
+        # and county are all TCEQ can offer, and here they are decisive.
+        assert method == "cross_source_operator"
+        assert score >= linkmod.DEFAULT_THRESHOLD
+
+    def test_all_four_feeds_resolve_to_one_site(self):
+        rows = [self.ERCOT, self.TCEQ, self.PUCT, self.NOI]
+        links = linkmod.build_links(rows)
+        union = linkmod.UnionFind()
+        for row in rows:
+            union.add(row["entity_id"])
+        for link in links:
+            union.union(link["entity_a"], link["entity_b"])
+        roots = {union.find(row["entity_id"]) for row in rows}
+        assert len(roots) == 1, f"expected one site, got {len(roots)}"
+
+    def test_same_source_portfolio_still_requires_the_name(self):
+        # Two unrelated ERCOT projects from one developer in one county. This is
+        # the 42-project Brazoria over-merge; operator agreement must not be
+        # enough within a feed.
+        a = dict(self.ERCOT, entity_id="ercot_gis:a",
+                 name_norm="austin bayou solar", operator_norm="big developer",
+                 county_norm="brazoria")
+        b = dict(self.ERCOT, entity_id="ercot_gis:b",
+                 name_norm="bell creek storage", operator_norm="big developer",
+                 county_norm="brazoria")
+        score, method, _, _, _ = linkmod.score_pair(
+            a, b, unambiguous=self._unambiguous([a, b])
+        )
+        assert score == 0.0
+        assert method == "county_only_weak_text"
+
+    def test_ambiguous_operator_county_blocks_the_shortcut(self):
+        # One developer, one county, four distinct ERCOT projects: a TCEQ permit
+        # from that company could belong to any of them, so operator alone is a
+        # coin flip and must not link.
+        portfolio = [
+            dict(self.ERCOT, entity_id=f"ercot_gis:{i}", name_norm=name,
+                 operator_norm="big developer", county_norm="brazoria")
+            for i, name in enumerate(
+                ["austin bayou", "bell creek", "bodkin", "cascade"]
+            )
+        ]
+        permit = dict(self.TCEQ, entity_id="tceq_air:x",
+                      name_norm="big developer", operator_norm="big developer",
+                      county_norm="brazoria")
+        unambiguous = self._unambiguous(portfolio + [permit])
+        score, method, _, _, _ = linkmod.score_pair(
+            portfolio[0], permit, unambiguous=unambiguous
+        )
+        assert score == 0.0, f"linked on an ambiguous operator via {method}"
+
+    def test_different_counties_never_join(self):
+        far = dict(self.TCEQ, county_norm="harris")
+        score, _, _, _, _ = linkmod.score_pair(
+            self.ERCOT, far, unambiguous=self._unambiguous([self.ERCOT, far])
+        )
+        assert score == 0.0
+
+    def test_rulemaking_docket_is_not_a_site(self):
+        rulemaking = {
+            "entity_id": "puct:58481", "source": "puct",
+            "permit_type": "PUCT rulemaking / generic proceeding",
+        }
+        assert not linkmod.is_site_bearing(rulemaking)
+        assert linkmod.is_site_bearing(self.PUCT)
+
+    def test_cross_field_name_scoring_finds_the_pairing_that_matters(self):
+        # ERCOT's project name against TCEQ's company name is the comparison
+        # neither name-to-name nor operator-to-operator makes.
+        best = linkmod._best_name_score(
+            {"name_norm": "wild horse ranch energy center", "operator_norm": "x"},
+            {"name_norm": "y", "operator_norm": "wild horse ranch energy"},
+        )
+        assert best > 0.8
+
+
+class TestPuctApplicantExtraction:
+    """A docket joins the rest of the record through its applicant."""
+
+    @pytest.mark.parametrize("style,expected", [
+        ("APPLICATION OF BRAES BAYOU GENERATING, LLC FOR A CERTIFICATE",
+         "BRAES BAYOU GENERATING, LLC"),
+        ("PETITION OF VERTUS ENERGY STORAGE LLC TO AMEND", "VERTUS ENERGY STORAGE LLC"),
+        ("RULEMAKING TO IMPLEMENT LARGE LOAD STANDARDS", None),
+    ])
+    def test_applicant(self, style, expected):
+        assert puct.extract_applicant(style) == expected
+
+    def test_joint_application_takes_the_lead_filer(self):
+        style = ("JOINT APPLICATION OF SHARYLAND UTILITIES, L.P. AND CITY OF "
+                 "LUBBOCK FOR SALE")
+        assert puct.extract_applicant(style) == "SHARYLAND UTILITIES, L.P"
+
+    def test_named_line_becomes_the_project_name(self):
+        style = ("APPLICATION OF ONCOR ELECTRIC DELIVERY COMPANY LLC TO AMEND "
+                 "ITS CERTIFICATE OF CONVENIENCE AND NECESSITY FOR THE OLD "
+                 "COUNTRY SWITCH 345-KV TAP TRANSMISSION LINE IN ELLIS COUNTY")
+        assert "OLD COUNTRY SWITCH" in puct.extract_facility(style)
+
+    def test_applicant_beats_the_utility_column(self):
+        df = pd.DataFrame([{
+            "control_number": "59852", "filings": "4", "utility": "PUC OPDM",
+            "case_style": "APPLICATION OF BRAES BAYOU GENERATING, LLC FOR A "
+                          "CERTIFICATE OF CONVENIENCE AND NECESSITY",
+        }])
+        record = puct.to_entities(df)[0]
+        # Indexed under the Commission's docket-management office, but the
+        # company that can be matched to ERCOT and TCEQ is in the case style.
+        assert record["operator"] == "BRAES BAYOU GENERATING, LLC"
+
+    @pytest.mark.parametrize("utility,style", [
+        ("PUC RULES & PROJECTS", "RULEMAKING TO IMPLEMENT SB 6"),
+        ("PUC OPDM", "COMPLIANCE DOCKET FOR DOCKET NO. 46936"),
+    ])
+    def test_generic_proceedings_are_flagged(self, utility, style):
+        df = pd.DataFrame([{"control_number": "1", "filings": "1",
+                            "utility": utility, "case_style": style}])
+        records = puct.to_entities(df, relevant_only=False)
+        assert records[0]["permit_type"] == "PUCT rulemaking / generic proceeding"
+        assert not linkmod.is_site_bearing(records[0])

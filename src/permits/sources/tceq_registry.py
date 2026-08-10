@@ -30,6 +30,7 @@ import time
 import urllib.parse
 import urllib.request
 
+from .. import net
 from ..normalize import clean_str
 
 BASE = "https://www15.tceq.texas.gov/crpub/index.cfm"
@@ -53,28 +54,14 @@ _RE_ID = re.compile(r"re_id=(\d+)")
 
 
 def _get(url, timeout=60, jar=None):
-    # ProxyHandler() is constructed here rather than reused, so a sandbox proxy
-    # that changes port mid-run is picked up rather than stranding the sweep.
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    opener = jar or urllib.request.build_opener(
-        urllib.request.ProxyHandler(), urllib.request.HTTPCookieProcessor()
-    )
-    with opener.open(request, timeout=timeout) as response:
-        return response.read().decode("utf-8", errors="replace")
+    # `jar` carries the ColdFusion session cookie across the two-step lookup.
+    # The proxy is resolved per request by permits.net, so a sweep that outlives
+    # a proxy restart re-discovers the new port instead of stalling on it.
+    return net.request(url, timeout=timeout, jar=jar)
 
 
 def _post(url, fields, timeout=60, jar=None):
-    data = urllib.parse.urlencode(fields).encode("utf-8")
-    request = urllib.request.Request(
-        url, data=data,
-        headers={"User-Agent": USER_AGENT,
-                 "Content-Type": "application/x-www-form-urlencoded"},
-    )
-    opener = jar or urllib.request.build_opener(
-        urllib.request.ProxyHandler(), urllib.request.HTTPCookieProcessor()
-    )
-    with opener.open(request, timeout=timeout) as response:
-        return response.read().decode("utf-8", errors="replace")
+    return net.post(url, fields, timeout=timeout, jar=jar)
 
 
 def _plain(html):
@@ -113,7 +100,7 @@ def lookup(rn_number, timeout=60, jar=None):
     if len(rn) < 4:
         return None
 
-    jar = jar or urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
+    jar = jar or net.new_jar()
     search = _post(
         BASE,
         {
@@ -184,7 +171,7 @@ def enrich(rn_numbers, cache_path=DEFAULT_CACHE, delay=0.4, verbose=True,
     if verbose:
         print(f"  {len(cache)} cached, {len(pending)} to fetch")
 
-    jar = urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
+    jar = net.new_jar()
     for index, rn in enumerate(pending, 1):
         try:
             record = lookup(rn, timeout=timeout, jar=jar)

@@ -284,16 +284,64 @@ def _noi_frame():
     return pd.DataFrame(rows)
 
 
+# --- PUCT Interchange ---------------------------------------------------------
+# (dev_key, control, filings, utility, style_template, parties)
+# A docket is a proceeding about a project, not the project: the CCN rows name a
+# transmission line reaching a site, and the large-load rows name the customer
+# the utility is building for — which is the one thing ERCOT's aggregate
+# large-load queue never states.
+_PUCT_ROWS = [
+    ("brazos_ridge", "56412", 34, "ONCOR ELECTRIC DELIVERY CO",
+     "APPLICATION OF ONCOR ELECTRIC DELIVERY COMPANY LLC TO AMEND ITS CERTIFICATE "
+     "OF CONVENIENCE AND NECESSITY FOR THE {name} 345-KV TRANSMISSION LINE IN "
+     "{county} COUNTY", ""),
+    ("marlin_bend", "57120", 12, "ONCOR ELECTRIC DELIVERY CO",
+     "APPLICATION OF ONCOR ELECTRIC DELIVERY COMPANY LLC FOR AN ECONOMIC "
+     "DEVELOPMENT RATE RIDER FOR A NEW DATA CENTER SERVING {operator}", ""),
+    ("sabine_point", "56880", 21, "ENTERGY TEXAS, INC.",
+     "APPLICATION OF ENTERGY TEXAS, INC. TO AMEND ITS CERTIFICATE OF CONVENIENCE "
+     "AND NECESSITY FOR THE {name} 138-KV TRANSMISSION LINE IN {county} COUNTY", ""),
+    (None, "58481", 203, "PUC RULES & PROJECTS",
+     "RULEMAKING TO IMPLEMENT LARGE LOAD INTERCONNECTION STANDARDS UNDER "
+     "PURA 37.0561",
+     "Marlin Bend Data Works LLC; Redbud Digital Holdings LLC; Kiowa Draw Mining "
+     "Company LLC"),
+]
+
+
+def _puct_frame():
+    rows = []
+    for key, control, filings, utility, template, parties in _PUCT_ROWS:
+        if key:
+            name, operator, county, _, _ = _dev(key)
+        else:
+            name = operator = county = ""
+        rows.append(
+            {
+                "control_number": control,
+                "filings": filings,
+                "utility": utility,
+                "case_style": template.format(
+                    name=name.upper(), operator=operator.upper(),
+                    county=county.upper(),
+                ),
+                "parties": parties,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 FRAME_BUILDERS = {
     "ercot-gis-report-demo.csv": _gis_frame,
     "ercot-large-load-demo.csv": _large_load_frame,
     "tceq-air-nsr-demo.csv": _air_frame,
     "tceq-stormwater-noi-demo.csv": _noi_frame,
+    "puct-interchange-dockets-demo.csv": _puct_frame,
 }
 
 
 def write_demo_files(directory):
-    """Write the four synthetic exports. Returns the list of paths written."""
+    """Write the synthetic exports, one per source. Returns the paths written."""
     os.makedirs(directory, exist_ok=True)
     paths = []
     for filename, builder in FRAME_BUILDERS.items():
@@ -305,10 +353,11 @@ def write_demo_files(directory):
     with open(readme, "w") as handle:
         handle.write(
             DEMO_BANNER + "\n\n"
-            "These four CSVs imitate the column layout of the real ERCOT GIS,\n"
-            "ERCOT large load, TCEQ air NSR and TCEQ stormwater NOI exports so the\n"
-            "ingest pipeline can be run end to end offline. Every project name,\n"
-            "company, permit number and coordinate is fabricated.\n"
+            "These CSVs imitate the column layout of the real ERCOT GIS, ERCOT\n"
+            "large load, TCEQ air NSR, TCEQ stormwater NOI and PUCT Interchange\n"
+            "exports so the ingest pipeline can be run end to end offline. Every\n"
+            "project name, company, docket number, permit number and coordinate\n"
+            "is fabricated.\n"
         )
     return paths
 

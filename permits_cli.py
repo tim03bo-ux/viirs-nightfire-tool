@@ -159,6 +159,16 @@ def cmd_sites(args):
     return 0
 
 
+# Site-name patterns for standby generators at premises whose business is not
+# electricity. Matched against UPPER(project_name) with SQL LIKE.
+BACKUP_GENSET_PATTERNS = [
+    "%WAL-MART%", "%WALMART%", "%SUPERCENTER%", "%SAM'S CLUB%", "%COSTCO%",
+    "%KROGER%", "%WALGREEN%", "%DOLLAR GENERAL%", "%DOLLAR TREE%",
+    "%HOSPITAL%", "%MEDICAL CENTER%", "%UNIVERSITY%", "% ISD%", "%SCHOOL%",
+    "%NURSING%", "%APARTMENT%", "%CHURCH%",
+]
+
+
 def cmd_scrape(args):
     """Pull permit documents and extract unit MW / engine manufacturer."""
     from src.permits.sources import tceq_records
@@ -197,8 +207,25 @@ def cmd_scrape(args):
             if args.lifecycle:
                 sql += " AND lifecycle = ?"
                 params.append(args.lifecycle)
+            if args.skip_backup:
+                # TCEQ's electric-generating-facilities unit rule covers any
+                # site with a generator, so a big-box store's emergency genset
+                # sits in the same list as a merchant peaker. Both are real
+                # authorizations, but a Walmart's standby diesel is not a
+                # generation project, and there are enough of them to spend a
+                # sweep on before reaching anything that matters.
+                for pattern in BACKUP_GENSET_PATTERNS:
+                    sql += " AND UPPER(COALESCE(project_name, '')) NOT LIKE ?"
+                    params.append(pattern)
             sql += (" ORDER BY CASE permit_program WHEN 'psd' THEN 0 "
-                    "WHEN 'nonattainment_nsr' THEN 1 WHEN 'nsr' THEN 2 ELSE 3 END "
+                    "WHEN 'nonattainment_nsr' THEN 1 WHEN 'nsr' THEN 2 ELSE 3 END, "
+                    # Then by how much the name claims to be generation: a sweep
+                    # that is cut short should have spent its time on plants.
+                    "CASE WHEN UPPER(COALESCE(project_name, '')) LIKE '%GENERATING%' "
+                    "       OR UPPER(COALESCE(project_name, '')) LIKE '%ENERGY CENTER%' "
+                    "       OR UPPER(COALESCE(project_name, '')) LIKE '%POWER%' "
+                    "       OR UPPER(COALESCE(project_name, '')) LIKE '%PEAK%' "
+                    "  THEN 0 ELSE 1 END "
                     "LIMIT ?")
             params.append(args.limit)
             targets = [(r[0], r[1]) for r in conn.execute(sql, params)]
@@ -264,6 +291,76 @@ def cmd_scrape(args):
 def cmd_enrich(args):
     pipeline.enrich_registry(args.db, limit=args.limit, delay=args.delay,
                              lifecycle=args.lifecycle, county=args.county)
+    if not args.no_link:
+        print("Linking...")
+        pipeline.relink(args.db)
+    return 0
+
+
+DEFAULT_PUCT_QUERIES = [
+    "data center", "large load", "transmission line",
+    "certificate of convenience and necessity", "generating", "energy storage",
+    "economic development rate",
+]
+
+
+def cmd_puct(args):
+    """Pull PUCT Interchange dockets and store them as entities.
+
+    The default queries cover the case styles that touch generation and large
+    load. `--parties` opens each docket to collect who filed in it, which is the
+    only public place a named data-center operator meets a named utility —
+    ERCOT publishes its large-load queue in aggregate.
+    """
+    import pandas as pd
+
+    from src.permits.sources import puct
+
+    queries = args.query or DEFAULT_PUCT_QUERIES
+    frames = []
+    for query in queries:
+        try:
+            frame = puct.search(
+                case_style=query, date_from=args.since, date_to=args.until,
+                utility_type=args.utility_type,
+            )
+            print(f"  '{query}': {len(frame)} dockets")
+            frames.append(frame)
+        except Exception as exc:
+            print(f"  ERROR '{query}': {exc}")
+
+    if not frames:
+        print("no dockets returned")
+        return 1
+
+    df = pd.concat(frames, ignore_index=True).drop_duplicates("control_number")
+    print(f"  {len(df)} distinct dockets")
+
+    if args.parties:
+        print("Fetching docket filing lists...")
+        df = puct.enrich_dockets(df, delay=args.delay, limit=args.limit)
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.out)) or ".", exist_ok=True)
+    df.to_csv(args.out, index=False)
+    print(f"  wrote {args.out}")
+
+    if args.no_ingest:
+        return 0
+
+    conn = dbmod.open_db(args.db)
+    try:
+        file_id = dbmod.record_source_file(
+            conn, puct.SOURCE, uri=os.path.abspath(args.out), sha256=None,
+            n_rows=len(df), notes="PUCT Interchange docket search",
+        )
+        records = puct.to_entities(
+            df, source_file_id=file_id, relevant_only=not args.all,
+        )
+        inserted, updated = dbmod.upsert_entities(conn, records)
+        print(f"  puct: {len(records)} records ({inserted} new, {updated} updated)")
+    finally:
+        conn.close()
+
     if not args.no_link:
         print("Linking...")
         pipeline.relink(args.db)
@@ -558,6 +655,10 @@ def build_parser():
                           "statewide sweep is hundreds of GB")
     sub.add_argument("--restart", action="store_true",
                      help="ignore prior results and scrape everything again")
+    sub.add_argument("--skip-backup", action="store_true",
+                     help="drop standby gensets at stores, schools and "
+                          "hospitals — they hold the same unit-rule "
+                          "authorization as a peaker but are not projects")
     sub.set_defaults(func=cmd_scrape)
 
     sub = subparsers.add_parser(
@@ -571,6 +672,28 @@ def build_parser():
     sub.add_argument("--county")
     sub.add_argument("--no-link", action="store_true")
     sub.set_defaults(func=cmd_enrich)
+
+    sub = subparsers.add_parser(
+        "puct", help="pull PUCT Interchange dockets (CCN, transmission, large load)"
+    )
+    sub.add_argument("--query", action="append",
+                     help="case-style search term; repeatable (default: a "
+                          "generation/large-load set)")
+    sub.add_argument("--since", default="01/01/2023", help="MM/DD/YYYY")
+    sub.add_argument("--until", default=None, help="MM/DD/YYYY")
+    sub.add_argument("--utility-type", default="Electric",
+                     help="Electric, Water, Telephone, Others or All")
+    sub.add_argument("--parties", action="store_true",
+                     help="open each docket for its filing parties and dates")
+    sub.add_argument("--limit", type=int, default=None,
+                     help="with --parties, stop after this many dockets")
+    sub.add_argument("--delay", type=float, default=0.5)
+    sub.add_argument("--all", action="store_true",
+                     help="keep dockets unrelated to generation or load")
+    sub.add_argument("--out", default=os.path.join(DEFAULT_RAW, "puct_dockets.csv"))
+    sub.add_argument("--no-ingest", action="store_true")
+    sub.add_argument("--no-link", action="store_true")
+    sub.set_defaults(func=cmd_puct)
 
     sub = subparsers.add_parser(
         "timing", help="how long decided permits took, filing to decision"
