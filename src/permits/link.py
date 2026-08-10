@@ -90,6 +90,11 @@ MIN_OPERATOR_FOR_COUNTY_MATCH = 0.75
 # hold a portfolio in one county, a permit could belong to any of them and the
 # name has to decide, exactly as before.
 CROSS_SOURCE_OPERATOR_MATCH = 0.88
+# Not a fitted number. Of the 46 operator+county keys where ERCOT and TCEQ both
+# hold records, 44 have three or fewer distinct TCEQ sites and 42 have exactly
+# one — then a gap, and the remaining two sit at 21 and 45, which are oil and gas
+# well portfolios rather than power projects. Any threshold from 3 to 20 selects
+# the same set, so this picks the conservative end of a wide plateau.
 MAX_NAMES_FOR_OPERATOR_ALONE = 3
 
 # Preference order when picking a site's display name / operator.
