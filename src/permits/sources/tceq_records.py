@@ -34,6 +34,7 @@ import json
 import os
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -65,10 +66,45 @@ USEFUL_TITLE_HINTS = [
 ]
 
 
-def _get(url, timeout=90):
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read()
+# Retry/backoff schedule for transient transport failures, in seconds.
+_RETRY_DELAYS = (2, 5, 15, 30, 60)
+
+
+def _opener():
+    """A fresh opener, so the proxy is re-read from the environment every call.
+
+    urllib caches whatever ProxyHandler it was built with, and this sandbox
+    cycles its proxy port periodically. A long-running sweep built once at start
+    keeps pointing at the dead port and degrades into an unbroken run of
+    "connection refused" — it looks alive while producing nothing. Constructing
+    the handler per request costs microseconds and makes a port change
+    self-healing instead of fatal.
+    """
+    return urllib.request.build_opener(
+        urllib.request.ProxyHandler(),          # reads getproxies() now, not at import
+        urllib.request.HTTPCookieProcessor(),
+    )
+
+
+def _get(url, timeout=90, retries=len(_RETRY_DELAYS)):
+    """Fetch a URL, retrying transport failures with backoff.
+
+    Only connection-level errors are retried. An HTTP status is the server's
+    answer and is returned to the caller as-is.
+    """
+    last = None
+    for attempt in range(retries + 1):
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            with _opener().open(request, timeout=timeout) as response:
+                return response.read()
+        except urllib.error.HTTPError:
+            raise
+        except (urllib.error.URLError, OSError, TimeoutError) as exc:
+            last = exc
+            if attempt < retries:
+                time.sleep(_RETRY_DELAYS[min(attempt, len(_RETRY_DELAYS) - 1)])
+    raise last
 
 
 def client_ip(timeout=30):

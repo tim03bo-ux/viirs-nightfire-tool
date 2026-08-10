@@ -53,9 +53,11 @@ _RE_ID = re.compile(r"re_id=(\d+)")
 
 
 def _get(url, timeout=60, jar=None):
+    # ProxyHandler() is constructed here rather than reused, so a sandbox proxy
+    # that changes port mid-run is picked up rather than stranding the sweep.
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     opener = jar or urllib.request.build_opener(
-        urllib.request.HTTPCookieProcessor()
+        urllib.request.ProxyHandler(), urllib.request.HTTPCookieProcessor()
     )
     with opener.open(request, timeout=timeout) as response:
         return response.read().decode("utf-8", errors="replace")
@@ -69,7 +71,7 @@ def _post(url, fields, timeout=60, jar=None):
                  "Content-Type": "application/x-www-form-urlencoded"},
     )
     opener = jar or urllib.request.build_opener(
-        urllib.request.HTTPCookieProcessor()
+        urllib.request.ProxyHandler(), urllib.request.HTTPCookieProcessor()
     )
     with opener.open(request, timeout=timeout) as response:
         return response.read().decode("utf-8", errors="replace")
