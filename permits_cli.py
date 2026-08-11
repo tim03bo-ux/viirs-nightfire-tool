@@ -222,11 +222,15 @@ def cmd_scrape(args):
             # have the database — the target list is the only thing it needs
             # from it, and shipping 1,200 identifiers beats shipping 127 MB.
             with open(args.rn_file) as handle:
-                targets = [
-                    (line.split(",")[0].strip(), None)
-                    for line in handle
-                    if line.strip() and not line.startswith("#")
-                ]
+                targets = []
+                for line in handle:
+                    if not line.strip() or line.startswith("#"):
+                        continue
+                    parts = line.split(",", 1)
+                    # Second column is the operator, carried only so progress
+                    # lines can name what is being scraped.
+                    targets.append((parts[0].strip(),
+                                    parts[1].strip() if len(parts) > 1 else None))
             if args.limit:
                 targets = targets[:args.limit]
         elif args.rn:
@@ -281,7 +285,9 @@ def cmd_scrape(args):
                     "       OR UPPER(COALESCE(project_name, '')) LIKE '%PEAK%' "
                     "  THEN 0 ELSE 1 END "
                     "LIMIT ?")
-            params.append(args.limit)
+            # SQLite rejects LIMIT NULL outright ("datatype mismatch"); -1 is
+            # its spelling of "no limit".
+            params.append(args.limit if args.limit else -1)
             targets = [(r[0], r[1]) for r in conn.execute(sql, params)]
     finally:
         conn.close()
@@ -809,7 +815,10 @@ def build_parser():
                           "psd,nonattainment_nsr — the major-source filings are "
                           "the ones carrying unit tables")
     sub.add_argument("--lifecycle", help="restrict to e.g. pending")
-    sub.add_argument("--limit", type=int, default=25)
+    sub.add_argument("--limit", type=int, default=None,
+                     help="stop after this many entities; default is all of "
+                          "them. This defaulted to 25 and silently truncated a "
+                          "1,140-entity sweep to 25 — a sweep should sweep")
     sub.add_argument("--max-docs", type=int, default=6,
                      help="documents to open per entity")
     sub.add_argument("--delay", type=float, default=1.0)
