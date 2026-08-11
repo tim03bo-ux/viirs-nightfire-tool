@@ -1478,3 +1478,41 @@ class TestStormwaterNameSearch:
         # phys_name is the site name; princ_name is the permittee.
         assert values["phys_name"] == "SOLAR"
         assert values["princ_name"] == ""
+
+
+class TestStormwaterCheckpoint:
+    """A sweep of thousands of pages has to survive the container going away."""
+
+    def test_cached_details_are_not_refetched(self, tmp_path, monkeypatch):
+        path = tmp_path / "ck.json"
+        path.write_text(json.dumps({"TXR1": {"acres": "40", "regulated_entity": "RN1"}}))
+        calls = []
+
+        def fake_fetch(url, timeout=90, jar=None):
+            calls.append(url)
+            return {"acres": "99", "regulated_entity": "RN2"}
+
+        monkeypatch.setattr(tceq_stormwater, "fetch_detail", fake_fetch)
+        df = pd.DataFrame([
+            {"Auth #": "TXR1", "detail_url": "a"},
+            {"Auth #": "TXR2", "detail_url": "b"},
+        ])
+        out = tceq_stormwater.enrich(df, delay=0, verbose=False, checkpoint=str(path))
+        assert len(calls) == 1, "the cached authorization was fetched again"
+        assert out.set_index("Auth #").loc["TXR1", "acres"] == "40"
+        # And the newly fetched one is persisted for the next run.
+        assert "TXR2" in json.loads(path.read_text())
+
+    def test_a_failed_fetch_is_not_cached(self, tmp_path, monkeypatch):
+        # A proxy restart or an expired session is transient; caching the
+        # failure would make the gap permanent across every future run.
+        path = tmp_path / "ck.json"
+
+        def boom(url, timeout=90, jar=None):
+            raise ValueError("session expired")
+
+        monkeypatch.setattr(tceq_stormwater, "fetch_detail", boom)
+        df = pd.DataFrame([{"Auth #": "TXR9", "detail_url": "a"}])
+        out = tceq_stormwater.enrich(df, delay=0, verbose=False, checkpoint=str(path))
+        assert "detail_error" in out.columns
+        assert json.loads(path.read_text()) == {}

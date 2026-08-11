@@ -43,6 +43,8 @@ tagged `construction` and surface in the dashboard as leads rather than as
 confirmed data centers.
 """
 
+import json
+import os
 import re
 import time
 import urllib.parse
@@ -424,7 +426,26 @@ def fetch_detail(detail_url, timeout=90, jar=None):
     return parse_detail(html)
 
 
-def enrich(df, delay=0.4, limit=None, verbose=True, timeout=90, jar=None):
+def _load_checkpoint(path):
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        with open(path) as handle:
+            return json.load(handle)
+    except (ValueError, OSError):
+        return {}
+
+
+def _save_checkpoint(path, cache):
+    if not path:
+        return
+    os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
+    with open(path, "w") as handle:
+        json.dump(cache, handle, indent=0, sort_keys=True)
+
+
+def enrich(df, delay=0.4, limit=None, verbose=True, timeout=90, jar=None,
+           checkpoint=None, flush_every=25):
     """Add acreage, coordinates, dates and the RN to each grid row.
 
     One request per authorization, so it is opt-in — but it is what turns a
@@ -435,22 +456,46 @@ def enrich(df, delay=0.4, limit=None, verbose=True, timeout=90, jar=None):
     rows = df.to_dict("records")
     if limit:
         rows = rows[:limit]
-    out = []
+
+    # A statewide sweep is thousands of round trips over hours, and this
+    # container is reclaimed on idle. Writing only at the end meant one restart
+    # threw away 3,425 completed detail fetches, so results are cached by
+    # authorization number as they arrive and a re-run skips what it already
+    # has. The grid search is cheap and is simply redone — its detail links are
+    # session-scoped and could not be reused across a restart anyway.
+    cache = _load_checkpoint(checkpoint)
+    if verbose and cache:
+        print(f"    resuming: {len(cache)} details already fetched")
+
+    out, fetched = [], 0
     for index, row in enumerate(rows, 1):
+        key = str(row.get("Auth #") or "")
+        cached = cache.get(key)
+        if cached is not None:
+            out.append(dict(row, **cached))
+            continue
         try:
-            row = dict(row, **fetch_detail(row.get("detail_url"), timeout=timeout,
-                                           jar=jar))
+            detail = fetch_detail(row.get("detail_url"), timeout=timeout, jar=jar)
         except Exception as exc:
-            row = dict(row, detail_error=str(exc)[:120])
-        out.append(row)
-        if verbose and index % 25 == 0:
-            print(f"    {index}/{len(rows)} details")
+            detail = {"detail_error": str(exc)[:120]}
+        # A failed fetch is not cached: a proxy restart or an expired session is
+        # transient, and freezing it in would make the gap permanent.
+        if key and "detail_error" not in detail:
+            cache[key] = detail
+        out.append(dict(row, **detail))
+        fetched += 1
+        if verbose and fetched % 25 == 0:
+            print(f"    {index}/{len(rows)} details ({fetched} new)")
+        if checkpoint and fetched % flush_every == 0:
+            _save_checkpoint(checkpoint, cache)
         time.sleep(delay)
+
+    _save_checkpoint(checkpoint, cache)
     return pd.DataFrame(out)
 
 
 def collect_names(terms=None, details=True, detail_limit=None, delay=0.4,
-                  verbose=True, **kwargs):
+                  verbose=True, checkpoint=None, **kwargs):
     """Sweep by site name, keeping only real word-boundary matches.
 
     Returns a DataFrame with a `matched_term` column recording which term found
@@ -464,7 +509,7 @@ def collect_names(terms=None, details=True, detail_limit=None, delay=0.4,
                 print(f"  '{term}':")
             found = collect(site_name=term, details=details,
                             detail_limit=detail_limit, delay=delay,
-                            verbose=verbose, **kwargs)
+                            verbose=verbose, checkpoint=checkpoint, **kwargs)
         except Exception as exc:
             print(f"  ERROR '{term}': {str(exc)[:120]}")
             continue
@@ -482,7 +527,7 @@ def collect_names(terms=None, details=True, detail_limit=None, delay=0.4,
 
 
 def collect(sic=None, county=None, details=True, detail_limit=None,
-            delay=0.4, verbose=True, **kwargs):
+            delay=0.4, verbose=True, checkpoint=None, **kwargs):
     """Search and enrich in one pass. Returns a DataFrame ready for ingest.
 
     This is the entry point worth using. Two things it gets right that are easy
@@ -510,7 +555,7 @@ def collect(sic=None, county=None, details=True, detail_limit=None,
             if verbose:
                 print(f"    details for {len(found)} authorizations...")
             found = enrich(found, delay=delay, limit=detail_limit,
-                           verbose=verbose, jar=jar)
+                           verbose=verbose, jar=jar, checkpoint=checkpoint)
         frames.append(found)
 
     if not frames:

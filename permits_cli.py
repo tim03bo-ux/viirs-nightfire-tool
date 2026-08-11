@@ -390,11 +390,13 @@ def cmd_stormwater(args):
         df = sw.collect_names(
             terms=terms, details=not args.no_details,
             detail_limit=args.limit, delay=args.delay,
+            checkpoint=args.checkpoint,
         )
     else:
         df = sw.collect(
             sic=sic, county=args.county, details=not args.no_details,
             detail_limit=args.limit, delay=args.delay,
+            checkpoint=args.checkpoint,
         )
     if df.empty:
         print("no NOIs returned")
@@ -752,6 +754,10 @@ def build_parser():
     sub.add_argument("--limit", type=int, default=None,
                      help="stop after this many detail fetches")
     sub.add_argument("--delay", type=float, default=0.4)
+    sub.add_argument("--checkpoint",
+                     default=os.path.join("data", "cache", "swnoi_details.json"),
+                     help="cache of fetched detail pages; a re-run resumes from "
+                          "it rather than re-fetching thousands of pages")
     sub.add_argument("--out", default=os.path.join(DEFAULT_RAW, "tceq_swnoi.csv"))
     sub.add_argument("--no-ingest", action="store_true")
     sub.add_argument("--no-link", action="store_true")
