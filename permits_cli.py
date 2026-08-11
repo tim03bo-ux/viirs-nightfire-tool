@@ -169,6 +169,25 @@ BACKUP_GENSET_PATTERNS = [
 ]
 
 
+def _write_json_atomic(path, payload):
+    """Write json via a temp file and rename, so a kill cannot truncate it.
+
+    Writing in place is not safe here. The scrape flushes after every entity and
+    this container is reclaimed without warning, so `open(path, "w")` was
+    regularly caught between truncating the file and finishing the dump — the
+    results landed on disk as invalid json, and the next run, unable to parse
+    it, would have started again from zero and redone hours of downloads.
+    os.replace is atomic on the same filesystem: readers see either the old
+    complete file or the new one, never a half-written one.
+    """
+    tmp = f"{path}.tmp"
+    with open(tmp, "w") as handle:
+        json.dump(payload, handle, indent=1)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(tmp, path)
+
+
 def cmd_scrape(args):
     """Pull permit documents and extract unit MW / engine manufacturer."""
     from src.permits.sources import tceq_records
@@ -281,12 +300,10 @@ def cmd_scrape(args):
         # a flush-every-5 rule that persisted nothing at all, and the sweep sat
         # at the same count across four consecutive restarts.
         if True:
-            with open(args.out, "w") as handle:
-                json.dump(results, handle, indent=1)
+            _write_json_atomic(args.out, results)
             print(f"    ... {index}/{len(todo)} scraped", flush=True)
 
-    with open(args.out, "w") as handle:
-        json.dump(results, handle, indent=1)
+    _write_json_atomic(args.out, results)
     hits = sum(1 for r in results if r["max_mw"] or r["manufacturers"])
     print(f"\n{hits}/{len(results)} entities yielded MW or manufacturer data "
           f"-> {args.out}")
