@@ -188,13 +188,48 @@ def _write_json_atomic(path, payload):
     os.replace(tmp, path)
 
 
+def _scrape_failure(rn, exc):
+    """A placeholder result. Not cached as done, so a re-run retries it."""
+    return {"regulated_entity": rn, "error": f"{type(exc).__name__}: {exc}"[:150],
+            "max_mw": None, "manufacturers": [], "models": [],
+            "documents_total": 0, "documents_read": 0, "findings": []}
+
+
+def _scrape_one(rn, operator, dest_dir, max_docs, delay, keep_files):
+    """One entity, in a worker process. Must be importable at module level."""
+    from src.permits.sources import tceq_records
+
+    try:
+        # Each worker takes its own access id: the grant is tied to a session
+        # and sharing one across processes would have them invalidate it for
+        # each other.
+        return tceq_records.scrape_entity(
+            rn, dest_dir, max_docs=max_docs, delay=delay, verbose=False,
+            keep_files=keep_files,
+        )
+    except Exception as exc:
+        return _scrape_failure(rn, exc)
+
+
 def cmd_scrape(args):
     """Pull permit documents and extract unit MW / engine manufacturer."""
     from src.permits.sources import tceq_records
 
     conn = dbmod.open_db(args.db)
     try:
-        if args.rn:
+        if args.rn_file:
+            # A plain list of RNs, so the scrape can run somewhere that does not
+            # have the database — the target list is the only thing it needs
+            # from it, and shipping 1,200 identifiers beats shipping 127 MB.
+            with open(args.rn_file) as handle:
+                targets = [
+                    (line.split(",")[0].strip(), None)
+                    for line in handle
+                    if line.strip() and not line.startswith("#")
+                ]
+            if args.limit:
+                targets = targets[:args.limit]
+        elif args.rn:
             targets = [(args.rn, None)]
         else:
             # Generation first, and within that the case-by-case programs, since
@@ -293,32 +328,58 @@ def cmd_scrape(args):
     print(f"{len(targets)} entities selected, {len(done)} already done, "
           f"{len(todo)} to scrape")
 
-    access = tceq_records.get_access_id()
-    for index, (rn, operator) in enumerate(todo, 1):
-        try:
-            found = tceq_records.scrape_entity(
-                rn, args.dir, max_docs=args.max_docs, access=access,
-                delay=args.delay, verbose=False, keep_files=args.keep_files,
-            )
-        except Exception as exc:
-            print(f"  {rn}: ERROR {type(exc).__name__}: {exc}", flush=True)
-            found = {"regulated_entity": rn, "error": str(exc)[:150],
-                     "max_mw": None, "manufacturers": [], "models": [],
-                     "documents_total": 0, "documents_read": 0, "findings": []}
+    def flush(index):
+        _write_json_atomic(args.out, results)
+        print(f"    ... {index}/{len(todo)} scraped", flush=True)
+
+    def report(index, rn, operator, found):
         if found.get("max_mw") or found.get("manufacturers"):
             print(f"  [{index}/{len(todo)}] {rn} "
                   f"{str(found.get('entity_name') or operator)[:30]:30} "
                   f"max_mw={found['max_mw']} mfr={found['manufacturers'][:3]}",
                   flush=True)
-        results.append(found)
-        # Flush every entity, not every fifth. This container is reclaimed
-        # after ~10 minutes of conversation idle, and one entity means up to six
-        # PDF downloads, so a window often completes only three or four — under
-        # a flush-every-5 rule that persisted nothing at all, and the sweep sat
-        # at the same count across four consecutive restarts.
-        if True:
-            _write_json_atomic(args.out, results)
-            print(f"    ... {index}/{len(todo)} scraped", flush=True)
+
+    if args.workers > 1:
+        # Extraction, not the network, is the cost: TCEQ answers a document
+        # search in under a second and serves a typical permit pdf in a few, but
+        # pdfplumber reconstructs table geometry on scanned pages and pins a
+        # core doing it. So this is processes rather than threads — the GIL
+        # would serialise exactly the part that is slow.
+        #
+        # Results are collected in the parent and flushed as each entity lands,
+        # so a kill still leaves a complete file and a resumable run.
+        from concurrent.futures import ProcessPoolExecutor, as_completed
+
+        print(f"  {args.workers} workers", flush=True)
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            futures = {
+                pool.submit(_scrape_one, rn, operator, args.dir, args.max_docs,
+                            args.delay, args.keep_files): (rn, operator)
+                for rn, operator in todo
+            }
+            for index, future in enumerate(as_completed(futures), 1):
+                rn, operator = futures[future]
+                try:
+                    found = future.result()
+                except Exception as exc:
+                    found = _scrape_failure(rn, exc)
+                report(index, rn, operator, found)
+                results.append(found)
+                flush(index)
+    else:
+        access = tceq_records.get_access_id()
+        for index, (rn, operator) in enumerate(todo, 1):
+            try:
+                found = tceq_records.scrape_entity(
+                    rn, args.dir, max_docs=args.max_docs, access=access,
+                    delay=args.delay, verbose=False, keep_files=args.keep_files,
+                )
+            except Exception as exc:
+                print(f"  {rn}: ERROR {type(exc).__name__}: {exc}", flush=True)
+                found = _scrape_failure(rn, exc)
+            report(index, rn, operator, found)
+            results.append(found)
+            flush(index)
 
     _write_json_atomic(args.out, results)
     hits = sum(1 for r in results if r["max_mw"] or r["manufacturers"])
@@ -737,6 +798,9 @@ def build_parser():
         "scrape", help="pull permit documents; extract unit MW and manufacturer"
     )
     sub.add_argument("--rn", help="scrape one regulated entity")
+    sub.add_argument("--rn-file",
+                     help="file of regulated-entity numbers, one per line; lets "
+                          "the scrape run without the database")
     sub.add_argument("--from-file", dest="from_file",
                      help="scrape entities from one ingested export, matched on "
                           "its filename, e.g. electric_generating")
@@ -756,6 +820,10 @@ def build_parser():
                           "statewide sweep is hundreds of GB")
     sub.add_argument("--restart", action="store_true",
                      help="ignore prior results and scrape everything again")
+    sub.add_argument("--workers", type=int, default=1,
+                     help="parallel worker processes. Extraction is CPU-bound, "
+                          "so this scales with cores; 1 keeps the old "
+                          "sequential behaviour")
     sub.add_argument("--skip-backup", action="store_true",
                      help="drop standby gensets at stores, schools and "
                           "hospitals — they hold the same unit-rule "
