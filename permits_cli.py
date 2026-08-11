@@ -275,7 +275,12 @@ def cmd_scrape(args):
                   f"max_mw={found['max_mw']} mfr={found['manufacturers'][:3]}",
                   flush=True)
         results.append(found)
-        if index % 5 == 0 or index == len(todo):
+        # Flush every entity, not every fifth. This container is reclaimed
+        # after ~10 minutes of conversation idle, and one entity means up to six
+        # PDF downloads, so a window often completes only three or four — under
+        # a flush-every-5 rule that persisted nothing at all, and the sweep sat
+        # at the same count across four consecutive restarts.
+        if True:
             with open(args.out, "w") as handle:
                 json.dump(results, handle, indent=1)
             print(f"    ... {index}/{len(todo)} scraped", flush=True)
