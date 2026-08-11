@@ -269,8 +269,25 @@ def cmd_scrape(args):
                 r.get("regulated_entity") for r in results if not r.get("error")
             }
             results = [r for r in results if not r.get("error")]
-        except (ValueError, OSError):
-            results, done = [], set()
+        except (ValueError, OSError) as exc:
+            # Do NOT silently start over. An unreadable results file is almost
+            # always a truncated write, not an empty one, and starting from zero
+            # then overwrites the very file that still holds the work — which is
+            # how 606 scraped entities were lost here. Keep the corpse for
+            # salvage and refuse to run until a human has looked at it.
+            salvage = f"{args.out}.corrupt"
+            try:
+                os.replace(args.out, salvage)
+            except OSError:
+                pass
+            print(
+                f"error: {args.out} is unreadable ({type(exc).__name__}). "
+                f"Moved it to {salvage} rather than overwrite it — it is likely "
+                f"a truncated write and may still be salvageable with "
+                f"`repair-units`. Pass --restart to deliberately begin again.",
+                file=sys.stderr,
+            )
+            return 2
 
     todo = [(rn, op) for rn, op in targets if rn not in done]
     print(f"{len(targets)} entities selected, {len(done)} already done, "
