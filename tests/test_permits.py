@@ -4,6 +4,7 @@ test_permits.py — Unit tests for the TCEQ / ERCOT permit database.
 Run with: python -m pytest tests/test_permits.py -v
 """
 
+import argparse
 import json
 import os
 import tempfile
@@ -17,7 +18,8 @@ from src.permits import (
 )
 from src.permits import net as netmod
 import permits_cli
-from src.permits.sources import base, ercot, puct, tceq_air, tceq_stormwater
+from src.permits.sources import (base, ercot, puct, tceq_air,
+                                 tceq_records, tceq_stormwater)
 
 
 class TestNormalize:
@@ -1630,3 +1632,139 @@ class TestScrapeTargetFile:
             targets, malformed = permits_cli.read_rn_file(path)
             assert not malformed, f"{name}: {malformed[:3]}"
             assert targets, f"{name} is empty"
+
+
+class TestDocumentPaging:
+    """search_all_documents must walk the whole docket, not page one.
+
+    search_documents asks for 50 rows sorted newest-first. A station docket runs
+    to hundreds -- 743 for one Houston plant -- so stopping at page one sampled
+    the 50 most recent records. The unit tables live in the original
+    application, the oldest record, so that page was the least likely to hold
+    what the scrape was after.
+    """
+
+    def _pages(self, total, page_size=50):
+        """A fake search_documents over `total` synthetic documents."""
+        calls = []
+
+        def fake(result_count=50, start_row=0, **kw):
+            calls.append(start_row)
+            rows = [{"doc_id": str(i), "title": "application", "extension": "pdf"}
+                    for i in range(start_row, min(start_row + result_count, total))]
+            return rows, total
+        return fake, calls
+
+    def test_follows_every_page(self, monkeypatch):
+        fake, calls = self._pages(743)
+        monkeypatch.setattr(tceq_records, "search_documents", fake)
+        monkeypatch.setattr(tceq_records, "get_access_id", lambda *a, **k: ("id", "ip"))
+        docs, total = tceq_records.search_all_documents(rn_number="RN1")
+        assert total == 743
+        assert len(docs) == 743
+        assert calls == list(range(0, 743, 50))
+
+    def test_single_page_docket_makes_one_call(self, monkeypatch):
+        fake, calls = self._pages(12)
+        monkeypatch.setattr(tceq_records, "search_documents", fake)
+        monkeypatch.setattr(tceq_records, "get_access_id", lambda *a, **k: ("id", "ip"))
+        docs, _ = tceq_records.search_all_documents(rn_number="RN1")
+        assert len(docs) == 12
+        assert calls == [0]
+
+    def test_max_results_stops_early(self, monkeypatch):
+        fake, calls = self._pages(743)
+        monkeypatch.setattr(tceq_records, "search_documents", fake)
+        monkeypatch.setattr(tceq_records, "get_access_id", lambda *a, **k: ("id", "ip"))
+        docs, _ = tceq_records.search_all_documents(rn_number="RN1", max_results=120)
+        assert len(docs) == 120
+
+    def test_server_ignoring_start_row_does_not_spin(self, monkeypatch):
+        # A server that returns page one forever, or a docket that shrank
+        # mid-sweep, would loop until the run was killed.
+        def stuck(result_count=50, start_row=0, **kw):
+            return ([{"doc_id": str(i), "title": "a", "extension": "pdf"}
+                     for i in range(50)], 743)
+        monkeypatch.setattr(tceq_records, "search_documents", stuck)
+        monkeypatch.setattr(tceq_records, "get_access_id", lambda *a, **k: ("id", "ip"))
+        docs, _ = tceq_records.search_all_documents(rn_number="RN1")
+        assert len(docs) == 50
+
+    def test_empty_result_returns_cleanly(self, monkeypatch):
+        monkeypatch.setattr(tceq_records, "search_documents",
+                            lambda **kw: ([], 0))
+        monkeypatch.setattr(tceq_records, "get_access_id", lambda *a, **k: ("id", "ip"))
+        assert tceq_records.search_all_documents(rn_number="RN1") == ([], 0)
+
+    def test_access_grant_taken_once_for_the_whole_sweep(self, monkeypatch):
+        # The grant is session-scoped; taking a new one per page invalidates the
+        # one in flight.
+        fake, _ = self._pages(200)
+        grants = []
+        monkeypatch.setattr(tceq_records, "search_documents", fake)
+        monkeypatch.setattr(tceq_records, "get_access_id",
+                            lambda *a, **k: (grants.append(1), ("id", "ip"))[1])
+        tceq_records.search_all_documents(rn_number="RN1")
+        assert len(grants) == 1
+
+
+class TestScrapeLimits:
+    """The four coverage ceilings resolved from CLI flags."""
+
+    def _args(self, **kw):
+        base = {"full": False, "max_docs": 6, "max_pages": 40, "max_mb": 40,
+                "any_title": False}
+        base.update(kw)
+        return argparse.Namespace(**base)
+
+    def test_defaults_stay_cheap(self):
+        got = permits_cli.scrape_limits(self._args())
+        assert got == {"max_docs": 6, "max_pages": 40,
+                       "max_bytes": 40 * 1024 * 1024, "useful_only": True}
+
+    def test_full_lifts_every_ceiling(self):
+        got = permits_cli.scrape_limits(self._args(full=True))
+        assert got["max_docs"] is None
+        assert got["max_pages"] is None
+        assert got["max_bytes"] is None
+
+    def test_full_keeps_the_title_filter_unless_asked(self):
+        # --full is about depth, not about downloading every scanned letter.
+        assert permits_cli.scrape_limits(self._args(full=True))["useful_only"]
+        assert not permits_cli.scrape_limits(
+            self._args(full=True, any_title=True))["useful_only"]
+
+    @pytest.mark.parametrize("flag,key", [
+        ("max_docs", "max_docs"), ("max_pages", "max_pages"),
+    ])
+    def test_zero_means_unlimited(self, flag, key):
+        assert permits_cli.scrape_limits(self._args(**{flag: 0}))[key] is None
+
+    def test_zero_mb_means_no_size_skip(self):
+        assert permits_cli.scrape_limits(self._args(max_mb=0))["max_bytes"] is None
+
+
+class TestDocumentDate:
+    """Oldest-first truncation depends on parsing dDocCreatedDate.
+
+    The field is M/D/YYYY, so a plain string sort ranks "1/10/2019" ahead of
+    "11/16/2016" and --max-docs would keep documents by leading digit.
+    """
+
+    @pytest.mark.parametrize("raw,expected", [
+        ("11/16/2016 3:42 PM", (2016, 11, 16)),
+        ("1/10/2019 ", (2019, 1, 10)),
+        ("6/17/2015", (2015, 6, 17)),
+    ])
+    def test_parses_month_day_year(self, raw, expected):
+        assert tceq_records.doc_date({"created": raw}) == expected
+
+    @pytest.mark.parametrize("raw", [None, "", "not a date"])
+    def test_unparseable_sorts_last(self, raw):
+        assert tceq_records.doc_date({"created": raw}) == (9999, 12, 31)
+
+    def test_ordering_is_chronological_not_lexical(self):
+        docs = [{"created": c} for c in
+                ("1/10/2019", "11/16/2016", "6/17/2015", "4/3/2018")]
+        order = [d["created"] for d in sorted(docs, key=tceq_records.doc_date)]
+        assert order == ["6/17/2015", "11/16/2016", "4/3/2018", "1/10/2019"]

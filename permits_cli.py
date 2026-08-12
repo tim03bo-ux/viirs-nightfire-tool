@@ -199,7 +199,7 @@ def _scrape_failure(rn, exc):
             "documents_total": 0, "documents_read": 0, "findings": []}
 
 
-def _scrape_one(rn, operator, dest_dir, max_docs, delay, keep_files):
+def _scrape_one(rn, operator, dest_dir, delay, keep_files, limits):
     """One entity, in a worker process. Must be importable at module level."""
     from src.permits.sources import tceq_records
 
@@ -208,11 +208,29 @@ def _scrape_one(rn, operator, dest_dir, max_docs, delay, keep_files):
         # and sharing one across processes would have them invalidate it for
         # each other.
         return tceq_records.scrape_entity(
-            rn, dest_dir, max_docs=max_docs, delay=delay, verbose=False,
-            keep_files=keep_files,
+            rn, dest_dir, delay=delay, verbose=False, keep_files=keep_files,
+            **limits,
         )
     except Exception as exc:
         return _scrape_failure(rn, exc)
+
+
+def scrape_limits(args):
+    """The four coverage ceilings, resolved from the flags.
+
+    Each defaults to something cheap, and each one quietly turns a docket into a
+    sample. --full lifts all of them: every result page, every matching
+    document, every page of every document, no size skip.
+    """
+    if args.full:
+        return {"max_docs": None, "max_bytes": None, "max_pages": None,
+                "useful_only": not args.any_title}
+    return {
+        "max_docs": args.max_docs or None,
+        "max_bytes": (args.max_mb or 0) * 1024 * 1024 or None,
+        "max_pages": args.max_pages or None,
+        "useful_only": not args.any_title,
+    }
 
 
 def read_rn_file(path):
@@ -360,8 +378,14 @@ def cmd_scrape(args):
             return 2
 
     todo = [(rn, op) for rn, op in targets if rn not in done]
+    limits = scrape_limits(args)
     print(f"{len(targets)} entities selected, {len(done)} already done, "
           f"{len(todo)} to scrape")
+    print("  coverage: "
+          f"docs={limits['max_docs'] or 'all'} "
+          f"pages={limits['max_pages'] or 'all'} "
+          f"size cap={(limits['max_bytes'] or 0) // 1048576 or 'none'} MB "
+          f"title filter={'on' if limits['useful_only'] else 'off'}", flush=True)
 
     def flush(index):
         _write_json_atomic(args.out, results)
@@ -388,8 +412,8 @@ def cmd_scrape(args):
         print(f"  {args.workers} workers", flush=True)
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
             futures = {
-                pool.submit(_scrape_one, rn, operator, args.dir, args.max_docs,
-                            args.delay, args.keep_files): (rn, operator)
+                pool.submit(_scrape_one, rn, operator, args.dir,
+                            args.delay, args.keep_files, limits): (rn, operator)
                 for rn, operator in todo
             }
             for index, future in enumerate(as_completed(futures), 1):
@@ -406,8 +430,8 @@ def cmd_scrape(args):
         for index, (rn, operator) in enumerate(todo, 1):
             try:
                 found = tceq_records.scrape_entity(
-                    rn, args.dir, max_docs=args.max_docs, access=access,
-                    delay=args.delay, verbose=False, keep_files=args.keep_files,
+                    rn, args.dir, access=access, delay=args.delay,
+                    verbose=False, keep_files=args.keep_files, **limits,
                 )
             except Exception as exc:
                 print(f"  {rn}: ERROR {type(exc).__name__}: {exc}", flush=True)
@@ -849,7 +873,27 @@ def build_parser():
                           "them. This defaulted to 25 and silently truncated a "
                           "1,140-entity sweep to 25 — a sweep should sweep")
     sub.add_argument("--max-docs", type=int, default=6,
-                     help="documents to open per entity")
+                     help="documents to open per entity; 0 for every matching "
+                          "document. Applied oldest-first, because the original "
+                          "application holds the unit table and the search "
+                          "returns newest first")
+    sub.add_argument("--max-pages", type=int, default=40,
+                     help="pages to read per document; 0 for all of them. The "
+                          "MAERT and unit tables are appendices, often past "
+                          "page 100, so a low cap reads the narrative and "
+                          "misses every rating")
+    sub.add_argument("--max-mb", type=int, default=40,
+                     help="skip documents larger than this many MB; 0 to read "
+                          "them regardless. 67 of 804 documents in the "
+                          "case-by-case sweep were dropped by this alone")
+    sub.add_argument("--any-title", action="store_true",
+                     help="open every pdf, not just those whose title suggests "
+                          "a unit table. Much slower and mostly correspondence")
+    sub.add_argument("--full", action="store_true",
+                     help="exhaustive sweep: every result page, every matching "
+                          "document, every page, no size skip. Overrides "
+                          "--max-docs, --max-pages and --max-mb. Expect hours "
+                          "and hundreds of GB of transfer for a large target list")
     sub.add_argument("--delay", type=float, default=1.0)
     sub.add_argument("--dir", default=os.path.join("data", "raw", "tceq_docs"))
     sub.add_argument("--out", default=os.path.join("output", "permit_units.json"))

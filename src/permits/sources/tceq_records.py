@@ -165,6 +165,57 @@ def search_documents(rn_number=None, permit_number=None, entity_name=None,
     return documents, total
 
 
+def search_all_documents(page_size=50, max_results=None, access=None, **kw):
+    """Every document for a search, following the result pages.
+
+    `search_documents` returns one page. A station's docket runs to hundreds of
+    records — 743 for one Houston plant — so reading page one and stopping was
+    silently sampling the most recent 50 and calling it the docket. The unit
+    tables sit in the original application, which is the *oldest* record, so the
+    one page we did read was the least likely to hold what we came for.
+
+    The access grant is fetched once and reused across pages: it is tied to a
+    session, and taking a new one per page invalidates the one in flight.
+    """
+    access = access or get_access_id()
+    documents, total = search_documents(
+        result_count=page_size, start_row=0, access=access, **kw
+    )
+    if not documents:
+        return [], total
+    seen = {doc["doc_id"] for doc in documents}
+    while len(documents) < (total or 0):
+        if max_results and len(documents) >= max_results:
+            break
+        page, _ = search_documents(
+            result_count=page_size, start_row=len(documents), access=access, **kw
+        )
+        # A server that ignores StartRow, or a docket that shrank mid-sweep,
+        # would otherwise spin here forever re-reading the same page.
+        fresh = [doc for doc in page if doc["doc_id"] not in seen]
+        if not fresh:
+            break
+        seen.update(doc["doc_id"] for doc in fresh)
+        documents.extend(fresh)
+    return (documents[:max_results] if max_results else documents), total
+
+
+def doc_date(document):
+    """Sortable date for a document row, oldest sorting first.
+
+    dDocCreatedDate arrives as "11/16/2016 3:42 PM". Sorting those as strings
+    puts "1/10/2019" before "11/16/2016", so an oldest-first truncation would
+    have kept whatever happened to start with a low digit. Unparseable dates
+    sort last, where they cost nothing.
+    """
+    raw = (document.get("created") or "").strip()
+    match = re.match(r"(\d{1,2})/(\d{1,2})/(\d{4})", raw)
+    if not match:
+        return (9999, 12, 31)
+    month, day, year = (int(part) for part in match.groups())
+    return (year, month, day)
+
+
 def looks_useful(document):
     """Cheap filter so a scrape does not pull thousands of scanned letters."""
     if document.get("extension") not in ("pdf", "tif", "tiff"):
@@ -224,6 +275,11 @@ _MODEL_RE = re.compile(
 def extract_tables(path, max_pages=30):
     """Table rows as text lines, one line per row, cells joined by ' | '.
 
+    `max_pages=None` reads the whole file. The default stops at 30, which is
+    wrong for a permit application: the MAERT and unit tables are appendices,
+    routinely past page 100, so a capped read scans the cover letter and the
+    narrative and misses the only pages that carry a rating.
+
     pypdf flattens a table into one line per *cell*, which separates a
     manufacturer from the rating sitting in the next column and makes same-row
     pairing impossible. pdfplumber reconstructs the row, so "Caterpillar |
@@ -236,7 +292,8 @@ def extract_tables(path, max_pages=30):
     lines = []
     try:
         with pdfplumber.open(path) as document:
-            for page in document.pages[:max_pages]:
+            pages = document.pages if max_pages is None else document.pages[:max_pages]
+            for page in pages:
                 try:
                     tables = page.extract_tables() or []
                 except Exception:
@@ -257,6 +314,9 @@ def extract_tables(path, max_pages=30):
 def extract_text(path, max_pages=40):
     """Text of the first `max_pages` pages, or '' when unreadable.
 
+    `max_pages=None` reads every page. See extract_tables on why the cap loses
+    exactly the pages worth reading.
+
     Scanned records with poor OCR return little or nothing; that is reported as
     empty rather than guessed at.
     """
@@ -269,7 +329,8 @@ def extract_text(path, max_pages=40):
     except Exception:
         return ""
     chunks = []
-    for page in reader.pages[:max_pages]:
+    pages = reader.pages if max_pages is None else reader.pages[:max_pages]
+    for page in pages:
         try:
             chunks.append(page.extract_text() or "")
         except Exception:
@@ -538,15 +599,33 @@ def summarize_units(units):
 
 def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
                   access=None, delay=1.0, verbose=True, keep_files=False,
-                  max_bytes=40 * 1024 * 1024):
+                  max_bytes=40 * 1024 * 1024, max_pages=40,
+                  useful_only=True):
     """Search, download and extract for one regulated entity.
 
     Returns a dict with the documents examined and the merged extraction.
+
+    Four independent ceilings decide how much of a docket is actually read, and
+    every one of them silently returns a partial answer that looks complete:
+
+      max_docs    documents opened, of those matching the title filter
+      max_bytes   files above this are downloaded and thrown away unread
+      max_pages   pages read per file (None = all)
+      useful_only whether the title filter applies at all
+
+    Pass max_docs=None, max_bytes=None, max_pages=None for an exhaustive sweep.
     """
-    documents, total = search_documents(
+    documents, total = search_all_documents(
         rn_number=rn_number, record_series=record_series, access=access
     )
-    useful = [doc for doc in documents if looks_useful(doc)][:max_docs]
+    useful = [doc for doc in documents if looks_useful(doc)] if useful_only \
+        else [doc for doc in documents
+              if doc.get("extension") in ("pdf", "tif", "tiff")]
+    if max_docs:
+        # Oldest first, because the original application carries the unit table
+        # and the search hands back newest first. Truncating a newest-first list
+        # keeps the correspondence and drops the application.
+        useful = sorted(useful, key=doc_date)[:max_docs]
     if verbose:
         print(f"  {rn_number}: {total} documents, {len(useful)} worth opening")
 
@@ -560,12 +639,12 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
             # Permit files are big — five entities pulled 726 MB, which projects
             # to hundreds of gigabytes across the state. The text is what is
             # wanted, so it is taken and the file dropped unless asked to keep.
-            if size > max_bytes:
+            if max_bytes and size > max_bytes:
                 extracted = extract_units("")
                 extracted["skipped"] = f"file too large ({size // 1048576} MB)"
             else:
-                page_text = extract_text(path)
-                table_text = extract_tables(path)
+                page_text = extract_text(path, max_pages=max_pages)
+                table_text = extract_tables(path, max_pages=max_pages)
                 extracted = extract_units(
                     page_text, entity_name=document.get("entity_name")
                 )
@@ -598,6 +677,8 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
         "by_manufacturer": summarize_units(all_units),
         "entity_name": documents[0].get("entity_name") if documents else None,
         "documents_total": total,
+        "documents_matched": len(documents),
+        "documents_useful": len(useful),
         "documents_read": len(findings),
         "max_mw": max(
             [f["max_mw"] for f in findings if f["max_mw"] is not None] or [0]
