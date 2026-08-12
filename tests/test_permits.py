@@ -1809,3 +1809,46 @@ class TestForeignEntityRows:
     ])
     def test_foreign_rns(self, line, rn, expected):
         assert tceq_records.foreign_rns(line, rn) == expected
+
+
+class TestPrecedentRows:
+    """BACT precedent tables are other people's plants.
+
+    A PSD application must survey comparable facilities for its BACT
+    demonstration, so every one carries rows like "FGE Power, LLC Westbrook TX
+    1,620 MW Combined Cycle". Reading a document in full ingested those as the
+    applicant's own capacity -- Rockwood Energy Center came back as 1,620 MW,
+    which is a plant in Westbrook. They carry no RN, so the register guard
+    cannot see them; company-plus-location is the shape that gives them away.
+    """
+
+    def test_precedent_row_is_recognised(self):
+        assert tceq_records.looks_like_precedent_row(
+            "FGE Power, LLC Westbrooh TX 1,620 MW Combined rycle")
+
+    def test_equipment_line_naming_a_vendor_survives(self):
+        # A company with no place is a supplier, not a precedent row.
+        assert not tceq_records.looks_like_precedent_row(
+            "Siemens Energy, Inc. will supply two units rated 300 MW")
+
+    def test_the_applicants_own_row_survives(self):
+        assert not tceq_records.looks_like_precedent_row(
+            "Rockwood Energy Center, LLC Colorado County TX 900 MW",
+            entity_name="ROCKWOOD ENERGY CENTER")
+
+    def test_plain_table_row_survives(self):
+        assert not tceq_records.looks_like_precedent_row("Caterpillar G3520C 2.0 MW")
+
+    def test_precedent_megawatts_are_not_counted(self):
+        text = ("The facility will consist of two 300 MW turbines.\n"
+                "FGE Power, LLC Westbrook TX 1,620 MW Combined Cycle\n")
+        got = tceq_records.extract_units(text, entity_name="ROCKWOOD ENERGY CENTER")
+        assert got["max_mw"] == 300.0
+        assert got["precedent_rows"] == 1
+
+    def test_generic_words_do_not_rescue_a_precedent_row(self):
+        # Almost every plant is an "energy center"; matching on that would let
+        # every precedent row through.
+        assert tceq_records.looks_like_precedent_row(
+            "FGE Power Energy Center, LLC Westbrook TX 1,620 MW",
+            entity_name="ROCKWOOD ENERGY CENTER")

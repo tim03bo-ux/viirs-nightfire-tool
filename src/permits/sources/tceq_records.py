@@ -342,6 +342,47 @@ def extract_text(path, max_pages=40):
     return "\n".join(chunks)
 
 
+# A PSD application must survey comparable plants for its BACT demonstration,
+# so every one carries a table of other companies' permits: "FGE Power, LLC
+# Westbrook TX 1,620 MW Combined Cycle". Those rows name a company and a place,
+# and reading a document in full ingests all of them as if they were the
+# applicant's. They carry no RN, so the register guard cannot see them.
+_STATES = (
+    "AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS "
+    "MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY"
+).split()
+_PRECEDENT_RE = re.compile(
+    r"\b(?:L\.?L\.?C|L\.?P|Inc|Corp(?:oration)?|Compan(?:y|ies)|Cooperative|"
+    r"Partners(?:hip)?|Ltd)\b\.?[^.\n]{0,40}?\b(?:" + "|".join(_STATES) + r")\b"
+)
+
+
+def looks_like_precedent_row(line, entity_name=None):
+    """True when a line is another company's entry in a comparison table.
+
+    Keyed on company-plus-location, which is the shape of a BACT precedent row
+    and not the shape of an equipment line: "Siemens Energy, Inc. will supply"
+    names a company but no place, so it survives.
+    """
+    if not _PRECEDENT_RE.search(line):
+        return False
+    if entity_name:
+        # The applicant appears in its own table. Any distinctive word of its
+        # name on the line means the row is about this plant.
+        own = [word for word in re.findall(r"[a-z]{4,}", entity_name.lower())
+               if word not in _GENERIC_NAME_WORDS]
+        lowered = line.lower()
+        if any(word in lowered for word in own):
+            return False
+    return True
+
+
+_GENERIC_NAME_WORDS = frozenset({
+    "energy", "power", "center", "centre", "plant", "station", "generating",
+    "generation", "electric", "company", "corporation", "holdings", "partners",
+})
+
+
 def extract_units(text, entity_name=None):
     """Pull candidate unit ratings and manufacturers out of permit text.
 
@@ -352,22 +393,29 @@ def extract_units(text, entity_name=None):
     """
     if not text:
         return {"mw_values": [], "max_mw": None, "total_mw": None,
-                "manufacturers": [], "models": []}
+                "manufacturers": [], "models": [], "precedent_rows": 0}
 
     lowered = text.lower()
     values = []
-    for count, magnitude, unit in _MW_RE.findall(text):
-        try:
-            number = float(magnitude.replace(",", ""))
-        except ValueError:
+    precedent_rows = 0
+    # Scanned line by line rather than over the whole text, so a megawatt figure
+    # can be judged by the company it keeps.
+    for line in text.splitlines():
+        if looks_like_precedent_row(line, entity_name):
+            precedent_rows += 1
             continue
-        if unit.lower().startswith("k"):
-            number /= 1000.0
-        # Discard implausible readings: OCR turns table rules into digits.
-        if not (0.01 <= number <= 5000):
-            continue
-        multiplier = int(count) if count else 1
-        values.append(round(number * multiplier, 3))
+        for count, magnitude, unit in _MW_RE.findall(line):
+            try:
+                number = float(magnitude.replace(",", ""))
+            except ValueError:
+                continue
+            if unit.lower().startswith("k"):
+                number /= 1000.0
+            # Discard implausible readings: OCR turns table rules into digits.
+            if not (0.01 <= number <= 5000):
+                continue
+            multiplier = int(count) if count else 1
+            values.append(round(number * multiplier, 3))
 
     makers = sorted({
         maker for maker in MANUFACTURERS
@@ -387,6 +435,7 @@ def extract_units(text, entity_name=None):
         "total_mw": round(sum(values), 2) if values else None,
         "manufacturers": makers,
         "models": models,
+        "precedent_rows": precedent_rows,
     }
 
 
