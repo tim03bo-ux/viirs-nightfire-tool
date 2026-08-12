@@ -15,6 +15,7 @@ Build the database first:  python permits_cli.py demo   (or `ingest` + `link`)
 
 import json
 import os
+import re
 import sys
 
 import pandas as pd
@@ -203,6 +204,28 @@ def load_all(db_path, mtime):
         entities["submitted_year"] = pd.to_datetime(
             entities["submitted"], errors="coerce"
         ).dt.year
+        # From the permit-document scrape. A site can hold both families, so
+        # engine_type carries "Both" rather than picking one.
+        if "unit_manufacturers" in entities:
+            families = entities.apply(
+                lambda row: classify.classify_engines(
+                    row.get("unit_manufacturers"), row.get("unit_models")
+                ), axis=1,
+            )
+            entities["engine_type"] = families.apply(
+                lambda f: "Both" if len(f) > 1
+                else ("Reciprocating" if classify.ENGINE_RECIP in f
+                      else ("Turbine" if classify.ENGINE_TURBINE in f else None))
+            )
+            entities["engine_makers"] = entities["unit_manufacturers"].fillna("").apply(
+                lambda value: ", ".join(sorted({
+                    classify.canonical_maker(part) or part.strip()
+                    for part in str(value).split(",") if part.strip()
+                }))
+            )
+        else:
+            entities["engine_type"] = None
+            entities["engine_makers"] = ""
 
     if not sites.empty:
         sites["lifecycle_label"] = sites["lifecycle"].apply(
@@ -451,6 +474,46 @@ def render_map(records, offline_map):
                  "TCEQ publishes surveyed coordinates.",
         )
 
+    # Engine filters only appear once the permit-document scrape has run: before
+    # that no record carries a manufacturer and empty pickers would just be
+    # furniture.
+    has_engines = located["engine_type"].notna().any()
+    if has_engines:
+        engine_controls = st.columns([1, 2, 3])
+        with engine_controls[0]:
+            types = [t for t in ["Reciprocating", "Turbine", "Both"]
+                     if t in set(located["engine_type"].dropna())]
+            picked_engine = st.multiselect(
+                "Engine type", types, default=[],
+                help="From engine models named in the permit documents. A maker "
+                     "alone cannot decide it — a GE LM6000 is a turbine and a "
+                     "GE-era Jenbacher J620 is a reciprocating engine — so the "
+                     "model is read first.",
+            )
+        with engine_controls[1]:
+            makers = sorted({
+                maker.strip()
+                for value in located["engine_makers"].dropna()
+                for maker in str(value).split(",") if maker.strip()
+            })
+            picked_makers = st.multiselect("Engine manufacturer", makers, default=[])
+        with engine_controls[2]:
+            scraped = int(located["engine_type"].notna().sum())
+            st.caption(
+                f"\n\n{scraped:,} of {len(located):,} plotted records carry engine "
+                "data from a scraped permit document. Filtering on either "
+                "control hides the rest."
+            )
+        if picked_engine:
+            located = located[located["engine_type"].isin(picked_engine)]
+        if picked_makers:
+            pattern = "|".join(re.escape(m) for m in picked_makers)
+            located = located[
+                located["engine_makers"].fillna("").str.contains(
+                    pattern, case=False, regex=True
+                )
+            ]
+
     years = located["submitted_year"].dropna()
     if not years.empty:
         low, high = int(years.min()), int(years.max())
@@ -500,6 +563,7 @@ def render_map(records, offline_map):
         "operator": True, "county": True, "fuel_label": True, "tech_label": True,
         "mw": ":,.1f", "lifecycle_label": True, "program_label": True,
         "permit_number": True, "submitted": True, "Precision": True,
+        "engine_type": True, "engine_makers": True, "unit_mw_table": ":,.2f",
         "latitude": False, "longitude": False, "marker": False,
         "kind_label": False,
     }
@@ -508,6 +572,8 @@ def render_map(records, offline_map):
         "fuel_label": "Fuel", "tech_label": "Technology", "mw": "MW",
         "lifecycle_label": "State", "program_label": "Program",
         "permit_number": "Permit / INR", "submitted": "Submitted",
+        "engine_type": "Engine type", "engine_makers": "Engine maker(s)",
+        "unit_mw_table": "Per-unit MW",
     }
 
     if offline_map:

@@ -381,3 +381,107 @@ def summarize_fuel(fuel):
         FUEL_HYDRO: "Hydro", FUEL_BIOMASS: "Biomass", FUEL_GEOTHERMAL: "Geothermal",
         FUEL_PETROLEUM: "Petroleum", FUEL_HYDROGEN: "Hydrogen", FUEL_OTHER: "Other",
     }.get(fuel, clean_str(fuel) or "Unknown")
+
+
+# --- Engine family -----------------------------------------------------------
+#
+# "Recip or turbine" is the question the permit data is actually asked, and it
+# is not answerable from the manufacturer alone. Several makers build both:
+# General Electric sells the LM6000 aeroderivative *and* owned Jenbacher gas
+# engines; Rolls-Royce sells aero turbines and Bergen reciprocating sets. So the
+# model is consulted first and the maker is only a fallback.
+#
+# Wärtsilä is treated as reciprocating: its Texas plants — Pecos, Odessa — are
+# banks of large gas engines, which is what makes them look like turbines by
+# size while behaving like recips.
+
+ENGINE_RECIP = "reciprocating"
+ENGINE_TURBINE = "turbine"
+ENGINE_UNKNOWN = "unknown"
+
+# Model prefixes, checked before the manufacturer.
+_TURBINE_MODELS = [
+    "lm6000", "lm2500", "lms100", "sgt", "sst", "7fa", "7ha", "9ha", "6b",
+    "501j", "501g", "501f", "m501", "ft4000", "ft8", "titan", "taurus",
+    "centaur", "mars ", "solar t", "c65", "c200", "c1000", "gt ",
+]
+_RECIP_MODELS = [
+    "g3520", "g3516", "g3606", "g3608", "g3612", "g3616", "3516", "3512",
+    "qsk", "qsv", "qsx", "kta", "vhp", "l7042", "j920", "j620", "j420",
+    "gg20", "20v4000", "16v4000", "12v4000", "w20v34", "w18v50", "w31",
+]
+
+_TURBINE_MAKERS = [
+    "siemens", "mitsubishi", "solar turbines", "pratt & whitney", "kawasaki",
+    "capstone", "ge vernova",
+]
+_RECIP_MAKERS = [
+    "caterpillar", "cummins", "jenbacher", "innio", "waukesha", "guascor",
+    "mtu", "generac", "doosan", "scania", "perkins", "kohler", "deutz",
+    "yanmar", "volvo penta", "clarke", "detroit diesel", "baldor", "wartsila",
+    "wärtsilä",
+]
+
+
+def classify_engine(manufacturer=None, model=None):
+    """Return "reciprocating", "turbine" or "unknown" for one unit.
+
+    The model decides where it is recognisable, because a maker's name does not:
+    a GE LM6000 and a GE-era Jenbacher J620 are different machines entirely.
+    """
+    text = norm_text(model)
+    if text:
+        for prefix in _RECIP_MODELS:
+            if prefix in text:
+                return ENGINE_RECIP
+        for prefix in _TURBINE_MODELS:
+            if prefix in text:
+                return ENGINE_TURBINE
+
+    maker = norm_text(manufacturer)
+    if maker:
+        for name in _RECIP_MAKERS:
+            if name in maker:
+                return ENGINE_RECIP
+        for name in _TURBINE_MAKERS:
+            if name in maker:
+                return ENGINE_TURBINE
+    return ENGINE_UNKNOWN
+
+
+def classify_engines(manufacturers, models=None):
+    """Engine families present in a comma-separated maker/model pair of lists.
+
+    A site can hold both — a peaker with black-start engines beside its
+    turbines — so this returns a set rather than picking a winner.
+    """
+    makers = [part.strip() for part in str(manufacturers or "").split(",") if part.strip()]
+    model_list = [part.strip() for part in str(models or "").split(",") if part.strip()]
+    families = set()
+    for model in model_list:
+        family = classify_engine(model=model)
+        if family != ENGINE_UNKNOWN:
+            families.add(family)
+    for maker in makers:
+        families.add(classify_engine(manufacturer=maker))
+    families.discard(ENGINE_UNKNOWN)
+    return families
+
+
+# Spellings that reach the extractor as distinct strings but name one company.
+# Without this the manufacturer picker offers "wartsila" and "wärtsilä" as two
+# separate makers and splits that company's sites across both.
+_MAKER_ALIASES = {
+    "wärtsilä": "wartsila", "warstila": "wartsila",
+    "ge vernova": "general electric", "ge": "general electric",
+    "innio": "jenbacher", "man energy": "man energy solutions",
+    "rolls royce": "rolls-royce",
+}
+
+
+def canonical_maker(name):
+    """One spelling per manufacturer, for grouping and for filter menus."""
+    text = norm_text(name)
+    if not text:
+        return None
+    return _MAKER_ALIASES.get(text, text)

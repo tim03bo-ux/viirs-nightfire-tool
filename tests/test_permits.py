@@ -1516,3 +1516,61 @@ class TestStormwaterCheckpoint:
         out = tceq_stormwater.enrich(df, delay=0, verbose=False, checkpoint=str(path))
         assert "detail_error" in out.columns
         assert json.loads(path.read_text()) == {}
+
+
+class TestEngineFamily:
+    """Recip or turbine — the question the permit data is actually asked."""
+
+    @pytest.mark.parametrize("manufacturer,model,expected", [
+        # The model decides, because the maker cannot: GE sells the LM6000
+        # aeroderivative and owned Jenbacher gas engines.
+        ("general electric", "LM6000", classify.ENGINE_TURBINE),
+        ("general electric", "J620", classify.ENGINE_RECIP),
+        # Rolls-Royce likewise: aero turbines and Bergen reciprocating sets.
+        ("rolls-royce", "GG20V4000", classify.ENGINE_RECIP),
+        ("caterpillar", "G3520", classify.ENGINE_RECIP),
+        ("cummins", "QSK60G", classify.ENGINE_RECIP),
+        ("siemens", "SGT6-8000H", classify.ENGINE_TURBINE),
+        ("pratt & whitney", "FT4000", classify.ENGINE_TURBINE),
+        # Maker-only fallback, where a model was never captured.
+        ("caterpillar", None, classify.ENGINE_RECIP),
+        ("capstone", None, classify.ENGINE_TURBINE),
+        # Wärtsilä's Texas plants are banks of large gas engines — big enough to
+        # read as turbines by capacity, reciprocating in fact.
+        ("wartsila", None, classify.ENGINE_RECIP),
+        # A maker that builds both, with no model, must not be guessed.
+        ("general electric", None, classify.ENGINE_UNKNOWN),
+        (None, None, classify.ENGINE_UNKNOWN),
+    ])
+    def test_engine_family(self, manufacturer, model, expected):
+        assert classify.classify_engine(manufacturer, model) == expected
+
+    def test_a_site_can_hold_both_families(self):
+        # A peaker with black-start engines beside its turbines is one site with
+        # two families; picking a winner would lose that.
+        families = classify.classify_engines(
+            "caterpillar, siemens", "G3520, SGT6-8000H"
+        )
+        assert families == {classify.ENGINE_RECIP, classify.ENGINE_TURBINE}
+
+    def test_unknown_makers_drop_out_rather_than_counting(self):
+        assert classify.classify_engines("acme widgets", None) == set()
+
+    def test_model_wins_over_maker(self):
+        # Maker says turbine, model says otherwise. The model is the fact.
+        assert classify.classify_engines("general electric", "J920") == {
+            classify.ENGINE_RECIP
+        }
+
+    @pytest.mark.parametrize("raw,expected", [
+        ("wärtsilä", "wartsila"),
+        ("Wartsila", "wartsila"),
+        ("GE Vernova", "general electric"),
+        ("INNIO", "jenbacher"),
+        ("caterpillar", "caterpillar"),
+        (None, None),
+    ])
+    def test_maker_spellings_collapse(self, raw, expected):
+        # Two spellings of one company split its sites across two filter
+        # entries, which reads as two smaller vendors than reality.
+        assert classify.canonical_maker(raw) == expected
