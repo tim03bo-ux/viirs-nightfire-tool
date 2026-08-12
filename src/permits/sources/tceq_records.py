@@ -62,6 +62,10 @@ RECORD_SERIES = {
 # Document titles that plausibly carry unit tables. Applied to dDocTitle before
 # downloading, because a permit file can run to thousands of scanned pages of
 # correspondence that will never contain a rating.
+# Distinct other regulated entities named in one document, above which it is
+# treated as a register covering many facilities rather than one plant's file.
+REGISTER_RN_THRESHOLD = 5
+
 USEFUL_TITLE_HINTS = [
     "application", "maert", "emission", "permit", "technical", "review",
     "table", "unit", "attachment", "amendment", "project",
@@ -479,7 +483,25 @@ def _line_makers(line_lower):
     ]
 
 
-def extract_unit_records(text, entity_name=None, window=1):
+_RN_RE = re.compile(r"\bRN\d{9}\b")
+
+
+def foreign_rns(line, rn_number):
+    """Regulated-entity numbers on this line that are not the one being scraped.
+
+    A docket's "Project File Folder" is not always about one facility. Rockwood
+    Energy Center's folder carries a register listing many plants, so reading it
+    in full attributed DCP Midstream's Wilcox gas plant engines -- and a 1,620 MW
+    figure from some third station -- to Rockwood. The page caps used to hide
+    this by never reaching those pages; reading the whole document exposes it,
+    so the rows have to be attributed rather than merely found.
+    """
+    if not rn_number:
+        return []
+    return [found for found in _RN_RE.findall(line) if found != rn_number]
+
+
+def extract_unit_records(text, entity_name=None, window=1, rn_number=None):
     """Pair manufacturers with the ratings stated alongside them.
 
     Returns a list of unit dicts, each carrying the manufacturer, the rating in
@@ -504,6 +526,10 @@ def extract_unit_records(text, entity_name=None, window=1):
         lowered = line.lower()
         makers = [maker for maker in _line_makers(lowered) if maker not in own]
         if not makers:
+            continue
+        # A line that names someone else's regulated entity is describing
+        # someone else's equipment, whatever else it happens to contain.
+        if foreign_rns(line, rn_number):
             continue
 
         values = _line_mw(line)
@@ -648,14 +674,26 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
                 extracted = extract_units(
                     page_text, entity_name=document.get("entity_name")
                 )
+                others = set(foreign_rns(page_text, rn_number))
+                if len(others) >= REGISTER_RN_THRESHOLD:
+                    # A multi-facility register, not this plant's application.
+                    # Its prose megawatts belong to whichever station the
+                    # sentence was about, so taking the largest attributes some
+                    # other plant's capacity to this one.
+                    extracted["register_rns"] = len(others)
+                    extracted["mw_values"] = []
+                    extracted["max_mw"] = None
+                    extracted["total_mw"] = None
                 # Table rows first: they are the only place a manufacturer and
                 # its rating reliably share a line.
                 extracted["units"] = (
                     extract_unit_records(
-                        table_text, entity_name=document.get("entity_name")
+                        table_text, entity_name=document.get("entity_name"),
+                        rn_number=rn_number,
                     )
                     + extract_unit_records(
-                        page_text, entity_name=document.get("entity_name")
+                        page_text, entity_name=document.get("entity_name"),
+                        rn_number=rn_number,
                     )
                 )
         finally:

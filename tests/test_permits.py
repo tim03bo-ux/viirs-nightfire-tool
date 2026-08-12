@@ -1768,3 +1768,44 @@ class TestDocumentDate:
                 ("1/10/2019", "11/16/2016", "6/17/2015", "4/3/2018")]
         order = [d["created"] for d in sorted(docs, key=tceq_records.doc_date)]
         assert order == ["6/17/2015", "11/16/2016", "4/3/2018", "1/10/2019"]
+
+
+class TestForeignEntityRows:
+    """Unit rows must be attributed, not merely found.
+
+    Rockwood Energy Center's "Project File Folder" carries a register listing
+    many plants. Reading it in full credited DCP Midstream's Wilcox gas plant
+    engines -- and a 1,620 MW figure from a third station -- to Rockwood. The
+    old 40-page cap hid this by never reaching those pages.
+    """
+
+    def test_line_naming_another_entity_is_dropped(self):
+        text = ("NEW DCP MIDSTREAM, LP WILCOX GAS PLANT RN100213487 "
+                "Waukesha 1478 hp")
+        assert tceq_records.extract_unit_records(
+            text, rn_number="RN107573610") == []
+
+    def test_same_line_for_our_own_entity_is_kept(self):
+        text = "RN107573610 Siemens SGT6-8000H 300 MW"
+        units = tceq_records.extract_unit_records(text, rn_number="RN107573610")
+        assert [u["manufacturer"] for u in units] == ["siemens"]
+
+    def test_lines_naming_no_entity_are_kept(self):
+        # Most real table rows carry no RN at all; the guard must not eat them.
+        text = "Caterpillar G3520C 2.0 MW"
+        units = tceq_records.extract_unit_records(text, rn_number="RN107573610")
+        assert [u["manufacturer"] for u in units] == ["caterpillar"]
+
+    def test_without_an_rn_nothing_is_filtered(self):
+        # Callers that do not know whose docket this is get the old behaviour.
+        text = "DCP MIDSTREAM RN100213487 Waukesha 1478 hp"
+        assert tceq_records.extract_unit_records(text) != []
+
+    @pytest.mark.parametrize("line,rn,expected", [
+        ("RN100213487 and RN107573610", "RN107573610", ["RN100213487"]),
+        ("RN107573610 only", "RN107573610", []),
+        ("no entity here", "RN107573610", []),
+        ("RN100213487", None, []),
+    ])
+    def test_foreign_rns(self, line, rn, expected):
+        assert tceq_records.foreign_rns(line, rn) == expected
