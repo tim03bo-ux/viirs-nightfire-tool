@@ -208,6 +208,15 @@ _ADDED_COLUMNS = {
         "zip_code": "TEXT", "primary_business": "TEXT",
         "air_permit_status": "TEXT", "air_permit_date": "TEXT",
         "construction_start": "TEXT", "construction_end": "TEXT",
+        # From the permit-document scrape. Two MW columns on purpose: a rating
+        # read out of a unit table is a real per-unit number, while one read
+        # from prose is often the plant total or an option being evaluated
+        # ("total nameplate capacity of 930 megawatts", "for the Siemens F(5)
+        # option"). Collapsing them into one field would launder a plant total
+        # into a unit rating, so they stay apart and only the table-derived one
+        # is safe to treat as a unit.
+        "unit_manufacturers": "TEXT", "unit_models": "TEXT",
+        "unit_mw_table": "REAL", "unit_mw_stated": "REAL", "unit_count": "INTEGER",
     },
     "sites": {
         "gen_mw_approved": "REAL", "gen_mw_pending": "REAL",
