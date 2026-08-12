@@ -357,6 +357,13 @@ _PRECEDENT_RE = re.compile(
 )
 
 
+# A narrow table column extracts as one cell per line, so the row
+#   "FGE Power, LLC  Westbrook TX  1,620 MW  Combined Cycle"
+# arrives as six separate lines and no single one of them carries both the
+# company and the number. The window has to be wide enough to span a row.
+PRECEDENT_WINDOW = 6
+
+
 def looks_like_precedent_row(line, entity_name=None):
     """True when a line is another company's entry in a comparison table.
 
@@ -399,9 +406,14 @@ def extract_units(text, entity_name=None):
     values = []
     precedent_rows = 0
     # Scanned line by line rather than over the whole text, so a megawatt figure
-    # can be judged by the company it keeps.
-    for line in text.splitlines():
-        if looks_like_precedent_row(line, entity_name):
+    # can be judged by the company it keeps — and judged over a window, because
+    # a table column extracts one cell per line.
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        # Look back only. A precedent row names its company before its
+        # numbers, and looking ahead let a table poison the sentence above it.
+        window = " ".join(lines[max(0, index - PRECEDENT_WINDOW):index + 1])
+        if looks_like_precedent_row(window, entity_name):
             precedent_rows += 1
             continue
         for count, magnitude, unit in _MW_RE.findall(line):

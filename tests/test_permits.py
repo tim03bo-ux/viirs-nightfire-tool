@@ -1852,3 +1852,21 @@ class TestPrecedentRows:
         assert tceq_records.looks_like_precedent_row(
             "FGE Power Energy Center, LLC Westbrook TX 1,620 MW",
             entity_name="ROCKWOOD ENERGY CENTER")
+
+    def test_precedent_row_split_across_table_cells(self):
+        # A narrow column extracts one cell per line, so no single line carries
+        # both the company and the megawatts. Rockwood's 1,620 MW arrived this
+        # way and survived a per-line guard.
+        text = "FGE Power,\nLLC\nWestbrooh\nTX\n1,620 MW\nCombined rycle\n"
+        got = tceq_records.extract_units(text, entity_name="ROCKWOOD ENERGY CENTER")
+        assert got["max_mw"] is None
+        assert got["precedent_rows"]
+
+    def test_own_row_split_across_cells_still_survives(self):
+        text = "Rockwood Energy Center, LLC\nColorado County\nTX\n900 MW\n"
+        got = tceq_records.extract_units(text, entity_name="ROCKWOOD ENERGY CENTER")
+        assert got["max_mw"] == 900.0
+
+    def test_prose_with_no_company_is_untouched(self):
+        got = tceq_records.extract_units("The plant will be rated 300 MW total.")
+        assert got["max_mw"] == 300.0
