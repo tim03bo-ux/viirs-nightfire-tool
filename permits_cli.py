@@ -19,6 +19,7 @@ Real data:
 import argparse
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,9 @@ from src.permits import db as dbmod          # noqa: E402
 from src.permits import link as linkmod      # noqa: E402
 from src.permits import status as statusmod  # noqa: E402
 from src.permits import pipeline, seed       # noqa: E402
+
+# TCEQ regulated-entity numbers are RN + 9 digits, without exception.
+RN_RE = re.compile(r"^RN\d{9}$")
 
 DEFAULT_DB = os.path.join("output", "permits.db")
 DEFAULT_RAW = os.path.join("data", "raw")
@@ -211,6 +215,34 @@ def _scrape_one(rn, operator, dest_dir, max_docs, delay, keep_files):
         return _scrape_failure(rn, exc)
 
 
+def read_rn_file(path):
+    """Parse a scrape target list into (targets, malformed).
+
+    A plain list of RNs, so the scrape can run somewhere that does not have the
+    database — the target list is the only thing it needs from it, and shipping
+    1,200 identifiers beats shipping 127 MB.
+
+    Separator is comma or tab, because a hand-written target list will use
+    whichever the author reached for. Splitting on comma alone once swallowed a
+    whole tab-separated line into the RN, and every lookup then missed while the
+    run reported success on 99 empty results.
+    """
+    targets, malformed = [], []
+    with open(path) as handle:
+        for line in handle:
+            if not line.strip() or line.startswith("#"):
+                continue
+            parts = re.split(r"[,\t]", line, maxsplit=1)
+            rn = parts[0].strip()
+            if not RN_RE.match(rn):
+                malformed.append(rn)
+                continue
+            # Second column is the operator, carried only so progress lines can
+            # name what is being scraped.
+            targets.append((rn, parts[1].strip() if len(parts) > 1 else None))
+    return targets, malformed
+
+
 def cmd_scrape(args):
     """Pull permit documents and extract unit MW / engine manufacturer."""
     from src.permits.sources import tceq_records
@@ -218,19 +250,16 @@ def cmd_scrape(args):
     conn = dbmod.open_db(args.db)
     try:
         if args.rn_file:
-            # A plain list of RNs, so the scrape can run somewhere that does not
-            # have the database — the target list is the only thing it needs
-            # from it, and shipping 1,200 identifiers beats shipping 127 MB.
-            with open(args.rn_file) as handle:
-                targets = []
-                for line in handle:
-                    if not line.strip() or line.startswith("#"):
-                        continue
-                    parts = line.split(",", 1)
-                    # Second column is the operator, carried only so progress
-                    # lines can name what is being scraped.
-                    targets.append((parts[0].strip(),
-                                    parts[1].strip() if len(parts) > 1 else None))
+            targets, malformed = read_rn_file(args.rn_file)
+            if malformed:
+                # Bad identifiers cannot be scraped, and a file that is entirely
+                # bad is a format mistake worth stopping for rather than a slow
+                # walk through 99 guaranteed-empty lookups.
+                sys.stderr.write(
+                    f"{len(malformed)} line(s) in {args.rn_file} are not "
+                    f"regulated-entity numbers, e.g. {malformed[0]!r}\n")
+                if not targets:
+                    return 2
             if args.limit:
                 targets = targets[:args.limit]
         elif args.rn:

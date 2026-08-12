@@ -16,6 +16,7 @@ from src.permits import (
     status as statusmod,
 )
 from src.permits import net as netmod
+import permits_cli
 from src.permits.sources import base, ercot, puct, tceq_air, tceq_stormwater
 
 
@@ -1574,3 +1575,58 @@ class TestEngineFamily:
         # Two spellings of one company split its sites across two filter
         # entries, which reads as two smaller vendors than reality.
         assert classify.canonical_maker(raw) == expected
+
+
+class TestScrapeTargetFile:
+    """Parsing of --rn-file target lists.
+
+    A tab-separated file was once read with a comma-only split, so every RN came
+    out as "RN100209451\tMOTIVA ENTERPRISES LLC", every lookup missed, and the
+    run wrote 99 results with zero documents each and exited 0.
+    """
+
+    def _write(self, tmp_path, text):
+        path = tmp_path / "targets.txt"
+        path.write_text(text)
+        return str(path)
+
+    def test_comma_separated(self, tmp_path):
+        path = self._write(tmp_path, "RN100209451,MOTIVA ENTERPRISES LLC\n")
+        targets, malformed = permits_cli.read_rn_file(path)
+        assert targets == [("RN100209451", "MOTIVA ENTERPRISES LLC")]
+        assert malformed == []
+
+    def test_tab_separated_reads_the_same(self, tmp_path):
+        path = self._write(tmp_path, "RN100209451\tMOTIVA ENTERPRISES LLC\n")
+        targets, malformed = permits_cli.read_rn_file(path)
+        assert targets == [("RN100209451", "MOTIVA ENTERPRISES LLC")]
+        assert malformed == []
+
+    def test_rn_only_line_has_no_operator(self, tmp_path):
+        path = self._write(tmp_path, "RN100209451\n")
+        targets, _ = permits_cli.read_rn_file(path)
+        assert targets == [("RN100209451", None)]
+
+    def test_comments_and_blanks_skipped(self, tmp_path):
+        path = self._write(
+            tmp_path, "# a header\n\nRN100209451,A\n\n# another\nRN100209766,B\n"
+        )
+        targets, malformed = permits_cli.read_rn_file(path)
+        assert [t[0] for t in targets] == ["RN100209451", "RN100209766"]
+        assert malformed == []
+
+    def test_non_rn_lines_are_reported_not_scraped(self, tmp_path):
+        # These would each cost a session, a search and a wait, all to find
+        # nothing. Better to name them than to walk them.
+        path = self._write(tmp_path, "RN100209451,A\nnot-an-rn\nRN12345,B\n")
+        targets, malformed = permits_cli.read_rn_file(path)
+        assert [t[0] for t in targets] == ["RN100209451"]
+        assert malformed == ["not-an-rn", "RN12345"]
+
+    def test_shipped_target_lists_parse_clean(self, tmp_path):
+        # The two committed lists are the ones people actually run.
+        for name in ("scrape_targets_egf.txt", "scrape_targets_casebycase.txt"):
+            path = os.path.join("data", name)
+            targets, malformed = permits_cli.read_rn_file(path)
+            assert not malformed, f"{name}: {malformed[:3]}"
+            assert targets, f"{name} is empty"
