@@ -1870,3 +1870,33 @@ class TestPrecedentRows:
     def test_prose_with_no_company_is_untouched(self):
         got = tceq_records.extract_units("The plant will be rated 300 MW total.")
         assert got["max_mw"] == 300.0
+
+
+class TestClearinghouseDocuments:
+    """RBLC exports are a national database of other plants' permits.
+
+    Applicants attach EPA's RACT/BACT/LAER Clearinghouse output to justify
+    their own BACT. One Rockwood attachment mentions RBLC 343 times and carries
+    "KING POWER STATION ... 1350 MW" -- that figure was being reported as
+    Rockwood's rating. OCR mangles the company and state ("STEAG POWER LLC",
+    "815l20LA") past what the row-shaped guard can match, but the header text
+    survives.
+    """
+
+    def test_export_is_recognised(self):
+        assert tceq_records.clearinghouse_hits(
+            "RBLC ID TX-0754 RBLC PERMIT NUM RACT/BACT/LAER Clearinghouse") >= 3
+
+    def test_an_ordinary_application_scores_zero(self):
+        assert tceq_records.clearinghouse_hits(
+            "Application for a permit to construct two turbines.") == 0
+
+    def test_none_is_safe(self):
+        assert tceq_records.clearinghouse_hits(None) == 0
+
+    def test_threshold_separates_the_observed_documents(self):
+        # Measured on the live docket: 343 and 39 hits in the two contaminated
+        # attachments, 0 in the clean one.
+        for hits in (343, 39):
+            assert hits >= tceq_records.CLEARINGHOUSE_THRESHOLD
+        assert 0 < tceq_records.CLEARINGHOUSE_THRESHOLD

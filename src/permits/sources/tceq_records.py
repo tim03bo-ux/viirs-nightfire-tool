@@ -363,6 +363,22 @@ _PRECEDENT_RE = re.compile(
 # company and the number. The window has to be wide enough to span a row.
 PRECEDENT_WINDOW = 6
 
+# EPA's RACT/BACT/LAER Clearinghouse is a national database of BACT
+# determinations, and applicants attach its output to justify their own. The
+# export is nothing but other plants: one Rockwood attachment mentions RBLC 343
+# times and carries "KING POWER STATION ... 1350 MW". OCR mangles the company
+# and state badly enough ("STEAG POWER LLC", "815l20LA") that the row-shaped
+# guard cannot see them, but the header text survives and names the document
+# for what it is.
+_CLEARINGHOUSE_RE = re.compile(
+    r"\bRBLC\b|RACT/BACT/LAER|CLEARINGHOUSE", re.IGNORECASE)
+CLEARINGHOUSE_THRESHOLD = 5
+
+
+def clearinghouse_hits(text):
+    """How strongly a document identifies itself as an RBLC survey."""
+    return len(_CLEARINGHOUSE_RE.findall(text or ""))
+
 
 def looks_like_precedent_row(line, entity_name=None):
     """True when a line is another company's entry in a comparison table.
@@ -735,6 +751,16 @@ def scrape_entity(rn_number, dest_dir, record_series="nsr_permit", max_docs=6,
                 extracted = extract_units(
                     page_text, entity_name=document.get("entity_name")
                 )
+                hits = clearinghouse_hits(page_text)
+                if hits >= CLEARINGHOUSE_THRESHOLD:
+                    # Every megawatt figure in an RBLC export belongs to some
+                    # other plant. Reporting nothing is right here; reporting
+                    # the largest number on the page is how Rockwood ended up
+                    # rated at a station in Louisiana.
+                    extracted["clearinghouse_hits"] = hits
+                    extracted["mw_values"] = []
+                    extracted["max_mw"] = None
+                    extracted["total_mw"] = None
                 others = set(foreign_rns(page_text, rn_number))
                 if len(others) >= REGISTER_RN_THRESHOLD:
                     # A multi-facility register, not this plant's application.
