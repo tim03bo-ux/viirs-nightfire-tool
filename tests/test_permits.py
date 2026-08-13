@@ -1900,3 +1900,38 @@ class TestClearinghouseDocuments:
         for hits in (343, 39):
             assert hits >= tceq_records.CLEARINGHOUSE_THRESHOLD
         assert 0 < tceq_records.CLEARINGHOUSE_THRESHOLD
+
+
+class TestThrottleRetry:
+    """A non-json answer is a rate limit, not a dead entity.
+
+    Under six workers each following result pages, 35 of 99 entities in one
+    sweep died on "JSONDecodeError: Expecting value: line 1 column 1" -- the
+    server had returned an html throttle page and those entities were lost for
+    the whole run.
+    """
+
+    def test_recovers_once_the_limit_clears(self, monkeypatch):
+        answers = [b"<html>Too many requests</html>", b'{"ok": 1}']
+        monkeypatch.setattr(tceq_records, "_get", lambda *a, **k: answers.pop(0))
+        monkeypatch.setattr(tceq_records.time, "sleep", lambda s: None)
+        assert tceq_records._get_json("http://x", delays=(1,)) == {"ok": 1}
+
+    def test_valid_json_makes_one_request(self, monkeypatch):
+        calls = []
+
+        def once(*a, **k):
+            calls.append(1)
+            return b'{"ok": 1}'
+        monkeypatch.setattr(tceq_records, "_get", once)
+        assert tceq_records._get_json("http://x") == {"ok": 1}
+        assert len(calls) == 1
+
+    def test_persistent_throttle_names_itself(self, monkeypatch):
+        # The old message was a bare JSONDecodeError, which read like a parser
+        # bug rather than a rate limit and pointed at nothing actionable.
+        monkeypatch.setattr(tceq_records, "_get",
+                            lambda *a, **k: b"<html>Service Unavailable</html>")
+        monkeypatch.setattr(tceq_records.time, "sleep", lambda s: None)
+        with pytest.raises(ValueError, match="non-json"):
+            tceq_records._get_json("http://x", delays=(1, 1))

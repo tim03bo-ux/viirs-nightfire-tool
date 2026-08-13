@@ -85,6 +85,33 @@ def _get(url, timeout=90, retries=None):
     return net.request_bytes(url, timeout=timeout, retries=retries)
 
 
+# Answers to a burst are not always json. Under six workers each following
+# result pages, 35 of 99 entities in one sweep died on
+# "JSONDecodeError: Expecting value: line 1 column 1" -- the server had returned
+# an html throttle page, and every one of those entities was simply lost for the
+# run. It is a rate limit, so it clears on its own if the caller waits.
+JSON_RETRY_DELAYS = (5, 20, 60, 120)
+
+
+def _get_json(url, timeout=120, delays=JSON_RETRY_DELAYS):
+    """Fetch and parse json, waiting out non-json throttle responses."""
+    last = None
+    for attempt in range(len(delays) + 1):
+        payload = _get(url, timeout=timeout)
+        try:
+            return json.loads(payload.decode("utf-8", errors="replace"))
+        except json.JSONDecodeError as exc:
+            last = exc
+            head = payload[:200].decode("utf-8", errors="replace").strip()
+            if attempt < len(delays):
+                time.sleep(delays[attempt])
+                continue
+            raise ValueError(
+                f"TCEQ returned non-json after {attempt + 1} attempts "
+                f"(likely a rate limit); response began {head!r}"
+            ) from last
+
+
 def client_ip(timeout=30):
     """The site records the caller's IP with the access grant, as its own JS does."""
     try:
@@ -101,8 +128,7 @@ def get_access_id(ip=None, timeout=60):
         "IdcService": "TCEQ_SEARCH_ADD_ACCESS", "clientIP": ip,
         "searchType": "External", "IsJson": "1",
     })
-    payload = _get(f"{BASE}?{query}", timeout=timeout)
-    data = json.loads(payload.decode("utf-8", errors="replace"))
+    data = _get_json(f"{BASE}?{query}", timeout=timeout)
     return data.get("LocalData", {}).get("accessID"), ip
 
 
@@ -136,8 +162,7 @@ def search_documents(rn_number=None, permit_number=None, entity_name=None,
         "SortField": "dInDate", "SortOrder": "Desc",
         "accessID": access_id or "", "clientIP": ip,
     })
-    payload = _get(f"{BASE}?{query}", timeout=timeout)
-    data = json.loads(payload.decode("utf-8", errors="replace"))
+    data = _get_json(f"{BASE}?{query}", timeout=timeout)
 
     result_set = data.get("ResultSets", {}).get("SearchResults")
     if not result_set:
