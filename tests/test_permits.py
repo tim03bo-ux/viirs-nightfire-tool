@@ -2136,3 +2136,90 @@ class TestProjectTokens:
     def test_limit_is_respected(self):
         got = normalize.project_tokens("Alpha Bravo Charlie Delta Echo", limit=2)
         assert len(got) == 2
+
+
+class TestSearchForProject:
+    """Finding the NOIs that belong to one ERCOT project.
+
+    Recall is the easy half -- a token search returns something for 9 of 10
+    queue projects against 2 for an operator search. Precision is the work: the
+    app matches substrings, so "Trent" returns TRENTON VIEW CENTER, "Pinta"
+    returns PINTAILHOMES, and "Sampson" returns SAMPSON HOWARD ELEMENTARY
+    SCHOOL.
+    """
+
+    def _grid(self, rows):
+        return pd.DataFrame(
+            [{"Auth #": a, "Site Name": s, "County": c, "detail_url": ""}
+             for a, s, c in rows],
+            columns=tceq_stormwater.GRID_COLUMNS + ["detail_url"])
+
+    def _patch(self, monkeypatch, by_token):
+        seen = []
+
+        def fake(site_name=None, **kw):
+            seen.append(site_name)
+            return by_token.get(site_name, self._grid([]))
+        monkeypatch.setattr(tceq_stormwater, "search", fake)
+        monkeypatch.setattr(tceq_stormwater.net, "new_jar", lambda: None)
+        return seen
+
+    def test_word_boundary_rejects_a_longer_word(self, monkeypatch):
+        # Trent is a wind repower; TRENTON VIEW CENTER is a subdivision.
+        self._patch(monkeypatch, {"Trent": self._grid([
+            ("1", "TRENTON VIEW CENTER", "Taylor"),
+            ("2", "TRENT WIND FARM", "Taylor")])})
+        got = tceq_stormwater.search_for_project("Trent repower", county="Taylor")
+        assert got["Site Name"].tolist() == ["TRENT WIND FARM"]
+
+    def test_county_rejects_a_real_word_match(self, monkeypatch):
+        # "Sampson" genuinely appears in the school's name; only the county
+        # separates them.
+        self._patch(monkeypatch, {"Sampson": self._grid([
+            ("1", "SAMPSON HOWARD ELEMENTARY SCHOOL", "Harris"),
+            ("2", "BIG SAMPSON WIND", "Coke")])})
+        got = tceq_stormwater.search_for_project("Big Sampson Wind", county="Coke")
+        assert got["Site Name"].tolist() == ["BIG SAMPSON WIND"]
+
+    def test_county_suffix_does_not_break_the_comparison(self, monkeypatch):
+        self._patch(monkeypatch, {"Mesteno": self._grid([
+            ("1", "MESTENO WIND PROJECT", "Starr County")])})
+        got = tceq_stormwater.search_for_project("Mesteno Wind", county="starr")
+        assert len(got) == 1
+
+    def test_without_a_county_the_filter_is_skipped(self, monkeypatch):
+        self._patch(monkeypatch, {"Mesteno": self._grid([
+            ("1", "MESTENO WIND PROJECT", "Starr")])})
+        assert len(tceq_stormwater.search_for_project("Mesteno Wind")) == 1
+
+    def test_the_finding_token_is_recorded(self, monkeypatch):
+        # A match should be traceable to why it is here.
+        self._patch(monkeypatch, {"BearKat": self._grid([
+            ("1", "BEARKAT RENEWABLE ENERGY PROJECT", "Glasscock")])})
+        got = tceq_stormwater.search_for_project(
+            "Harald (BearKat Wind B)", county="Glasscock")
+        assert got["matched_term"].tolist() == ["BearKat"]
+
+    def test_one_authorization_is_not_returned_twice(self, monkeypatch):
+        # Two tokens can find the same NOI.
+        grid = self._grid([("1", "BEARKAT HARALD PROJECT", "Glasscock")])
+        self._patch(monkeypatch, {"BearKat": grid, "Harald": grid})
+        got = tceq_stormwater.search_for_project(
+            "Harald (BearKat Wind B)", county="Glasscock")
+        assert len(got) == 1
+
+    def test_a_search_failure_does_not_lose_the_other_tokens(self, monkeypatch):
+        def fake(site_name=None, **kw):
+            if site_name == "BearKat":
+                raise RuntimeError("throttled")
+            return self._grid([("1", "HARALD SOLAR", "Glasscock")])
+        monkeypatch.setattr(tceq_stormwater, "search", fake)
+        monkeypatch.setattr(tceq_stormwater.net, "new_jar", lambda: None)
+        got = tceq_stormwater.search_for_project(
+            "Harald (BearKat Wind B)", county="Glasscock")
+        assert len(got) == 1
+
+    def test_no_usable_token_makes_no_requests(self, monkeypatch):
+        seen = self._patch(monkeypatch, {})
+        got = tceq_stormwater.search_for_project("Solar Storage Project")
+        assert got.empty and seen == []

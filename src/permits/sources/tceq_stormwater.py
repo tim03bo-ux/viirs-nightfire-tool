@@ -53,6 +53,7 @@ import pandas as pd
 
 from . import base
 from .. import net
+from .. import normalize
 from ..normalize import clean_str
 
 SOURCE = "tceq_swnoi"
@@ -651,3 +652,53 @@ def to_entities(df, source_file_id=None, min_acres=None):
 
         records.append(record)
     return records
+
+
+def search_for_project(project_name, operator=None, county=None, limit=3,
+                       delay=0.4, verbose=False, jar=None, **kwargs):
+    """NOIs that plausibly belong to one ERCOT project.
+
+    Driven by the project's name rather than its operator. ERCOT names the
+    single-purpose entity that signed the interconnection agreement and TCEQ
+    names whoever filed -- usually the parent or the contractor -- so an
+    operator search found 2 of 10 queue projects. A token search finds 9.
+
+    Recall is the easy half. The app matches substrings, so "Trent" returns
+    TRENTON VIEW CENTER, "Pinta" returns PINTAILHOMES, and "Sampson" returns
+    SAMPSON HOWARD ELEMENTARY SCHOOL. Two filters do the work, and neither
+    needs a detail fetch because both fields are in the results grid:
+
+      * `matches_term` re-checks the hit on word boundaries, which is what
+        separates Trent from Trenton.
+      * The county has to agree. A wind project in Glasscock and a school in
+        Harris share nothing but a word.
+
+    Returns a DataFrame with `matched_term` recording which token found each
+    row, so any match can be traced back to why it is here.
+    """
+    tokens = normalize.project_tokens(project_name, operator, limit=limit)
+    jar = jar or net.new_jar()
+    frames = []
+    for token in tokens:
+        try:
+            found = search(site_name=token, verbose=verbose, jar=jar,
+                           delay=delay, **kwargs)
+        except Exception as exc:
+            if verbose:
+                print(f"  ERROR '{token}': {str(exc)[:120]}")
+            continue
+        if found.empty:
+            continue
+        keep = found[found["Site Name"].apply(
+            lambda name: matches_term(name, token))].copy()
+        if county is not None:
+            wanted = normalize.norm_county(county)
+            keep = keep[keep["County"].apply(normalize.norm_county) == wanted]
+        if keep.empty:
+            continue
+        keep["matched_term"] = token
+        frames.append(keep)
+    if not frames:
+        return pd.DataFrame(columns=GRID_COLUMNS + ["detail_url", "matched_term"])
+    return (pd.concat(frames, ignore_index=True)
+            .drop_duplicates(subset=["Auth #"]).reset_index(drop=True))
