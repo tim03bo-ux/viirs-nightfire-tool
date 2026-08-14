@@ -202,3 +202,33 @@ Cross-reference outputs against:
 - NASA FIRMS VIIRS active fire NRT data (same satellite, different algorithm)
 - World Bank GFMR individual flare location data (2017-2024, freely available)
 - Texas RRC H-10/G-10 reported flaring volumes (for volume calibration)
+
+---
+
+# TCEQ / ERCOT Permit & Interconnection Database
+
+A second tool lives in this repository, sharing nothing with the flare pipeline
+but the repo itself. It joins four public Texas feeds — the **ERCOT generation
+interconnection queue**, the **ERCOT large load queue**, **TCEQ air New Source
+Review permit applications**, and **TCEQ stormwater construction NOIs
+(TXR150000)** — into a single database of resolved *sites*, to identify
+generation projects, data centers, and the colocated gen + data center
+developments that only become visible once the feeds are joined.
+
+```bash
+python permits_cli.py demo            # synthetic data, end to end, no network
+streamlit run permits_dashboard.py
+```
+
+With real data, download the exports into `data/raw/` and:
+
+```bash
+python permits_cli.py fetch                   # ERCOT MIS, where reachable
+python permits_cli.py ingest --dir data/raw
+python permits_cli.py link
+python permits_cli.py stats
+```
+
+Full documentation — where to get each source file, how records are matched into
+sites, how project type and fuel are classified, the schema, and the caveats — is
+in **[docs/PERMITS.md](docs/PERMITS.md)**.

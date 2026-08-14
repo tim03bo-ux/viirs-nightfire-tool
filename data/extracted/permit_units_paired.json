@@ -1,0 +1,5315 @@
+[
+ {
+  "regulated_entity": "RN111153185",
+  "units": [
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-1 | ENG-1 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-2 | ENG-2 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-3 | ENG-3 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-4 | ENG-4 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-5 | ENG-5 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-6 | ENG-6 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-7 | ENG-7 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-8 | ENG-8 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-9 | ENG-9 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-10 | ENG-10 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-11 | ENG-11 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-12 | ENG-12 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-13 | ENG-13 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-14 | ENG-14 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-15 | ENG-15 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "The Diamond Substation will consist of 15 Cummins QSK60G natural gas-fired engines. A process flow"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": 1945.0,
+    "mmbtu_hr": null,
+    "mw_from_hp": 1.45,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "same_line",
+    "context": "Emissions from the Cummins QSK60G, 1,945 horsepower (hp), natural gas\u2010fired, reciprocating engines"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-1 ENG-1 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-2 ENG-2 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-3 ENG-3 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-4 ENG-4 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-5 ENG-5 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-6 ENG-6 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-7 ENG-7 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-8 ENG-8 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-9 ENG-9 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-10 ENG-10 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-11 ENG-11 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-12 ENG-12 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-13 ENG-13 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-14 ENG-14 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-15 ENG-15 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Cummins"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-1 | ENG-1 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-2 | ENG-2 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-3 | ENG-3 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-4 | ENG-4 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-5 | ENG-5 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-6 | ENG-6 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-7 | ENG-7 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-8 | ENG-8 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-9 | ENG-9 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-10 | ENG-10 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-11 | ENG-11 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-12 | ENG-12 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-13 | ENG-13 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-14 | ENG-14 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-15 | ENG-15 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "The Diamond Substation will consist of 15 Cummins QSK60G natural gas-fired engines. A process flow"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": 1945.0,
+    "mmbtu_hr": null,
+    "mw_from_hp": 1.45,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "same_line",
+    "context": "Emissions from the Cummins QSK60G, 1,945 horsepower (hp), natural gas\u2010fired, reciprocating engines"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-1 ENG-1 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-2 ENG-2 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-3 ENG-3 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-4 ENG-4 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-5 ENG-5 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-6 ENG-6 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-7 ENG-7 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-8 ENG-8 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-9 ENG-9 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-10 ENG-10 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-11 ENG-11 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-12 ENG-12 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-13 ENG-13 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-14 ENG-14 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "QSK60G",
+    "proximity": "unrated",
+    "context": "ENG-15 ENG-15 Cummins QSK60G"
+   },
+   {
+    "manufacturer": "cummins",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Cummins"
+   }
+  ],
+  "by_manufacturer": [
+   {
+    "manufacturer": "cummins",
+    "models": [
+     "QSK60G"
+    ],
+    "mentions": 66,
+    "same_line": 2,
+    "max_unit_hp": 1945.0,
+    "max_unit_mw": 1.45,
+    "min_unit_mw": 1.45,
+    "n_rated": 2
+   }
+  ],
+  "entity_name": "DUKE ENERGY DIAMOND SUBSTATION GENERATION PROJECT",
+  "documents_total": 6,
+  "documents_read": 4,
+  "max_mw": 19.5,
+  "manufacturers": [
+   "cummins"
+  ],
+  "models": [
+   "Domestic",
+   "Rated",
+   "Runtime",
+   "application/pdf"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5937951",
+    "bytes": 160282
+   },
+   {
+    "mw_values": [
+     19.5,
+     15.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.3,
+     1.3,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 19.5,
+    "total_mw": 80.6,
+    "manufacturers": [
+     "cummins"
+    ],
+    "models": [
+     "Rated",
+     "Runtime"
+    ],
+    "units": [
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-1 | ENG-1 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-2 | ENG-2 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-3 | ENG-3 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-4 | ENG-4 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-5 | ENG-5 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-6 | ENG-6 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-7 | ENG-7 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-8 | ENG-8 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-9 | ENG-9 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-10 | ENG-10 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-11 | ENG-11 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-12 | ENG-12 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-13 | ENG-13 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-14 | ENG-14 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-15 | ENG-15 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "The Diamond Substation will consist of 15 Cummins QSK60G natural gas-fired engines. A process flow"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": 1945.0,
+      "mmbtu_hr": null,
+      "mw_from_hp": 1.45,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "same_line",
+      "context": "Emissions from the Cummins QSK60G, 1,945 horsepower (hp), natural gas\u2010fired, reciprocating engines"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-1 ENG-1 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-2 ENG-2 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-3 ENG-3 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-4 ENG-4 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-5 ENG-5 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-6 ENG-6 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-7 ENG-7 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-8 ENG-8 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-9 ENG-9 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-10 ENG-10 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-11 ENG-11 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-12 ENG-12 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-13 ENG-13 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-14 ENG-14 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-15 ENG-15 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Cummins"
+     }
+    ],
+    "title": "Applications",
+    "doc_id": "5937952",
+    "bytes": 8214713
+   },
+   {
+    "mw_values": [
+     19.5,
+     15.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.3,
+     1.3,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 19.5,
+    "total_mw": 80.6,
+    "manufacturers": [
+     "cummins"
+    ],
+    "models": [
+     "Rated",
+     "Runtime"
+    ],
+    "units": [
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-1 | ENG-1 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-2 | ENG-2 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-3 | ENG-3 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-4 | ENG-4 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-5 | ENG-5 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-6 | ENG-6 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-7 | ENG-7 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-8 | ENG-8 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-9 | ENG-9 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-10 | ENG-10 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-11 | ENG-11 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-12 | ENG-12 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-13 | ENG-13 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-14 | ENG-14 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-15 | ENG-15 | Cummins QSK60G (NG-Fired Engine) | 8.58 | 4.29 | 0.13 | 0.13 | 0.13 | 0.01 | 3.69 | 1.29 | 0.64 | 0.02 | 0.02 | 0.02 | 0.00 | 0.55"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "The Diamond Substation will consist of 15 Cummins QSK60G natural gas-fired engines. A process flow"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": 1945.0,
+      "mmbtu_hr": null,
+      "mw_from_hp": 1.45,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "same_line",
+      "context": "Emissions from the Cummins QSK60G, 1,945 horsepower (hp), natural gas\u2010fired, reciprocating engines"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-1 ENG-1 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-2 ENG-2 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-3 ENG-3 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-4 ENG-4 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-5 ENG-5 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-6 ENG-6 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-7 ENG-7 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-8 ENG-8 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-9 ENG-9 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-10 ENG-10 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-11 ENG-11 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-12 ENG-12 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-13 ENG-13 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-14 ENG-14 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "QSK60G",
+      "proximity": "unrated",
+      "context": "ENG-15 ENG-15 Cummins QSK60G"
+     },
+     {
+      "manufacturer": "cummins",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Cummins"
+     }
+    ],
+    "title": "Initial Application",
+    "doc_id": "8033102",
+    "bytes": 8214713
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8033103",
+    "bytes": 12989
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100226067",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "BAYTOWN ENERGY CENTER",
+  "documents_total": 155,
+  "documents_read": 4,
+  "max_mw": 180.0,
+  "manufacturers": [],
+  "models": [
+   "116107",
+   "163545",
+   "172517",
+   "49622",
+   "93224",
+   "Domestic",
+   "February",
+   "ing"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "116107",
+     "163545",
+     "172517",
+     "49622",
+     "93224",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8539255",
+    "bytes": 39702
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "116107",
+     "163545",
+     "172517",
+     "49622",
+     "93224",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9398700",
+    "bytes": 39628
+   },
+   {
+    "mw_values": [
+     180.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 180.0,
+    "total_mw": 223.5,
+    "manufacturers": [],
+    "models": [
+     "February",
+     "ing"
+    ],
+    "units": [],
+    "title": "Project File Folder",
+    "doc_id": "571286",
+    "bytes": 8593871
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "116107",
+     "163545",
+     "172517",
+     "49622",
+     "93224",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8541519",
+    "bytes": 39702
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100213107",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "CHANNEL ENERGY CENTER",
+  "documents_total": 220,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "147282",
+   "156050",
+   "159449",
+   "163539",
+   "164774",
+   "30iIn",
+   "Application",
+   "Domestic",
+   "EPAY",
+   "Industry",
+   "Security",
+   "Site"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "30iIn",
+     "Industry",
+     "Security",
+     "Site",
+     "and",
+     "here",
+     "locating",
+     "reviews"
+    ],
+    "units": [],
+    "title": "Site Review",
+    "doc_id": "8853673",
+    "bytes": 1961685
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "147282",
+     "Application",
+     "EPAY",
+     "Standard",
+     "Status",
+     "ePay",
+     "ing",
+     "tng"
+    ],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "1360053",
+    "bytes": 6570404
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "156050",
+     "159449",
+     "163539",
+     "164774",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8447740",
+    "bytes": 39161
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "156050",
+     "159449",
+     "163539",
+     "164774",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8898743",
+    "bytes": 37673
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100665579",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "",
+  "documents_total": 329,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "107312",
+   "107313",
+   "107314",
+   "107316",
+   "108114",
+   "111091",
+   "130148",
+   "141276",
+   "168041",
+   "22827",
+   "46837",
+   "50655"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "107312",
+     "107313",
+     "107314",
+     "107316",
+     "108114",
+     "111091",
+     "130148",
+     "141276",
+     "168041",
+     "22827",
+     "46837",
+     "50655"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8501625",
+    "bytes": 41660
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "107312",
+     "107313",
+     "107314",
+     "107316",
+     "108114",
+     "111091",
+     "130148",
+     "141276",
+     "168041",
+     "22827",
+     "46837",
+     "50655"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8501627",
+    "bytes": 41660
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "107313",
+     "107314",
+     "107316",
+     "108114",
+     "111091",
+     "130148",
+     "141276",
+     "168041",
+     "22827",
+     "46837",
+     "82188",
+     "86369"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9385030",
+    "bytes": 40598
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "107312",
+     "107313",
+     "107314",
+     "107316",
+     "108114",
+     "111091",
+     "130148",
+     "141276",
+     "168041",
+     "22827",
+     "46837",
+     "50655"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8501629",
+    "bytes": 41660
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111112082",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "MARK ONE",
+  "documents_total": 43,
+  "documents_read": 4,
+  "max_mw": 50.0,
+  "manufacturers": [],
+  "models": [
+   "163309",
+   "Authorization",
+   "Domestic",
+   "application/pdf",
+   "can",
+   "that"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163309",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9386359",
+    "bytes": 38084
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920768",
+    "bytes": 156582
+   },
+   {
+    "mw_values": [
+     50.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 50.0,
+    "total_mw": 93.5,
+    "manufacturers": [],
+    "models": [
+     "Authorization",
+     "can",
+     "that"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920769",
+    "bytes": 4152213
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8033037",
+    "bytes": 12667
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110453131",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "HEB HOUSTON RSC EGUS",
+  "documents_total": 23,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "Standard",
+   "application/pdf",
+   "from"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf",
+     "from"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "3867766",
+    "bytes": 6493545
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 22.25,
+    "manufacturers": [],
+    "models": [
+     "Standard"
+    ],
+    "units": [],
+    "title": "Technical Review",
+    "doc_id": "3835307",
+    "bytes": 123084
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920863",
+    "bytes": 159326
+   },
+   {
+    "mw_values": [
+     1.0
+    ],
+    "max_mw": 1.0,
+    "total_mw": 1.0,
+    "manufacturers": [],
+    "models": [
+     "from"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920865",
+    "bytes": 8371463
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105727085",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 1296",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163210",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163210",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505129",
+    "bytes": 38117
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163210",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380597",
+    "bytes": 38143
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920790",
+    "bytes": 158108
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920791",
+    "bytes": 3896898
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101690865",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART 1041",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163208",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163208",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505125",
+    "bytes": 38103
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163208",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380593",
+    "bytes": 38131
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920597",
+    "bytes": 158520
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920598",
+    "bytes": 3921163
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101692218",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 3229",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163214",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163214",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505135",
+    "bytes": 38133
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163214",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9369513",
+    "bytes": 38159
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920731",
+    "bytes": 3917291
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920730",
+    "bytes": 158209
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105905533",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WALMART SUPERCENTER 2891",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163207",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163207",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505123",
+    "bytes": 38061
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163207",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9369505",
+    "bytes": 38090
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920640",
+    "bytes": 3209887
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920639",
+    "bytes": 158122
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102215845",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 513",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163209",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163209",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505127",
+    "bytes": 38131
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163209",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380595",
+    "bytes": 38156
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920841",
+    "bytes": 158534
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920842",
+    "bytes": 3910624
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106232168",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WALMART SUPERCENTER 897",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163213",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163213",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505133",
+    "bytes": 38153
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163213",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380601",
+    "bytes": 38183
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920700",
+    "bytes": 3931568
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920699",
+    "bytes": 158117
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN106067697",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER STORE 490-05 FLOUR BLUFF",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163211",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163211",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8505131",
+    "bytes": 38172
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163211",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380599",
+    "bytes": 38211
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920614",
+    "bytes": 4005032
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920613",
+    "bytes": 158699
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN104785688",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 3645",
+  "documents_total": 10,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "163212",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163212",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8510971",
+    "bytes": 38106
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "163212",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9369508",
+    "bytes": 38140
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920836",
+    "bytes": 3905780
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920835",
+    "bytes": 158221
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100211689",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "HAYS ENERGY FACILITY",
+  "documents_total": 176,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "155237",
+   "160356",
+   "163072",
+   "ADD",
+   "Domestic",
+   "Permit",
+   "ePay"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "1325705",
+    "bytes": 219367
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "ADD",
+     "ePay"
+    ],
+    "units": [],
+    "title": "Project File Folder",
+    "doc_id": "1337617",
+    "bytes": 4288837
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155237",
+     "160356",
+     "163072",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504146",
+    "bytes": 38849
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155237",
+     "160356",
+     "163072",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9341463",
+    "bytes": 38828
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN100816685",
+  "units": [
+   {
+    "manufacturer": "jenbacher",
+    "mw": 0.848,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [
+     0.848
+    ],
+    "count": null,
+    "model": null,
+    "proximity": "same_line",
+    "context": "EGU/ 848 kW- Jenbacher* Formaldehyde 0.86 r5.12 6r.75 0.29 0.29 4.95 0.60"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "One skid-mounted, Jenbacher Type 316 reciprocating intemal combustion engine will be instalted. The generator will satisry the conditions and emission"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Assuming a NOx emissions factor of 1.78 lb[r4W-hr (0.6 g/hp-hr) for the Jenbacher engine, the selected engine's NOx emissions factor of 1.78 rvill satisff the NOx"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": 0.848,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [
+     0.848
+    ],
+    "count": null,
+    "model": null,
+    "proximity": "same_line",
+    "context": "EGU/ 848 kW- Jenbacher* Formaldehyde 0.86 15.12 6r.75 0.29 0.29 4.95 0.60"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Attachment D-3, GE Jenbacher Biogas Engine Generator Set; Technical Description"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Attachment D-4 GE Jenbacher Biogas Engine Emissions Performance Warranty Data"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": "J316",
+    "proximity": "unrated",
+    "context": "Jenbacher Gas Engine Emission Factors (J316 C82"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Attachment D-3, GE Jenbacher Biogas Engine Generator Set; Technical Description"
+   },
+   {
+    "manufacturer": "jenbacher",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Attachment D-4, GE Jenbacher Biogas Engine Emissions Performance Warranty Data"
+   }
+  ],
+  "by_manufacturer": [
+   {
+    "manufacturer": "jenbacher",
+    "models": [
+     "J316"
+    ],
+    "mentions": 9,
+    "same_line": 2,
+    "max_unit_hp": null,
+    "max_unit_mw": 0.848,
+    "min_unit_mw": 0.848,
+    "n_rated": 2
+   }
+  ],
+  "entity_name": "HORNSBY BEND BIOSOLIDS PLANT",
+  "documents_total": 8,
+  "documents_read": 2,
+  "max_mw": 12.0,
+  "manufacturers": [
+   "jenbacher"
+  ],
+  "models": [
+   "106",
+   "316",
+   "97100-61",
+   "CB-100",
+   "CB-60",
+   "CHECK",
+   "FEF-I8",
+   "Permit",
+   "Request",
+   "Source",
+   "Standard",
+   "TBxes"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     12.0,
+     2.0,
+     1.97,
+     1.97,
+     0.848,
+     0.848,
+     0.848,
+     0.848,
+     0.848,
+     0.848,
+     0.848,
+     0.848
+    ],
+    "max_mw": 12.0,
+    "total_mw": 24.72,
+    "manufacturers": [
+     "jenbacher"
+    ],
+    "models": [
+     "316",
+     "CHECK",
+     "Request",
+     "Source",
+     "Standard",
+     "TBxes",
+     "WASTE",
+     "ofJuel"
+    ],
+    "units": [
+     {
+      "manufacturer": "jenbacher",
+      "mw": 0.848,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [
+       0.848
+      ],
+      "count": null,
+      "model": null,
+      "proximity": "same_line",
+      "context": "EGU/ 848 kW- Jenbacher* Formaldehyde 0.86 r5.12 6r.75 0.29 0.29 4.95 0.60"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "One skid-mounted, Jenbacher Type 316 reciprocating intemal combustion engine will be instalted. The generator will satisry the conditions and emission"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Assuming a NOx emissions factor of 1.78 lb[r4W-hr (0.6 g/hp-hr) for the Jenbacher engine, the selected engine's NOx emissions factor of 1.78 rvill satisff the NOx"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": 0.848,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [
+       0.848
+      ],
+      "count": null,
+      "model": null,
+      "proximity": "same_line",
+      "context": "EGU/ 848 kW- Jenbacher* Formaldehyde 0.86 15.12 6r.75 0.29 0.29 4.95 0.60"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Attachment D-3, GE Jenbacher Biogas Engine Generator Set; Technical Description"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Attachment D-4 GE Jenbacher Biogas Engine Emissions Performance Warranty Data"
+     }
+    ],
+    "title": "Agency Review",
+    "doc_id": "1289428",
+    "bytes": 15490264
+   },
+   {
+    "mw_values": [
+     2.0,
+     2.0,
+     0.848
+    ],
+    "max_mw": 2.0,
+    "total_mw": 4.85,
+    "manufacturers": [
+     "jenbacher"
+    ],
+    "models": [
+     "106",
+     "97100-61",
+     "CB-100",
+     "CB-60",
+     "FEF-I8",
+     "Permit"
+    ],
+    "units": [
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": "J316",
+      "proximity": "unrated",
+      "context": "Jenbacher Gas Engine Emission Factors (J316 C82"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Attachment D-3, GE Jenbacher Biogas Engine Generator Set; Technical Description"
+     },
+     {
+      "manufacturer": "jenbacher",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Attachment D-4, GE Jenbacher Biogas Engine Emissions Performance Warranty Data"
+     }
+    ],
+    "title": "Agency Review",
+    "doc_id": "1289434",
+    "bytes": 13468429
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110723897",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "SJRR POWER PEAKING FACILITY",
+  "documents_total": 30,
+  "documents_read": 4,
+  "max_mw": 50.0,
+  "manufacturers": [],
+  "models": [
+   "155895",
+   "Domestic",
+   "LM6000",
+   "and",
+   "application/pdf",
+   "represented"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155895",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8532403",
+    "bytes": 38162
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155895",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9386237",
+    "bytes": 38089
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4322500",
+    "bytes": 46171
+   },
+   {
+    "mw_values": [
+     50.0,
+     50.0,
+     25.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.5,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 50.0,
+    "total_mw": 170.0,
+    "manufacturers": [],
+    "models": [
+     "LM6000",
+     "and",
+     "represented"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4322501",
+    "bytes": 1543276
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102552031",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "SAND HILLS GAS PLANT",
+  "documents_total": 353,
+  "documents_read": 4,
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [
+   "157820",
+   "Application",
+   "Domestic",
+   "PERMIT",
+   "PROJECT",
+   "PROJEGT",
+   "Permit",
+   "Status",
+   "Targa",
+   "ePay"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "157820",
+     "Application",
+     "PROJEGT",
+     "ePay"
+    ],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "1214608",
+    "bytes": 5388215
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8371347",
+    "bytes": 37522
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Application",
+     "PERMIT",
+     "PROJECT",
+     "PROJEGT",
+     "Permit",
+     "Status",
+     "Targa",
+     "ePay"
+    ],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "1214604",
+    "bytes": 6990160
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Permit"
+    ],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "3630614",
+    "bytes": 177362
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110947363",
+  "units": [
+   {
+    "manufacturer": "clarke",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "What is the name of the Regulated Entity (RE)? \u00a0 HO CLARKE GENERATING"
+   },
+   {
+    "manufacturer": "clarke",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Number and Street \u00a0 12584 HIRAM CLARKE RD"
+   },
+   {
+    "manufacturer": "clarke",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Legal Name \u00a0 Ho Clarke Generating, LLC"
+   },
+   {
+    "manufacturer": "clarke",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "Legal Name: \u00a0 Ho Clarke Generating, LLC"
+   },
+   {
+    "manufacturer": "clarke",
+    "mw": null,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [],
+    "count": null,
+    "model": null,
+    "proximity": "unrated",
+    "context": "12100 Hiram Clarke Road"
+   }
+  ],
+  "by_manufacturer": [
+   {
+    "manufacturer": "clarke",
+    "models": [],
+    "mentions": 5,
+    "same_line": 0,
+    "max_unit_hp": null,
+    "max_unit_mw": null,
+    "min_unit_mw": null,
+    "n_rated": 0
+   }
+  ],
+  "entity_name": "PROENERGY SOUTH HOUSTON PLANT",
+  "documents_total": 59,
+  "documents_read": 4,
+  "max_mw": 40.0,
+  "manufacturers": [
+   "clarke"
+  ],
+  "models": [
+   "153484",
+   "Domestic",
+   "Standard",
+   "and",
+   "represented"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [
+     "clarke"
+    ],
+    "models": [
+     "153484",
+     "Domestic"
+    ],
+    "units": [
+     {
+      "manufacturer": "clarke",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "What is the name of the Regulated Entity (RE)? \u00a0 HO CLARKE GENERATING"
+     },
+     {
+      "manufacturer": "clarke",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Number and Street \u00a0 12584 HIRAM CLARKE RD"
+     },
+     {
+      "manufacturer": "clarke",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Legal Name \u00a0 Ho Clarke Generating, LLC"
+     },
+     {
+      "manufacturer": "clarke",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "Legal Name: \u00a0 Ho Clarke Generating, LLC"
+     }
+    ],
+    "title": "Initial Application",
+    "doc_id": "9386189",
+    "bytes": 38144
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4271319",
+    "bytes": 4019573
+   },
+   {
+    "mw_values": [
+     40.0,
+     40.0,
+     40.0,
+     6.0
+    ],
+    "max_mw": 40.0,
+    "total_mw": 126.0,
+    "manufacturers": [
+     "clarke"
+    ],
+    "models": [
+     "and",
+     "represented"
+    ],
+    "units": [
+     {
+      "manufacturer": "clarke",
+      "mw": null,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [],
+      "count": null,
+      "model": null,
+      "proximity": "unrated",
+      "context": "12100 Hiram Clarke Road"
+     }
+    ],
+    "title": "Applications",
+    "doc_id": "4271320",
+    "bytes": 6932091
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Standard"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4271318",
+    "bytes": 84990
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110696283",
+  "units": [
+   {
+    "manufacturer": "general electric",
+    "mw": 50.0,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [
+     50.0
+    ],
+    "count": null,
+    "model": "LM6000",
+    "proximity": "same_line",
+    "context": "General Electric (GE) LM6000, nominally rated at 50 megawatts (MW) output. Each of the simple cycle"
+   },
+   {
+    "manufacturer": "general electric",
+    "mw": 50.0,
+    "hp": null,
+    "mmbtu_hr": null,
+    "mw_from_hp": null,
+    "mw_candidates": [
+     50.0
+    ],
+    "count": null,
+    "model": "LM6000",
+    "proximity": "nearby",
+    "context": "equipment. The turbine model that will be installed is the General Electric (GE) LM6000, nominally rated"
+   }
+  ],
+  "by_manufacturer": [
+   {
+    "manufacturer": "general electric",
+    "models": [
+     "LM6000"
+    ],
+    "mentions": 2,
+    "same_line": 1,
+    "max_unit_hp": null,
+    "max_unit_mw": 50.0,
+    "min_unit_mw": 50.0,
+    "n_rated": 1
+   }
+  ],
+  "entity_name": "FREEWAY PARK POWER",
+  "documents_total": 18,
+  "documents_read": 4,
+  "max_mw": 50.0,
+  "manufacturers": [
+   "general electric"
+  ],
+  "models": [
+   "155736",
+   "Authorization",
+   "Domestic",
+   "application/pdf",
+   "can",
+   "that"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155736",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9386233",
+    "bytes": 38228
+   },
+   {
+    "mw_values": [
+     50.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 50.0,
+    "total_mw": 93.5,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "Authorization",
+     "Domestic",
+     "application/pdf",
+     "can",
+     "that"
+    ],
+    "units": [
+     {
+      "manufacturer": "general electric",
+      "mw": 50.0,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [
+       50.0
+      ],
+      "count": null,
+      "model": "LM6000",
+      "proximity": "same_line",
+      "context": "General Electric (GE) LM6000, nominally rated at 50 megawatts (MW) output. Each of the simple cycle"
+     }
+    ],
+    "title": "Applications",
+    "doc_id": "4188781",
+    "bytes": 10845049
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "155736",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5039429",
+    "bytes": 147767
+   },
+   {
+    "mw_values": [
+     50.0,
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 50.0,
+    "total_mw": 93.5,
+    "manufacturers": [
+     "general electric"
+    ],
+    "models": [
+     "Authorization",
+     "that"
+    ],
+    "units": [
+     {
+      "manufacturer": "general electric",
+      "mw": 50.0,
+      "hp": null,
+      "mmbtu_hr": null,
+      "mw_from_hp": null,
+      "mw_candidates": [
+       50.0
+      ],
+      "count": null,
+      "model": "LM6000",
+      "proximity": "nearby",
+      "context": "equipment. The turbine model that will be installed is the General Electric (GE) LM6000, nominally rated"
+     }
+    ],
+    "title": "Applications",
+    "doc_id": "5920600",
+    "bytes": 2405810
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111105045",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WALMART 01272 - EGUS",
+  "documents_total": 14,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162804",
+   "Domestic",
+   "application/pdf",
+   "from"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162804",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8511712",
+    "bytes": 38147
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162804",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380581",
+    "bytes": 38166
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "max_mw": 10.0,
+    "total_mw": 43.0,
+    "manufacturers": [],
+    "models": [
+     "from"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920789",
+    "bytes": 4164126
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5920787",
+    "bytes": 157572
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111099115",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "",
+  "documents_total": 6,
+  "documents_read": 3,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162723",
+   "Domestic",
+   "application/pdf",
+   "from"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 43.25,
+    "manufacturers": [],
+    "models": [
+     "from"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032868",
+    "bytes": 4470052
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032869",
+    "bytes": 12796
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162723",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "6162195",
+    "bytes": 48245
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111098679",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "HEB 00418 - EGUS",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "application/pdf",
+   "from"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5807085",
+    "bytes": 158669
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 43.25,
+    "manufacturers": [],
+    "models": [
+     "from"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "5807088",
+    "bytes": 3913081
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032866",
+    "bytes": 12790
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 43.25,
+    "manufacturers": [],
+    "models": [
+     "from"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032865",
+    "bytes": 3913081
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110650058",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "SEALY POWER PEAKING FACILITY",
+  "documents_total": 8,
+  "documents_read": 3,
+  "max_mw": 50.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "LM6000",
+   "and",
+   "application/pdf",
+   "represented"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4323582",
+    "bytes": 46464
+   },
+   {
+    "mw_values": [
+     50.0,
+     50.0,
+     50.0,
+     50.0,
+     50.0,
+     25.0,
+     1.5
+    ],
+    "max_mw": 50.0,
+    "total_mw": 276.5,
+    "manufacturers": [],
+    "models": [
+     "LM6000",
+     "and",
+     "represented"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4322485",
+    "bytes": 1590403
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "6837845",
+    "bytes": 46799
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN110650066",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "PALESTINE POWER PEAKING FACILITY",
+  "documents_total": 8,
+  "documents_read": 3,
+  "max_mw": 50.0,
+  "manufacturers": [],
+  "models": [
+   "Domestic",
+   "LM6000",
+   "and",
+   "application/pdf",
+   "represented"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     10.0,
+     10.0,
+     1.0,
+     1.0,
+     1.0,
+     0.25,
+     0.25
+    ],
+    "max_mw": 10.0,
+    "total_mw": 43.5,
+    "manufacturers": [],
+    "models": [],
+    "units": [],
+    "title": "Agency Review",
+    "doc_id": "4212935",
+    "bytes": 781942
+   },
+   {
+    "mw_values": [
+     50.0,
+     50.0,
+     50.0,
+     25.0,
+     1.5
+    ],
+    "max_mw": 50.0,
+    "total_mw": 176.5,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "LM6000",
+     "and",
+     "application/pdf",
+     "represented"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "4189836",
+    "bytes": 1797084
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Applications",
+    "doc_id": "6837847",
+    "bytes": 46983
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101692309",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 601",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162580",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162580",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504972",
+    "bytes": 38138
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162580",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380573",
+    "bytes": 38168
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032853",
+    "bytes": 12724
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032852",
+    "bytes": 3212419
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102219342",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 420",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162578",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162578",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504970",
+    "bytes": 38108
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162578",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380571",
+    "bytes": 38151
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032850",
+    "bytes": 3202763
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032851",
+    "bytes": 12719
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN101692259",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 0608",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162575",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162575",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504964",
+    "bytes": 38108
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162575",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380565",
+    "bytes": 38135
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032845",
+    "bytes": 12715
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032844",
+    "bytes": 3224888
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102219367",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 1148",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162576",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162576",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504966",
+    "bytes": 38095
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162576",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380567",
+    "bytes": 38126
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032846",
+    "bytes": 3206412
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032847",
+    "bytes": 12715
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN105019608",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "WAL-MART SUPERCENTER 1249",
+  "documents_total": 8,
+  "documents_read": 4,
+  "max_mw": 10.0,
+  "manufacturers": [],
+  "models": [
+   "162577",
+   "32L",
+   "Cylinders",
+   "Description",
+   "Direction",
+   "Domestic",
+   "FACILITY",
+   "INTERNAL",
+   "Max",
+   "V-Series",
+   "application/pdf",
+   "year"
+  ],
+  "findings": [
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162577",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8504968",
+    "bytes": 38127
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "162577",
+     "Domestic"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "9380569",
+    "bytes": 38152
+   },
+   {
+    "mw_values": [
+     10.0,
+     10.0,
+     1.44,
+     1.44,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.075
+    ],
+    "max_mw": 10.0,
+    "total_mw": 27.27,
+    "manufacturers": [],
+    "models": [
+     "32L",
+     "Cylinders",
+     "Description",
+     "Direction",
+     "FACILITY",
+     "INTERNAL",
+     "Max",
+     "V-Series",
+     "year"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032848",
+    "bytes": 3291781
+   },
+   {
+    "mw_values": [],
+    "max_mw": null,
+    "total_mw": null,
+    "manufacturers": [],
+    "models": [
+     "Domestic",
+     "application/pdf"
+    ],
+    "units": [],
+    "title": "Initial Application",
+    "doc_id": "8032849",
+    "bytes": 12694
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN102199486",
+  "units": [],
+  "by_manufacturer": [],
+  "entity_name": "",
+  "documents_total": 46,
+  "documents_read": 1,
+  "max_mw": 265.0,
+  "manufacturers": [],
+  "models": [
+   "2677",
+   "Addn"
+  ],
+  "findings": [
+   {
+    "mw_values": [
+     265.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.681,
+     0.681,
+     0.53,
+     0.416,
+     0.416,
+     0.416,
+     0.265,
+     0.265,
+     0.265,
+     0.265
+    ],
+    "max_mw": 265.0,
+    "total_mw": 275.2,
+    "manufacturers": [],
+    "models": [
+     "2677",
+     "Addn"
+    ],
+    "units": [],
+    "title": "Project File Folder",
+    "doc_id": "1303877",
+    "bytes": 6015958
+   }
+  ]
+ },
+ {
+  "regulated_entity": "RN111091070",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111090460",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111087029",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111084794",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100812023",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN100222033",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN105342943",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111075552",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111074993",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111074886",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111074803",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111074175",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102984705",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102286242",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN108462102",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN110069226",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN109001842",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN110565843",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN101941284",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN105295802",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106080914",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106108343",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102584844",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106072846",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111035838",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN104432109",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111019840",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111020285",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN102219326",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111019873",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111019774",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106355746",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN111019717",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106556509",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106539406",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106555923",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106498843",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106506397",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ },
+ {
+  "regulated_entity": "RN106557416",
+  "error": "<urlopen error [Errno 111] Connection refused>",
+  "max_mw": null,
+  "manufacturers": [],
+  "models": [],
+  "documents_total": 0,
+  "documents_read": 0,
+  "findings": []
+ }
+]
