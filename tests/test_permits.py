@@ -2088,3 +2088,51 @@ class TestMergeUnitResults:
             {"manufacturer": "cummins", "proximity": "unrated"}]}])
         got = pipeline.merge_unit_results(db, src, verbose=False)
         assert got["unmatched"] == 1 and got["rows"] == 0
+
+
+class TestProjectTokens:
+    """Search terms that ERCOT and TCEQ can both be expected to carry.
+
+    ERCOT lists the single-purpose entity that signed the interconnection
+    agreement; TCEQ lists whoever filed, usually the parent or the contractor.
+    Searching TCEQ stormwater by ERCOT's operator name found 2 of 10. The
+    project's own name is the part the two share.
+    """
+
+    def test_parenthetical_is_opened_not_stripped(self):
+        # "Harald (BearKat Wind B)" pairs ERCOT's internal codename with the
+        # real one, and the parenthetical is the half matching "BEARKAT WIND".
+        assert "BearKat" in normalize.project_tokens("Harald (BearKat Wind B)")
+
+    def test_generic_queue_words_are_dropped(self):
+        got = normalize.project_tokens("TX Nazareth Solar, LLC")
+        assert got == ["Nazareth"]
+
+    def test_ercot_process_annotation_is_not_a_name(self):
+        # "TEF - Due Diligence" is an ERCOT workflow note, not the project.
+        got = normalize.project_tokens("Cedar Bayou 5 (TEF - Due Diligence)")
+        assert "TEF" not in got and "Due" not in got
+        assert set(got) == {"Cedar", "Bayou"}
+
+    def test_longer_tokens_come_first(self):
+        # Rarer words narrow a site-name search faster.
+        assert normalize.project_tokens(
+            "Fort Worth Power Core Bastrop Gas Plant")[0] == "Bastrop"
+
+    def test_short_real_names_survive(self):
+        # "Elk" and "Zeus" are real projects; the floor has to sit below four.
+        assert normalize.project_tokens("Elk Unit 4") == ["Elk"]
+
+    def test_operator_supplies_tokens_when_the_name_is_all_generic(self):
+        got = normalize.project_tokens("Solar Project", "Mesteno Windpower, LLC")
+        assert got == ["Mesteno"]
+
+    def test_a_wholly_generic_name_yields_nothing(self):
+        assert normalize.project_tokens("Solar Energy Storage Project") == []
+
+    def test_duplicates_across_name_and_operator_appear_once(self):
+        assert normalize.project_tokens("Coyote Wind", "Coyote Wind LLC") == ["Coyote"]
+
+    def test_limit_is_respected(self):
+        got = normalize.project_tokens("Alpha Bravo Charlie Delta Echo", limit=2)
+        assert len(got) == 2

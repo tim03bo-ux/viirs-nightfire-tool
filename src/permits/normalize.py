@@ -336,3 +336,54 @@ def clean_str(value, max_len=None):
     if max_len:
         text = text[:max_len]
     return text
+
+
+# Words that appear across the ERCOT queue and so identify nothing. Measured by
+# counting every word in 1,827 project names: "solar", "storage" and "bess" lead
+# the list, and "TEF"/"due diligence" is an ERCOT process annotation rather than
+# part of any project's name.
+_GENERIC_PROJECT_WORDS = frozenset({
+    "solar", "storage", "bess", "battery", "energy", "wind", "windpower",
+    "gas", "power", "project", "renewable", "renewables", "generation",
+    "generating", "farm", "plant", "station", "center", "centre", "facility",
+    "phase", "repower", "expansion", "addition", "unit", "units", "grid",
+    "slf", "brp", "tef", "due", "diligence", "flexible", "hybrid",
+    "north", "south", "east", "west", "texas", "tx", "county",
+    "the", "and", "of", "llc", "lp", "inc", "ltd", "corp", "company",
+    "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x",
+    "new", "old", "big", "little",
+})
+
+# Two letters is not a searchable name; four is. "Elk" and "Zeus" are real
+# project names, so the floor sits at three.
+_MIN_TOKEN = 3
+
+
+def project_tokens(*names, limit=3):
+    """Distinctive words from a project name, most identifying first.
+
+    ERCOT and TCEQ almost never agree on an operator -- ERCOT lists the
+    single-purpose entity that signed the interconnection agreement, TCEQ lists
+    whoever filed, which is usually the parent or the contractor. Searching
+    TCEQ by ERCOT's operator found one match in seven.
+
+    What the two do share is the project's own name, and it survives in odd
+    places: "Harald (BearKat Wind B)" pairs ERCOT's internal codename with the
+    real one, and the parenthetical is the half that matches "BEARKAT WIND".
+    So parentheses are opened rather than stripped, and every word is a
+    candidate until the generic ones are removed.
+
+    Longer words are tried first: they are rarer, so they narrow a site-name
+    search faster than a short one does.
+    """
+    seen, tokens = set(), []
+    for name in names:
+        for word in re.findall(r"[A-Za-z][A-Za-z0-9'-]*", str(name or "")):
+            lowered = word.lower()
+            if (len(lowered) < _MIN_TOKEN or lowered in _GENERIC_PROJECT_WORDS
+                    or lowered in seen):
+                continue
+            seen.add(lowered)
+            tokens.append(word)
+    tokens.sort(key=len, reverse=True)
+    return tokens[:limit]
