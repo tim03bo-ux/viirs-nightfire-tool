@@ -113,6 +113,17 @@ ENERGY_SITE_TERMS = NAME_TERMS_GENERATION + NAME_TERMS_LOAD + [
 ]
 
 
+# Site types that are not generation whatever else their name contains. Needed
+# because a few energy words are not exclusively electrical: "TRANSMISSION"
+# admitted CITY OF SWEETWATER WATER TRANSMISSION, which is a water main.
+# Checked on word boundaries, so "WATER" does not fire on "SWEETWATER".
+NON_ENERGY_SITE_TERMS = [
+    "WATER", "SEWER", "WASTEWATER", "TREATMENT", "LANDFILL", "SCHOOL",
+    "SUBDIVISION", "RESIDENCE", "APARTMENTS", "HOSPITAL", "ROADWAY",
+    "HIGHWAY", "BRIDGE", "DRAINAGE", "DETENTION",
+]
+
+
 def looks_like_energy_site(name):
     """True when a site name reads as energy infrastructure.
 
@@ -120,6 +131,8 @@ def looks_like_energy_site(name):
     substring test puts OBESSO RESIDENCE in the BESS results and Windsor in the
     WIND ones.
     """
+    if any(matches_term(name, term) for term in NON_ENERGY_SITE_TERMS):
+        return False
     return any(matches_term(name, term) for term in ENERGY_SITE_TERMS)
 
 HEADER_TOKENS = ["Permit", "Operator", "County", "Acres", "Site", "NOI"]

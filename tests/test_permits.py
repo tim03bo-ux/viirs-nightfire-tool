@@ -2281,3 +2281,23 @@ class TestEnergySiteFilter:
         got = tceq_stormwater.search_for_project(
             "Sweetwater 2 repower", county="Nolan", energy_only=False)
         assert len(got) == 1
+
+    @pytest.mark.parametrize("name", [
+        "CITY OF SWEETWATER WATER TRANSMISSION",
+        "HEREFORD WASTEWATER TREATMENT PLANT",
+        "COUNTY ROADWAY POWER RELOCATION",
+    ])
+    def test_non_electrical_sites_are_dropped_despite_an_energy_word(self, name):
+        # A few energy words are not exclusively electrical. "TRANSMISSION"
+        # admitted a water main and "POWER" a road relocation.
+        assert not tceq_stormwater.looks_like_energy_site(name)
+
+    def test_sweetwater_is_not_water(self):
+        # The exclusion runs on word boundaries, so a town whose name ends in
+        # "water" is not mistaken for a water utility.
+        assert tceq_stormwater.looks_like_energy_site("SWEETWATER WIND PROJECT")
+
+    def test_a_contractor_named_site_still_reads_as_energy(self):
+        # RES is Renewable Energy Systems; the NOI is filed under the builder.
+        assert tceq_stormwater.looks_like_energy_site(
+            "RES CONSTRUCTION SOUTH TRENT MESA WIND FARM")
