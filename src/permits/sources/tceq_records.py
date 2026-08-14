@@ -388,6 +388,10 @@ _PRECEDENT_RE = re.compile(
 # company and the number. The window has to be wide enough to span a row.
 PRECEDENT_WINDOW = 6
 
+# No single Texas generating station reaches this. W. A. Parish, the largest,
+# is about 3,650 MW, so anything above is a misread rather than a big plant.
+MAX_PLAUSIBLE_MW = 5000
+
 # EPA's RACT/BACT/LAER Clearinghouse is a national database of BACT
 # determinations, and applicants attach its output to justify their own. The
 # export is nothing but other plants: one Rockwood attachment mentions RBLC 343
@@ -465,10 +469,17 @@ def extract_units(text, entity_name=None):
             if unit.lower().startswith("k"):
                 number /= 1000.0
             # Discard implausible readings: OCR turns table rules into digits.
-            if not (0.01 <= number <= 5000):
+            if not (0.01 <= number <= MAX_PLAUSIBLE_MW):
                 continue
             multiplier = int(count) if count else 1
-            values.append(round(number * multiplier, 3))
+            total = round(number * multiplier, 3)
+            # The product needs the same check as the figure. Validating only
+            # the per-unit number let a count through unexamined, and Morgan
+            # Creek -- a 600 MW station -- was reported at 66,675 MW, which is
+            # a third of everything ERCOT has.
+            if not (0.01 <= total <= MAX_PLAUSIBLE_MW):
+                continue
+            values.append(total)
 
     makers = sorted({
         maker for maker in MANUFACTURERS

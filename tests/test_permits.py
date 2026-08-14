@@ -1935,3 +1935,27 @@ class TestThrottleRetry:
         monkeypatch.setattr(tceq_records.time, "sleep", lambda s: None)
         with pytest.raises(ValueError, match="non-json"):
             tceq_records._get_json("http://x", delays=(1, 1))
+
+
+class TestMegawattPlausibility:
+    """The count multiplier has to face the same check as the figure.
+
+    "75 x 889 MW" passed because 889 is plausible; the product was stored
+    unexamined. Morgan Creek Steam Electric Station, roughly 600 MW, came back
+    at 66,675 MW -- about a third of everything ERCOT has installed.
+    """
+
+    def test_multiplied_total_is_range_checked(self):
+        got = tceq_records.extract_units("75 x 889 MW of capacity")
+        assert got["max_mw"] is None
+
+    def test_a_plausible_multiple_survives(self):
+        got = tceq_records.extract_units("2 x 300 MW combustion turbines")
+        assert got["max_mw"] == 600.0
+
+    def test_single_figure_above_the_ceiling_is_dropped(self):
+        assert tceq_records.extract_units("66,675 MW")["max_mw"] is None
+
+    def test_largest_real_station_still_fits(self):
+        # W. A. Parish is about 3,650 MW; the ceiling must not exclude it.
+        assert tceq_records.extract_units("3,650 MW")["max_mw"] == 3650.0
