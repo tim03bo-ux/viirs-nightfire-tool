@@ -447,6 +447,15 @@ def cmd_scrape(args):
     return 0
 
 
+def cmd_merge_units(args):
+    """Write a scrape result file onto the matching database records."""
+    if not os.path.exists(args.file):
+        print(f"error: {args.file} does not exist", file=sys.stderr)
+        return 2
+    pipeline.merge_unit_results(args.db, args.file)
+    return 0
+
+
 def cmd_enrich(args):
     pipeline.enrich_registry(args.db, limit=args.limit, delay=args.delay,
                              lifecycle=args.lifecycle, county=args.county)
@@ -911,6 +920,13 @@ def build_parser():
                           "hospitals — they hold the same unit-rule "
                           "authorization as a peaker but are not projects")
     sub.set_defaults(func=cmd_scrape)
+
+    sub = subparsers.add_parser(
+        "merge-units",
+        help="write a scrape result file onto the matching permit records")
+    sub.add_argument("--file", required=True,
+                     help="a permit_units json produced by `scrape`")
+    sub.set_defaults(func=cmd_merge_units)
 
     sub = subparsers.add_parser(
         "enrich", help="add real site names + business class from Central Registry"

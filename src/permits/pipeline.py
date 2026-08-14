@@ -311,3 +311,98 @@ def refresh(
 def run(db_path="output/permits.db", **kwargs):
     """Convenience entry point used by the dashboard's refresh button."""
     return refresh(db_path, **kwargs)
+
+
+def unit_payload(result):
+    """Database columns for one scraped entity, or None when it carries nothing.
+
+    Drawn from the per-line unit rows, never from the whole-text summary. The
+    summary fields are a scan of everything in the document and are the one
+    place the foreign-RN, precedent-row and clearinghouse guards do not reach,
+    so a manufacturer that only ever appears in a BACT comparison table would
+    arrive as though it were installed here. The unit rows cost nothing in
+    coverage -- both give 79 of 99 sites -- and they are attributable.
+
+    Only same-line pairings are rated at all. "nearby" is kept upstream as
+    evidence of presence but is not strong enough to attribute a number to, and
+    prose megawatts are refused outright: over one 99-entity sweep they produced
+    66,675 MW for a 600 MW station and a run of 3,000-4,300 figures for plants a
+    fifth that size, because a permit application is required to quote other
+    plants' capacities in its BACT demonstration.
+
+    The two surviving ratings go to separate columns because they are separate
+    quantities, and merging them reads as one. A horsepower rating converts to
+    the output of a single engine -- median 1.1 MW across this sweep, right for
+    a reciprocating unit. A megawatt figure printed beside a manufacturer is
+    usually the block or the station -- median 172 MW -- because that is the
+    unit an electrical rating is quoted in. Taking the larger of the two would
+    have made every site with both look like it had one enormous engine.
+    """
+    from . import classify
+
+    units = result.get("units") or []
+    if not units:
+        return None
+
+    makers = sorted({
+        classify.canonical_maker(unit["manufacturer"]) or unit["manufacturer"]
+        for unit in units if unit.get("manufacturer")
+    })
+    models = sorted({unit["model"] for unit in units if unit.get("model")})
+    rated = [unit for unit in units if unit.get("proximity") == "same_line"]
+    per_unit = [unit["mw_from_hp"] for unit in rated if unit.get("mw_from_hp")]
+    stated = [unit["mw"] for unit in rated if unit.get("mw")]
+    if not (makers or models or per_unit or stated):
+        return None
+    return {
+        "unit_manufacturers": ", ".join(makers) or None,
+        "unit_models": ", ".join(models[:12]) or None,
+        "unit_mw_table": max(per_unit) if per_unit else None,
+        "unit_mw_stated": max(stated) if stated else None,
+        "unit_count": len(per_unit) + len(stated) or None,
+    }
+
+
+def merge_unit_results(db_path, path, verbose=True):
+    """Write scraped unit data onto every tceq_air row for each entity.
+
+    A regulated entity holds one set of equipment and usually several permit
+    filings, so the scrape is per entity and the result belongs on all of them.
+    """
+    import json
+
+    with open(path) as handle:
+        results = json.load(handle)
+
+    conn = dbmod.open_db(db_path)
+    updated = rows = skipped = unmatched = 0
+    try:
+        for result in results:
+            rn = result.get("regulated_entity")
+            if not rn or result.get("error"):
+                skipped += 1
+                continue
+            payload = unit_payload(result)
+            if not payload:
+                skipped += 1
+                continue
+            assignments = ", ".join(f"{name} = ?" for name in payload)
+            cursor = conn.execute(
+                f"UPDATE entities SET {assignments} "
+                f"WHERE source = 'tceq_air' AND regulated_entity = ?",
+                list(payload.values()) + [rn],
+            )
+            if cursor.rowcount:
+                updated += 1
+                rows += cursor.rowcount
+            else:
+                unmatched += 1
+        conn.commit()
+    finally:
+        conn.close()
+
+    if verbose:
+        print(f"{updated} entities merged onto {rows} permit records "
+              f"({skipped} carried nothing, {unmatched} matched no record)")
+    return {"entities": updated, "rows": rows,
+            "skipped": skipped, "unmatched": unmatched}

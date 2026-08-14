@@ -1959,3 +1959,132 @@ class TestMegawattPlausibility:
     def test_largest_real_station_still_fits(self):
         # W. A. Parish is about 3,650 MW; the ceiling must not exclude it.
         assert tceq_records.extract_units("3,650 MW")["max_mw"] == 3650.0
+
+
+class TestUnitPayload:
+    """What a scrape result contributes to the database.
+
+    Drawn from per-line unit rows, never the whole-text summary: the summary is
+    the one place the foreign-RN, precedent-row and clearinghouse guards do not
+    reach, so a manufacturer appearing only in a BACT comparison table would
+    arrive as though it were installed at this site.
+    """
+
+    def _result(self, **kw):
+        base = {"regulated_entity": "RN1", "units": [],
+                "manufacturers": ["ge vernova"], "models": ["AND", "APPL"],
+                "max_mw": 66675.0}
+        base.update(kw)
+        return base
+
+    def test_makers_come_from_unit_rows_not_the_summary(self):
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "caterpillar", "proximity": "unrated"}]))
+        assert got["unit_manufacturers"] == "caterpillar"
+
+    def test_maker_spellings_are_canonical(self):
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "wärtsilä", "proximity": "unrated"},
+            {"manufacturer": "innio", "proximity": "unrated"}]))
+        assert got["unit_manufacturers"] == "jenbacher, wartsila"
+
+    def test_models_come_from_unit_rows(self):
+        # The whole-text model scan returns "AND", "APPL", "Amendment"; the
+        # per-line one returns SGT6-5000F and LM6000.
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "siemens", "model": "SGT6-5000F",
+             "proximity": "same_line"}]))
+        assert got["unit_models"] == "SGT6-5000F"
+
+    def test_prose_megawatts_never_reach_the_database(self):
+        # 66,675 MW for a 600 MW station is what prose extraction produced.
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "siemens", "proximity": "unrated"}]))
+        assert got["unit_mw_stated"] is None
+        assert got["unit_mw_table"] is None
+
+    def test_horsepower_and_stated_ratings_stay_in_separate_columns(self):
+        # A horsepower rating is one engine (median 1.1 MW); a megawatt figure
+        # beside a manufacturer is usually the block. Taking the larger would
+        # make every site with both look like it had one enormous engine.
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "caterpillar", "mw_from_hp": 1.1,
+             "proximity": "same_line"},
+            {"manufacturer": "siemens", "mw": 976.0, "proximity": "same_line"}]))
+        assert got["unit_mw_table"] == 1.1
+        assert got["unit_mw_stated"] == 976.0
+
+    def test_only_same_line_pairings_are_rated(self):
+        # "nearby" is evidence of presence, not grounds for a number.
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "cummins", "mw": 2.5, "proximity": "nearby"}]))
+        assert got["unit_mw_table"] is None
+        assert got["unit_count"] is None
+
+    def test_horsepower_derived_rating_counts(self):
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "caterpillar", "mw_from_hp": 1.104,
+             "proximity": "same_line"}]))
+        assert got["unit_mw_table"] == 1.104
+        assert got["unit_count"] == 1
+
+    def test_largest_same_line_rating_wins(self):
+        got = pipeline.unit_payload(self._result(units=[
+            {"manufacturer": "ge", "mw": 180.0, "proximity": "same_line"},
+            {"manufacturer": "ge", "mw": 60.0, "proximity": "same_line"}]))
+        assert got["unit_mw_stated"] == 180.0
+        assert got["unit_count"] == 2
+
+    def test_a_result_with_no_units_contributes_nothing(self):
+        assert pipeline.unit_payload(self._result(units=[])) is None
+
+
+class TestMergeUnitResults:
+    """Merging a scrape file onto the permit records."""
+
+    def _db(self, tmp_path, rows):
+        path = str(tmp_path / "m.db")
+        conn = dbmod.open_db(path)
+        for rn, key in rows:
+            conn.execute(
+                "INSERT INTO entities (entity_id, source, source_key, "
+                "regulated_entity) VALUES (?, 'tceq_air', ?, ?)",
+                (key, key, rn))
+        conn.commit()
+        conn.close()
+        return path
+
+    def _file(self, tmp_path, results):
+        path = tmp_path / "units.json"
+        path.write_text(json.dumps(results))
+        return str(path)
+
+    def test_applies_to_every_filing_for_the_entity(self, tmp_path):
+        # One regulated entity holds one set of equipment and usually several
+        # permit filings; the scrape is per entity, so it belongs on all of them.
+        db = self._db(tmp_path, [("RN100000001", "a"), ("RN100000001", "b")])
+        src = self._file(tmp_path, [{"regulated_entity": "RN100000001", "units": [
+            {"manufacturer": "caterpillar", "mw_from_hp": 2.0,
+             "proximity": "same_line"}]}])
+        got = pipeline.merge_unit_results(db, src, verbose=False)
+        assert got["entities"] == 1 and got["rows"] == 2
+        conn = dbmod.open_db(db)
+        stored = [tuple(row) for row in conn.execute(
+            "SELECT unit_manufacturers, unit_mw_table FROM entities")]
+        conn.close()
+        assert stored == [("caterpillar", 2.0), ("caterpillar", 2.0)]
+
+    def test_failed_entities_are_skipped(self, tmp_path):
+        db = self._db(tmp_path, [("RN100000001", "a")])
+        src = self._file(tmp_path, [
+            {"regulated_entity": "RN100000001", "error": "JSONDecodeError",
+             "units": []}])
+        got = pipeline.merge_unit_results(db, src, verbose=False)
+        assert got["entities"] == 0 and got["skipped"] == 1
+
+    def test_entities_absent_from_the_database_are_counted(self, tmp_path):
+        db = self._db(tmp_path, [("RN100000001", "a")])
+        src = self._file(tmp_path, [{"regulated_entity": "RN999999999", "units": [
+            {"manufacturer": "cummins", "proximity": "unrated"}]}])
+        got = pipeline.merge_unit_results(db, src, verbose=False)
+        assert got["unmatched"] == 1 and got["rows"] == 0
