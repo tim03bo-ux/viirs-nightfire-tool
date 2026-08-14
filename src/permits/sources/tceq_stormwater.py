@@ -95,6 +95,33 @@ NAME_TERMS_GENERATION = [
 ]
 NAME_TERMS_LOAD = ["DATA CENTER", "DATACENTER", "MINING"]
 
+# Words that mark a construction site as energy infrastructure. Used to judge a
+# candidate NOI once a project token and the county already agree, because a
+# token that is also a place name defeats both: "Sweetwater" is a town in Nolan
+# county, so searching for the Sweetwater repower there returned 27 rows led by
+# CITY OF SWEETWATER LANDFILL.
+#
+# Fuzzy similarity was tried first and does not separate these. Scored against
+# the ERCOT name, the real BEARKAT RENEWABLE ENERGY PROJECT lands at 0.44 while
+# the wrong COYOTE DRIVE-IN THEATER reaches 0.71 -- the orders overlap, so any
+# threshold cuts through the middle of both classes. What a project shares with
+# its NOI is not spelling, it is being a power plant.
+ENERGY_SITE_TERMS = NAME_TERMS_GENERATION + NAME_TERMS_LOAD + [
+    "ENERGY", "POWER", "BATTERY", "STORAGE", "GENERATION", "TRANSMISSION",
+    "SWITCHING", "SWITCHYARD", "INTERCONNECT", "INTERCONNECTION", "REPOWER",
+    "WINDFARM", "PHOTOVOLTAIC", "TURBINE", "COLLECTION",
+]
+
+
+def looks_like_energy_site(name):
+    """True when a site name reads as energy infrastructure.
+
+    Word boundaries throughout, for the reason `matches_term` exists: a
+    substring test puts OBESSO RESIDENCE in the BESS results and Windsor in the
+    WIND ones.
+    """
+    return any(matches_term(name, term) for term in ENERGY_SITE_TERMS)
+
 HEADER_TOKENS = ["Permit", "Operator", "County", "Acres", "Site", "NOI"]
 
 COLUMNS = {
@@ -655,7 +682,8 @@ def to_entities(df, source_file_id=None, min_acres=None):
 
 
 def search_for_project(project_name, operator=None, county=None, limit=3,
-                       delay=0.4, verbose=False, jar=None, **kwargs):
+                       delay=0.4, verbose=False, jar=None, energy_only=True,
+                       **kwargs):
     """NOIs that plausibly belong to one ERCOT project.
 
     Driven by the project's name rather than its operator. ERCOT names the
@@ -672,6 +700,10 @@ def search_for_project(project_name, operator=None, county=None, limit=3,
         separates Trent from Trenton.
       * The county has to agree. A wind project in Glasscock and a school in
         Harris share nothing but a word.
+      * The site has to read as energy infrastructure. County cannot help when
+        the token is also a place name in that county -- "Sweetwater" is a town
+        in Nolan, so the Sweetwater repower returned 27 rows led by CITY OF
+        SWEETWATER LANDFILL. Pass energy_only=False to keep them.
 
     Returns a DataFrame with `matched_term` recording which token found each
     row, so any match can be traced back to why it is here.
@@ -694,6 +726,8 @@ def search_for_project(project_name, operator=None, county=None, limit=3,
         if county is not None:
             wanted = normalize.norm_county(county)
             keep = keep[keep["County"].apply(normalize.norm_county) == wanted]
+        if energy_only:
+            keep = keep[keep["Site Name"].apply(looks_like_energy_site)]
         if keep.empty:
             continue
         keep["matched_term"] = token

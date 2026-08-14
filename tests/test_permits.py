@@ -2202,7 +2202,7 @@ class TestSearchForProject:
 
     def test_one_authorization_is_not_returned_twice(self, monkeypatch):
         # Two tokens can find the same NOI.
-        grid = self._grid([("1", "BEARKAT HARALD PROJECT", "Glasscock")])
+        grid = self._grid([("1", "BEARKAT HARALD WIND PROJECT", "Glasscock")])
         self._patch(monkeypatch, {"BearKat": grid, "Harald": grid})
         got = tceq_stormwater.search_for_project(
             "Harald (BearKat Wind B)", county="Glasscock")
@@ -2223,3 +2223,61 @@ class TestSearchForProject:
         seen = self._patch(monkeypatch, {})
         got = tceq_stormwater.search_for_project("Solar Storage Project")
         assert got.empty and seen == []
+
+
+class TestEnergySiteFilter:
+    """Judging whether a candidate NOI is energy infrastructure at all.
+
+    A project token that is also a place name defeats both the word-boundary
+    and county filters: "Sweetwater" is a town in Nolan county, so the
+    Sweetwater repower returned 27 rows led by CITY OF SWEETWATER LANDFILL.
+
+    Fuzzy similarity was tried first and does not separate these. Scored
+    against the ERCOT name, the real BEARKAT RENEWABLE ENERGY PROJECT lands at
+    0.44 while the wrong COYOTE DRIVE-IN THEATER reaches 0.71, so any threshold
+    cuts through the middle of both classes.
+    """
+
+    @pytest.mark.parametrize("name", [
+        "SWEETWATER WIND PROJECT", "BEARKAT RENEWABLE ENERGY PROJECT",
+        "TRENT REPOWER PROJECT", "NAZARETH SUBSTATION", "MESTENO WIND PROJECT",
+    ])
+    def test_energy_sites_are_kept(self, name):
+        assert tceq_stormwater.looks_like_energy_site(name)
+
+    @pytest.mark.parametrize("name", [
+        "CITY OF SWEETWATER LANDFILL", "SWEETWATER SUBDIVISION",
+        "COYOTE DRIVE-IN THEATER", "SAMPSON HOWARD ELEMENTARY SCHOOL",
+        "PINTAILHOMES NEW HOME",
+    ])
+    def test_everything_else_is_dropped(self, name):
+        assert not tceq_stormwater.looks_like_energy_site(name)
+
+    def test_word_boundaries_apply_here_too(self):
+        # The reason matches_term exists: OBESSO is not a BESS.
+        assert not tceq_stormwater.looks_like_energy_site("OBESSO RESIDENCE")
+        assert not tceq_stormwater.looks_like_energy_site("WINDSOR PARK PHASE 2")
+
+    def test_filter_runs_inside_the_project_search(self, monkeypatch):
+        grid = pd.DataFrame(
+            [{"Auth #": "1", "Site Name": "CITY OF SWEETWATER LANDFILL",
+              "County": "Nolan", "detail_url": ""},
+             {"Auth #": "2", "Site Name": "SWEETWATER WIND PROJECT",
+              "County": "Nolan", "detail_url": ""}],
+            columns=tceq_stormwater.GRID_COLUMNS + ["detail_url"])
+        monkeypatch.setattr(tceq_stormwater, "search", lambda **kw: grid)
+        monkeypatch.setattr(tceq_stormwater.net, "new_jar", lambda: None)
+        got = tceq_stormwater.search_for_project(
+            "Sweetwater 2 repower", county="Nolan")
+        assert got["Site Name"].tolist() == ["SWEETWATER WIND PROJECT"]
+
+    def test_it_can_be_turned_off(self, monkeypatch):
+        grid = pd.DataFrame(
+            [{"Auth #": "1", "Site Name": "SWEETWATER LANDFILL",
+              "County": "Nolan", "detail_url": ""}],
+            columns=tceq_stormwater.GRID_COLUMNS + ["detail_url"])
+        monkeypatch.setattr(tceq_stormwater, "search", lambda **kw: grid)
+        monkeypatch.setattr(tceq_stormwater.net, "new_jar", lambda: None)
+        got = tceq_stormwater.search_for_project(
+            "Sweetwater 2 repower", county="Nolan", energy_only=False)
+        assert len(got) == 1
